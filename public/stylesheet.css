@@ -76,3 +76,11 @@ body {
     color: red;
     display: none;
 }
+
+.inputField {
+    margin-bottom: 20px;
+}
+
+.RegisterUser {
+    text-align: center;
+}
