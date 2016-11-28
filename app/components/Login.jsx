@@ -6,10 +6,11 @@ var {Link} = require('react-router');
 var Login = React.createClass({
     render: function() {
         return (
-            <div>
+            <div className="LoginRegister" id="loginMain">
+                <h3 id="loginHeadline">Already a user?</h3>
                 <form>
                     <div>
-                        <input type="text" placeholder="username" ref="username"></input>
+                        <input type="text" placeholder="email" ref="username"></input>
                     </div>
                     <div>
                         <input type="text" placeholder="password" ref="password"></input>

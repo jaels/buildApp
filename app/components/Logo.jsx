@@ -4,7 +4,9 @@ var React = require('react');
 var Logo = React.createClass({
     render: function() {
         return(
-            <h1>Neighbours</h1>
+            <div id='logoContainer'>
+            <h1 id="mainHeadline">Neighbours</h1>
+            </div>
         )
     }
 })

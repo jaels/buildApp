@@ -1,21 +1,43 @@
 
+var ReactDOM = require('react-dom');
 var React = require('react');
 var {Link} = require('react-router');
+import Geosuggest from 'react-geosuggest';
+<Geosuggest />
+
 
 
 var RegisterAddress = React.createClass({
     render: function() {
+           var fixtures = [];
         return (
-            <div>
-                <form>
-                    <div>
-                        <input type="text" placeholder="What's your address" ref="username"></input>
-                    </div>
-                    <button><Link to="/register">Submit</Link></button>
-                </form>
+            <div className="LoginRegister" id="registerMain">
+                <h3 id="loginHeadline">If not - Where do you live?</h3>
+                <Geosuggest
+                    // className="geosuggest"
+                    placeholder="Type your address and choose from the list"
+                    initialValue=""
+                    fixtures={fixtures}
+                    onSuggestSelect={this.onSuggestSelect}
+                    onKeyPress = {this.onKeyPress}
+                    onSuggestNoResults = {this.onSuggestNoResults}
+                    location={new google.maps.LatLng(53.558572, 9.9278215)}
+                    radius="20" />
+                <h4 id="noAddressResults">Please submit an address</h4>
+                <button id="submitAddress"><Link to="/register">Submit</Link></button>
             </div>
         )
+    },
+    onSuggestSelect: function(suggest) {
+        console.log(suggest);
+        document.getElementsByClassName("geosuggest__suggests-wrapper")[0].style.display = "none";
+
+
+    },
+    onKeyPress: function(event) {
+        document.getElementsByClassName("geosuggest__suggests-wrapper")[0].style.display = "block";
     }
+
 })
 
 module.exports = RegisterAddress;
