@@ -84,3 +84,11 @@ body {
 .RegisterUser {
     text-align: center;
 }
+
+.buildingExist {
+    text-align: center;
+}
+
+#createdAddress{
+    color: red;
+}

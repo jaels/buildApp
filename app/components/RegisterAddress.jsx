@@ -44,12 +44,15 @@ var RegisterAddress = React.createClass({
         var suggest = this.state.suggest;
         var address = suggest.label;
         var placeId = suggest.placeId;
-        axios.post('/trial', {
+        axios.post('/checkBuilding', {
             address: address,
             placeId: placeId
         }).then(function(res) {
             if(res.data.success===true) {
-                browserHistory.push('#/buildingExists');                
+                window.location.href = "#/buildingExists";
+            }
+            else {
+                window.location.href = "#/createBuilding";
             }
         })
 

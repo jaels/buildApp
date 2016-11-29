@@ -1,7 +1,9 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var RegisterUser = require('./components/RegisterUser.jsx');
-var buildingExists = require('./components/buildingExists.jsx')
+var buildingExists = require('./components/buildingExists.jsx');
+var createBuilding = require('./components/createBuilding.jsx')
+
 
 var Main = require('./components/Main.jsx');
 var LoginPage = require('./components/LoginPage.jsx');
@@ -14,6 +16,7 @@ ReactDOM.render(
         <Route path="/" component={Main}>
             <Route path="register" component={RegisterUser}/>
                 <Route path="buildingExists" component={buildingExists}/>
+                    <Route path="createBuilding" component={createBuilding}/>
             <IndexRoute component={LoginPage}/>
         </Route>
 
