@@ -15,7 +15,7 @@ var Login = React.createClass({
                     <div>
                         <input type="text" placeholder="password" ref="password"></input>
                     </div>
-                    <button><Link to="/connectArea">Submit</Link></button>
+                    <button className="button"><Link to="/connectArea">Submit</Link></button>
                 </form>
             </div>
         )

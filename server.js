@@ -28,7 +28,6 @@ app.post('/checkBuilding', function(req,res) {
     var placeId = req.body.placeId;
     req.session.address = address;
     req.session.placeId = placeId;
-    console.log(req.session.address);
     db.checkBuilding(placeId).then(function(result) {
         console.log(result.rows);
         if(result.rows.length>0) {
@@ -42,6 +41,15 @@ app.post('/checkBuilding', function(req,res) {
 
 
 
+
+app.get('/registerBuilding', function(req,res) {
+    var address = req.session.address;
+    var placeId = req.session.placeId;
+    db.insertBuilding(address,placeId).then(function(result) {
+        res.json({success:true, file:address});
+    })
+})
+
 app.get('/checkAddress', function(req, res) {
     if (req.session.address) {
         res.json({
@@ -53,13 +61,6 @@ app.get('/checkAddress', function(req, res) {
     }
 });
 
-app.get('/registerBuilding', function(req,res) {
-    var address = req.session.address;
-    var placeId = req.session.placeId;
-    db.insertBuilding(address,placeId).then(function(result) {
-        res.json({success:true, file:address});
-    })
-})
 
 
 app.listen(3000, function() {

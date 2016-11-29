@@ -21817,7 +21817,7 @@
 	                ),
 	                React.createElement(
 	                    'button',
-	                    null,
+	                    { className: 'button' },
 	                    React.createElement(
 	                        Link,
 	                        { to: '/connectArea' },
@@ -37076,7 +37076,7 @@
 	            ),
 	            React.createElement(
 	                'button',
-	                null,
+	                { className: 'button' },
 	                React.createElement(
 	                    Link,
 	                    { to: '/register' },
@@ -37132,7 +37132,7 @@
 	                    ),
 	                    React.createElement(
 	                        'button',
-	                        null,
+	                        { className: 'button' },
 	                        React.createElement(
 	                            Link,
 	                            { to: '/register' },
@@ -37152,7 +37152,7 @@
 	            ),
 	            React.createElement(
 	                'button',
-	                { onClick: this.makeBuilding },
+	                { className: 'button', onClick: this.makeBuilding },
 	                'Yes!'
 	            ),
 	            renderSuccess()
@@ -37287,7 +37287,7 @@
 	                ),
 	                React.createElement(
 	                    'button',
-	                    null,
+	                    { className: 'button' },
 	                    React.createElement(
 	                        Link,
 	                        { to: '/connectArea' },
@@ -37313,6 +37313,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	var ReactDOM = __webpack_require__(32);
 	var React = __webpack_require__(1);
 
@@ -37335,6 +37337,8 @@
 	    displayName: 'RegisterAddress',
 
 	    render: function render() {
+	        var _React$createElement;
+
 	        var fixtures = [];
 	        return React.createElement(
 	            'div',
@@ -37359,7 +37363,7 @@
 	            ),
 	            React.createElement(
 	                'button',
-	                { id: 'submitAddress', onClick: this.saveAddress },
+	                (_React$createElement = { className: 'button', id: 'submitAddress' }, _defineProperty(_React$createElement, 'className', 'button'), _defineProperty(_React$createElement, 'onClick', this.saveAddress), _React$createElement),
 	                'Submit'
 	            )
 	        );

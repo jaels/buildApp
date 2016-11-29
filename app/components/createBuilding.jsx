@@ -16,7 +16,7 @@ var createBuilding = React.createClass({
                 return (
                     <div className="buildingExist">
                         <h3 id="loginHeadline"> Your building in <span id="createdAddress"> { address } </span> was created! Please register and tell your neighbours to join!</h3>
-                        <button><Link to="/register">Register</Link></button>
+                        <button className="button"><Link to="/register">Register</Link></button>
                     </div>
                 )
             }
@@ -24,7 +24,7 @@ var createBuilding = React.createClass({
         return (
             <div className="buildingExist">
                 <h3 id="loginHeadline">Your building is new here! Do you wanna create it?</h3>
-                <button onClick = {this.makeBuilding}>Yes!</button>
+                <button className="button" onClick = {this.makeBuilding}>Yes!</button>
                 {renderSuccess()}
             </div>
         )

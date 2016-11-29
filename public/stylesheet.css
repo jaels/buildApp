@@ -92,3 +92,19 @@ body {
 #createdAddress{
     color: red;
 }
+
+.button {
+    position: relative;
+    text-align: center;
+    background-color: 	#FF6347;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    height:40px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    padding-bottom: 30px:
+    cursor: pointer;
+}

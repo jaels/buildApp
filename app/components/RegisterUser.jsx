@@ -27,7 +27,7 @@ var RegisterUser = React.createClass({
                         <br/>
 
                         </div>
-                    <button><Link to="/connectArea">Submit</Link></button>
+                    <button className="button"><Link to="/connectArea">Submit</Link></button>
                 </form>
             </div>
         )

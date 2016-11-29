@@ -26,7 +26,7 @@ var RegisterAddress = React.createClass({
                     location={new google.maps.LatLng(53.558572, 9.9278215)}
                     radius="20" />
                 <h4 id="noAddressResults">Please submit an address</h4>
-                <button id="submitAddress" onClick={this.saveAddress}>Submit</button>
+                <button className="button" id="submitAddress" className="button" onClick={this.saveAddress}>Submit</button>
             </div>
         )
     },
