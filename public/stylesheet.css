@@ -108,3 +108,33 @@ body {
     padding-bottom: 30px:
     cursor: pointer;
 }
+
+.userError {
+    color: red;
+}
+
+.chatNav {
+    float: left;
+    height:85vh;
+    width: 17%;
+    background-color: #A9A9A9;
+}
+
+.textArea {
+    height: 6vh;
+    width: 140vh;
+    font-size: 18px;
+}
+
+.chatContainer {
+    margin-bottom: 20%;
+}
+
+.conversationsArea {
+    height:75vh;
+    background-color: #DCDCDC;
+}
+
+.connectArea {
+    display: inline;
+}

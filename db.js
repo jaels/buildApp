@@ -46,7 +46,27 @@ exports.insertBuilding = function(address,placeId) {
 };
 
 
+exports.checkEmail = function(email) {
+    return getFromDb('SELECT * FROM users WHERE email=$1',[email]).then(function(result) {
+        return result;
+    });
+};
 
+exports.insertUserData = function(firstname, lastname, floor, buildingSpec, aptNumber, buildingId, email, hashPassword) {
+    return getFromDb('INSERT into users(firstname, lastname, floor, building_specifications, apt_number,building_id, email, password) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',[firstname, lastname, floor, buildingSpec, aptNumber, buildingId, email, hashPassword]).then(function(result) {
+        console.log(result.rows);
+        return result.rows[0].id;
+        res.json({success:true});
+    }).catch(function(err) {
+        console.log(err);
+    });
+};
+
+exports.getUsers = function(buildingId) {
+    return getFromDb('SELECT * FROM users WHERE building_id=$1',[buildingId]).then(function(result) {
+        return result;
+    });
+}
 
 function getFromDb(str, params) {
     return new Promise(function(resolve, reject) {
@@ -67,3 +87,35 @@ function getFromDb(str, params) {
         });
     });
 }
+
+exports.hashPassword = function (password) {
+    return new Promise(function(resolve, reject) {
+        bcrypt.genSalt(function(err, salt) {
+            if (err) {
+                reject(err);
+            }
+            bcrypt.hash(password, salt, function(err, hash) {
+                if (err) {
+                    reject(err);
+                }
+                else  {
+                    resolve(hash);
+                }
+            });
+        });
+    });
+};
+
+exports.checkPassword = function (requestedPassword, listedPassword) {
+    return new Promise(function(resolve, reject) {
+        bcrypt.compare(requestedPassword, listedPassword, function(err, doesMatch) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                console.log(doesMatch);
+                resolve(doesMatch);
+            }
+        });
+    });
+};

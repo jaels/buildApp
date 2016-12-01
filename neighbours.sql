@@ -14,7 +14,7 @@ CREATE TABLE users (
     lastname VARCHAR(255) not null,
     floor INTEGER not null,
     building_specifications VARCHAR(255),
-    apt_number INTEGER,
+    apt_number VARCHAR(255),
     building_id INTEGER not null,
     email VARCHAR(255) not null UNIQUE,
     password VARCHAR(255) not null,
