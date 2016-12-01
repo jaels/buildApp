@@ -6,6 +6,8 @@ var createBuilding = require('./components/createBuilding.jsx');
 var thankYou = require('./components/ThankYou.jsx')
 var connectArea = require('./components/ConnectArea.jsx')
 
+var anotherChat = require('./components/anotherChat.jsx');
+
 
 
 var Main = require('./components/Main.jsx');
@@ -22,6 +24,7 @@ ReactDOM.render(
                     <Route path="createBuilding" component={createBuilding}/>
                         <Route path="thankYou" component={thankYou}/>
                             <Route path="connectArea" component={connectArea}/>
+
             <IndexRoute component={LoginPage}/>
         </Route>
 

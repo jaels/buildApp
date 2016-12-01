@@ -55,13 +55,11 @@ app.post('/checkUser', function(req,res) {
     var requestedEmail = req.body.email;
     var requestedPassword = req.body.password;
     db.checkEmail(requestedEmail).then(function(result) {
-        console.log(result.rows);
         if (result.rows.length===0) {
             res.send('No such user, please register');
         }
         else {
             var listedPassword = result.rows[0].password;
-            console.log(listedPassword);
             var id=result.rows[0].id;
             var firstname=result.rows[0].firstname;
             var lastname=result.rows[0].lastname;
@@ -72,7 +70,6 @@ app.post('/checkUser', function(req,res) {
             var building_id =result.rows[0].building_id;
 
             db.checkPassword(requestedPassword,listedPassword).then(function(doesMatch) {
-                console.log(doesMatch);
                 if(doesMatch===true) {
                     req.session.buildingId = building_id;
                     req.session.user = {
@@ -85,7 +82,6 @@ app.post('/checkUser', function(req,res) {
                         apt_number:apt_number
                     };
                     res.json({success: true});
-                    console.log(req.session);
                 }
 
                 else {
@@ -106,17 +102,13 @@ app.post('/registerUser', function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
     var buildingId = req.session.buildingId;
-    console.log([firstname, lastname, floor, aptNumber, buildingSpec, email, password]);
 
     if(email.indexOf('@')>-1 && firstname && lastname && floor && email && password ) {
         db.checkEmail(email).then(function(result) {
             if(result.rows.length===0) {
-                console.log('yes a new user');
                 db.hashPassword(password).then(function(hash) {
-                    console.log(hash)
                     var hashPassword = hash;
                     db.insertUserData(firstname, lastname, floor, buildingSpec, aptNumber, buildingId, email, hashPassword).then(function(id) {
-                        console.log(id);
                         req.session.user = {
                             id:id,
                             firstname:firstname,
@@ -152,7 +144,6 @@ app.get('/checkAddress', function(req, res) {
 
 app.get('/getAllDetails', function(req,res) {
     if(req.session) {
-        console.log(req.session);
         res.json({
             success:true,
             file: req.session
@@ -163,7 +154,10 @@ app.get('/getAllDetails', function(req,res) {
 app.get('/getAllUsers', function(req, res) {
     var buildingId = req.session.buildingId;
     db.getUsers(buildingId).then(function(result) {
-        console.log(result.rows);
+        res.json({
+            success:true,
+            file: result.rows
+        })
     })
 })
 

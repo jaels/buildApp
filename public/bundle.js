@@ -54,6 +54,8 @@
 	var thankYou = __webpack_require__(267);
 	var connectArea = __webpack_require__(268);
 
+	var anotherChat = __webpack_require__(289);
+
 	var Main = __webpack_require__(272);
 	var LoginPage = __webpack_require__(274);
 
@@ -28498,45 +28500,32 @@
 
 	'use strict';
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var React = __webpack_require__(1);
 	var ChatNav = __webpack_require__(269);
 	var Conversations = __webpack_require__(270);
 	var ChatInput = __webpack_require__(271);
 
-	var ConnectArea = React.createClass({
-	    displayName: 'ConnectArea',
+	var ConnectArea = function (_React$Component) {
+	    _inherits(ConnectArea, _React$Component);
 
-	    getInitialState: function getInitialState() {
-	        return { gotAllDetails: false
+	    function ConnectArea(props) {
+	        _classCallCheck(this, ConnectArea);
+
+	        var _this = _possibleConstructorReturn(this, (ConnectArea.__proto__ || Object.getPrototypeOf(ConnectArea)).call(this, props));
+
+	        _this.state = {
+	            gotAllDetails: false
 	        };
-	    },
-	    render: function render() {
-	        this.getDetails();
-	        var that = this;
-	        var details = this.state.details;
-	        var _state = this.state,
-	            gotAllDetails = _state.gotAllDetails,
-	            details = _state.details;
-
-	        function rendering() {
-	            if (gotAllDetails) {
-	                return React.createElement(
-	                    'div',
-	                    { className: 'connectArea' },
-	                    React.createElement(ChatNav, { details: details }),
-	                    React.createElement(Conversations, { details: details }),
-	                    React.createElement(ChatInput, { details: details })
-	                );
-	            }
-	        }
-	        return React.createElement(
-	            'div',
-	            null,
-	            rendering()
-	        );
-	    },
-	    getDetails: function getDetails() {
-	        var that = this;
+	        console.log('constructor');
+	        var that = _this;
 	        axios.get('/getAllDetails').then(function (result) {
 	            that.setState({
 	                details: result.data.file,
@@ -28544,8 +28533,53 @@
 	            });
 	            return;
 	        });
+	        return _this;
 	    }
-	});
+
+	    _createClass(ConnectArea, [{
+	        key: 'render',
+	        value: function render() {
+	            this.getDetails();
+	            var that = this;
+	            var details = this.state.details;
+	            var _state = this.state,
+	                gotAllDetails = _state.gotAllDetails,
+	                details = _state.details;
+
+	            function rendering() {
+	                if (gotAllDetails) {
+	                    return React.createElement(
+	                        'div',
+	                        { className: 'connectArea' },
+	                        React.createElement(ChatNav, { details: details }),
+	                        React.createElement(Conversations, { details: details }),
+	                        React.createElement(ChatInput, { details: details })
+	                    );
+	                }
+	            }
+
+	            return React.createElement(
+	                'div',
+	                null,
+	                rendering()
+	            );
+	        }
+	    }, {
+	        key: 'getDetails',
+	        value: function getDetails() {
+	            var that = this;
+	            axios.get('/getAllDetails').then(function (result) {
+	                that.setState({
+	                    details: result.data.file,
+	                    gotAllDetails: true
+	                });
+	                return;
+	            });
+	        }
+	    }]);
+
+	    return ConnectArea;
+	}(React.Component);
 
 	module.exports = ConnectArea;
 
@@ -28555,45 +28589,103 @@
 
 	'use strict';
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var React = __webpack_require__(1);
 
 	var _require = __webpack_require__(184),
 	    Link = _require.Link;
 
-	var ChatNav = React.createClass({
-	    displayName: 'ChatNav',
+	var ChatNav = function (_React$Component) {
+	    _inherits(ChatNav, _React$Component);
 
-	    render: function render() {
-	        var details = this.props.details;
-	        var address = this.props.details.address;
-	        return React.createElement(
-	            'div',
-	            { className: 'chatNav' },
-	            React.createElement(
-	                'h3',
-	                null,
-	                ' ',
-	                address
-	            ),
-	            React.createElement(
-	                'p',
-	                null,
-	                'General'
-	            )
-	        );
-	    },
-	    getUsers: function getUsers() {
-	        var that = this;
+	    function ChatNav(props) {
+	        _classCallCheck(this, ChatNav);
+
+	        var _this = _possibleConstructorReturn(this, (ChatNav.__proto__ || Object.getPrototypeOf(ChatNav)).call(this, props));
+
+	        _this.state = {
+	            gotAllusers: false
+	        };
+	        var that = _this;
 	        axios.get('/getAllUsers').then(function (result) {
-	            that.setState({
+	            console.log(result);
+	            that.state = {
 	                users: result.data.file,
 	                gotAllUsers: true
-	            });
+	            };
+	            console.log(that.state.users);
 	            return;
 	        });
+	        return _this;
 	    }
 
-	});
+	    _createClass(ChatNav, [{
+	        key: 'render',
+	        value: function render() {
+	            var that = this;
+	            var _state = this.state,
+	                gotAllUsers = _state.gotAllUsers,
+	                users = _state.users;
+
+
+	            function gotUsers() {
+	                if (gotAllUsers) {
+	                    var users = that.state.users.map(function (user) {
+	                        return React.createElement(
+	                            Link,
+	                            { to: '/chatWithUser/' + user.id, activeClassName: 'active' },
+	                            ' ',
+	                            React.createElement(
+	                                'p',
+	                                null,
+	                                user.firstname,
+	                                ' ',
+	                                user.lastname
+	                            )
+	                        );
+	                    });
+	                    return React.createElement(
+	                        'div',
+	                        null,
+	                        users
+	                    );
+	                }
+	            }
+	            var details = this.props.details;
+	            var address = this.props.details.address;
+	            return React.createElement(
+	                'div',
+	                { className: 'chatNav' },
+	                React.createElement(
+	                    'h3',
+	                    null,
+	                    ' ',
+	                    address
+	                ),
+	                React.createElement(
+	                    Link,
+	                    { to: '/connectArea', activeClassName: 'active' },
+	                    'General'
+	                ),
+	                React.createElement(
+	                    Link,
+	                    { to: '/anotherChat' },
+	                    'another'
+	                ),
+	                gotUsers()
+	            );
+	        }
+	    }]);
+
+	    return ChatNav;
+	}(React.Component);
 
 	module.exports = ChatNav;
 
@@ -30667,6 +30759,28 @@
 	  className: '',
 	  suggest: {}
 	};
+
+/***/ },
+/* 289 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Another = React.createClass({
+	    displayName: 'Another',
+
+	    render: function render() {
+	        return React.createElement(
+	            'h2',
+	            null,
+	            'Another Chat!!'
+	        );
+	    }
+	});
+
+	module.exports = Another;
 
 /***/ }
 /******/ ]);
