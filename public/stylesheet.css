@@ -122,7 +122,7 @@ body {
 
 .textArea {
     height: 6vh;
-    width: 140vh;
+    width: 120vh;
     font-size: 18px;
 }
 
@@ -137,4 +137,16 @@ body {
 
 .connectArea {
     display: inline;
+}
+
+.chatContainer {
+    display: inline-block;
+}
+.message_button {
+    float: right;
+}
+
+.active {
+    color: green;
+    font-weight: bold;
 }

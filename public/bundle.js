@@ -49,15 +49,17 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
 	var RegisterUser = __webpack_require__(183);
-	var buildingExists = __webpack_require__(265);
 	var createBuilding = __webpack_require__(266);
-	var thankYou = __webpack_require__(267);
 	var connectArea = __webpack_require__(268);
 
-	var anotherChat = __webpack_require__(289);
+	var privateChat = __webpack_require__(291);
 
-	var Main = __webpack_require__(272);
-	var LoginPage = __webpack_require__(274);
+	var generalChat = __webpack_require__(273);
+
+	var Conversations = __webpack_require__(270);
+
+	var Main = __webpack_require__(274);
+	var LoginPage = __webpack_require__(276);
 
 	var _require = __webpack_require__(184),
 	    Route = _require.Route,
@@ -71,12 +73,14 @@
 	    React.createElement(
 	        Route,
 	        { path: '/', component: Main },
+	        React.createElement(IndexRoute, { component: LoginPage }),
 	        React.createElement(Route, { path: 'register', component: RegisterUser }),
-	        React.createElement(Route, { path: 'buildingExists', component: buildingExists }),
-	        React.createElement(Route, { path: 'createBuilding', component: createBuilding }),
-	        React.createElement(Route, { path: 'thankYou', component: thankYou }),
-	        React.createElement(Route, { path: 'connectArea', component: connectArea }),
-	        React.createElement(IndexRoute, { component: LoginPage })
+	        React.createElement(
+	            Route,
+	            { path: 'connectArea', component: connectArea },
+	            React.createElement(Route, { path: 'privateChat/:chat_with_id', component: privateChat }),
+	            React.createElement(IndexRoute, { component: generalChat })
+	        )
 	    )
 	), document.getElementById('app'));
 
@@ -21845,7 +21849,7 @@
 	            password: password
 	        }).then(function (res) {
 	            if (res.data.success === true) {
-	                window.location.href = "#/thankYou";
+	                window.location.href = "#/connectArea";
 	            } else {}
 	        });
 	    }
@@ -28337,44 +28341,7 @@
 
 
 /***/ },
-/* 265 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var _require = __webpack_require__(184),
-	    Link = _require.Link;
-
-	var buildingExists = React.createClass({
-	    displayName: 'buildingExists',
-
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            { className: 'buildingExist' },
-	            React.createElement(
-	                'h3',
-	                { id: 'loginHeadline' },
-	                'Your building already exists here, would you like to join the group?'
-	            ),
-	            React.createElement(
-	                'button',
-	                { className: 'button' },
-	                React.createElement(
-	                    Link,
-	                    { to: '/register' },
-	                    'Yes'
-	                )
-	            )
-	        );
-	    }
-	});
-
-	module.exports = buildingExists;
-
-/***/ },
+/* 265 */,
 /* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -28457,44 +28424,7 @@
 	module.exports = createBuilding;
 
 /***/ },
-/* 267 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var _require = __webpack_require__(184),
-	    Link = _require.Link;
-
-	var ThankYou = React.createClass({
-	    displayName: 'ThankYou',
-
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            { className: 'LoginRegister', id: 'loginMain' },
-	            React.createElement(
-	                'h3',
-	                { id: 'loginHeadline' },
-	                'Thank you for registering! Enter the group!'
-	            ),
-	            React.createElement(
-	                'button',
-	                { className: 'button' },
-	                React.createElement(
-	                    Link,
-	                    { to: '/connectArea' },
-	                    'Enter'
-	                )
-	            )
-	        );
-	    }
-	});
-
-	module.exports = ThankYou;
-
-/***/ },
+/* 267 */,
 /* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -28522,15 +28452,19 @@
 	        var _this = _possibleConstructorReturn(this, (ConnectArea.__proto__ || Object.getPrototypeOf(ConnectArea)).call(this, props));
 
 	        _this.state = {
-	            gotAllDetails: false
+	            gotAllDetails: false,
+	            message: ""
 	        };
-	        console.log('constructor');
+	        _this.handleNewMessage = _this.handleNewMessage.bind(_this);
+
 	        var that = _this;
 	        axios.get('/getAllDetails').then(function (result) {
 	            that.setState({
 	                details: result.data.file,
 	                gotAllDetails: true
 	            });
+	            console.log(result.data.file);
+
 	            return;
 	        });
 	        return _this;
@@ -28539,7 +28473,6 @@
 	    _createClass(ConnectArea, [{
 	        key: 'render',
 	        value: function render() {
-	            this.getDetails();
 	            var that = this;
 	            var details = this.state.details;
 	            var _state = this.state,
@@ -28551,9 +28484,13 @@
 	                    return React.createElement(
 	                        'div',
 	                        { className: 'connectArea' },
-	                        React.createElement(ChatNav, { details: details }),
-	                        React.createElement(Conversations, { details: details }),
-	                        React.createElement(ChatInput, { details: details })
+	                        React.createElement(ChatNav, { message: that.state.message, details: details }),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'conversationsArea' },
+	                            React.cloneElement(that.props.children, { message: that.state.message })
+	                        ),
+	                        React.createElement(ChatInput, { onNewMessage: that.handleNewMessage })
 	                    );
 	                }
 	            }
@@ -28565,15 +28502,10 @@
 	            );
 	        }
 	    }, {
-	        key: 'getDetails',
-	        value: function getDetails() {
-	            var that = this;
-	            axios.get('/getAllDetails').then(function (result) {
-	                that.setState({
-	                    details: result.data.file,
-	                    gotAllDetails: true
-	                });
-	                return;
+	        key: 'handleNewMessage',
+	        value: function handleNewMessage(message) {
+	            this.setState({
+	                message: message
 	            });
 	        }
 	    }]);
@@ -28600,7 +28532,8 @@
 	var React = __webpack_require__(1);
 
 	var _require = __webpack_require__(184),
-	    Link = _require.Link;
+	    Link = _require.Link,
+	    IndexLink = _require.IndexLink;
 
 	var ChatNav = function (_React$Component) {
 	    _inherits(ChatNav, _React$Component);
@@ -28611,16 +28544,15 @@
 	        var _this = _possibleConstructorReturn(this, (ChatNav.__proto__ || Object.getPrototypeOf(ChatNav)).call(this, props));
 
 	        _this.state = {
-	            gotAllusers: false
+	            gotAllUsers: false
 	        };
+
 	        var that = _this;
 	        axios.get('/getAllUsers').then(function (result) {
-	            console.log(result);
-	            that.state = {
+	            that.setState({
 	                users: result.data.file,
 	                gotAllUsers: true
-	            };
-	            console.log(that.state.users);
+	            });
 	            return;
 	        });
 	        return _this;
@@ -28634,23 +28566,30 @@
 	                gotAllUsers = _state.gotAllUsers,
 	                users = _state.users;
 
-
+	            var details = this.props.details;
+	            var address = this.props.details.address;
 	            function gotUsers() {
-	                if (gotAllUsers) {
+	                if (that.state.gotAllUsers) {
 	                    var users = that.state.users.map(function (user) {
 	                        return React.createElement(
-	                            Link,
-	                            { to: '/chatWithUser/' + user.id, activeClassName: 'active' },
-	                            ' ',
+	                            'div',
+	                            null,
 	                            React.createElement(
-	                                'p',
-	                                null,
-	                                user.firstname,
+	                                Link,
+	                                { to: '/connectArea/privateChat/' + user.id, activeClassName: 'active', key: user.id },
 	                                ' ',
-	                                user.lastname
+	                                React.createElement(
+	                                    'p',
+	                                    null,
+	                                    user.firstname,
+	                                    ' ',
+	                                    user.lastname
+	                                )
 	                            )
 	                        );
 	                    });
+	                    console.log('after map');
+
 	                    return React.createElement(
 	                        'div',
 	                        null,
@@ -28658,8 +28597,6 @@
 	                    );
 	                }
 	            }
-	            var details = this.props.details;
-	            var address = this.props.details.address;
 	            return React.createElement(
 	                'div',
 	                { className: 'chatNav' },
@@ -28670,14 +28607,9 @@
 	                    address
 	                ),
 	                React.createElement(
-	                    Link,
-	                    { to: '/connectArea', activeClassName: 'active' },
+	                    IndexLink,
+	                    { to: 'connectArea', activeClassName: 'active' },
 	                    'General'
-	                ),
-	                React.createElement(
-	                    Link,
-	                    { to: '/anotherChat' },
-	                    'another'
 	                ),
 	                gotUsers()
 	            );
@@ -28709,7 +28641,8 @@
 	                "h3",
 	                null,
 	                "these are conversations"
-	            )
+	            ),
+	            this.props.children
 	        );
 	    }
 	});
@@ -28720,32 +28653,111 @@
 /* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(1);
 
-	var ChatInput = React.createClass({
-	    displayName: "ChatInput",
+	var ChatInput = function (_React$Component) {
+	    _inherits(ChatInput, _React$Component);
 
-	    render: function render() {
-	        return React.createElement(
-	            "div",
-	            { className: "chatContainer" },
-	            React.createElement("textArea", { className: "textArea", ref: "message", placeholder: "Write your message" })
-	        );
+	    function ChatInput(props) {
+	        _classCallCheck(this, ChatInput);
+
+	        var _this = _possibleConstructorReturn(this, (ChatInput.__proto__ || Object.getPrototypeOf(ChatInput)).call(this, props));
+
+	        _this.state = { message: '' };
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        _this.sendMessage = _this.sendMessage.bind(_this);
+	        return _this;
 	    }
-	});
+
+	    _createClass(ChatInput, [{
+	        key: 'render',
+	        value: function render() {
+	            return React.createElement(
+	                'div',
+	                { className: 'chatContainer' },
+	                React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.message, onChange: this.handleChange }),
+	                React.createElement(
+	                    'button',
+	                    { className: 'message_button', onClick: this.sendMessage },
+	                    'Send'
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'sendMessage',
+	        value: function sendMessage(e) {
+	            e.preventDefault();
+	            console.log(this.state.message);
+	            var message = this.state.message;
+	            this.props.onNewMessage(message);
+	        }
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(event) {
+	            this.setState({ message: event.target.value });
+	        }
+	    }]);
+
+	    return ChatInput;
+	}(React.Component);
 
 	module.exports = ChatInput;
 
 /***/ },
-/* 272 */
+/* 272 */,
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var Logo = __webpack_require__(273);
+
+	var generalChat = React.createClass({
+	    displayName: 'generalChat',
+
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                'h2',
+	                null,
+	                'general Chat!!'
+	            ),
+	            React.createElement(
+	                'h1',
+	                null,
+	                'GENERALLLLL'
+	            ),
+	            React.createElement(
+	                'h2',
+	                null,
+	                this.props.message
+	            )
+	        );
+	    }
+	});
+
+	module.exports = generalChat;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var Logo = __webpack_require__(275);
 
 	var Main = React.createClass({
 	    displayName: 'Main',
@@ -28766,7 +28778,7 @@
 	module.exports = Main;
 
 /***/ },
-/* 273 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28792,14 +28804,14 @@
 	module.exports = Logo;
 
 /***/ },
-/* 274 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var Login = __webpack_require__(275);
-	var RegisterAddress = __webpack_require__(276);
+	var Login = __webpack_require__(277);
+	var RegisterAddress = __webpack_require__(278);
 
 	var LoginPage = React.createClass({
 	    displayName: 'LoginPage',
@@ -28817,7 +28829,7 @@
 	module.exports = LoginPage;
 
 /***/ },
-/* 275 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28876,6 +28888,7 @@
 	            email: email,
 	            password: password
 	        }).then(function (res) {
+	            console.log('heyyyy');
 	            console.log(res.data);
 	            if (res.data.success === true) {
 	                window.location.href = "#/connectArea";
@@ -28891,12 +28904,12 @@
 	module.exports = Login;
 
 /***/ },
-/* 276 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _reactGeosuggest = __webpack_require__(277);
+	var _reactGeosuggest = __webpack_require__(279);
 
 	var _reactGeosuggest2 = _interopRequireDefault(_reactGeosuggest);
 
@@ -29083,7 +29096,7 @@
 	module.exports = RegisterAddress;
 
 /***/ },
-/* 277 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29100,31 +29113,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(278);
+	var _classnames = __webpack_require__(280);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _lodash = __webpack_require__(279);
+	var _lodash = __webpack_require__(281);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _defaults = __webpack_require__(280);
+	var _defaults = __webpack_require__(282);
 
 	var _defaults2 = _interopRequireDefault(_defaults);
 
-	var _propTypes = __webpack_require__(281);
+	var _propTypes = __webpack_require__(283);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _filterInputAttributes = __webpack_require__(282);
+	var _filterInputAttributes = __webpack_require__(284);
 
 	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
 
-	var _input = __webpack_require__(283);
+	var _input = __webpack_require__(285);
 
 	var _input2 = _interopRequireDefault(_input);
 
-	var _suggestList = __webpack_require__(287);
+	var _suggestList = __webpack_require__(289);
 
 	var _suggestList2 = _interopRequireDefault(_suggestList);
 
@@ -29638,7 +29651,7 @@
 	exports.default = Geosuggest;
 
 /***/ },
-/* 278 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -29692,7 +29705,7 @@
 
 
 /***/ },
-/* 279 */
+/* 281 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -30076,7 +30089,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 280 */
+/* 282 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30122,7 +30135,7 @@
 	};
 
 /***/ },
-/* 281 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30172,7 +30185,7 @@
 	};
 
 /***/ },
-/* 282 */
+/* 284 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30205,7 +30218,7 @@
 	 */
 
 /***/ },
-/* 283 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30222,15 +30235,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsShallowCompare = __webpack_require__(284);
+	var _reactAddonsShallowCompare = __webpack_require__(286);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
-	var _classnames = __webpack_require__(278);
+	var _classnames = __webpack_require__(280);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _filterInputAttributes = __webpack_require__(282);
+	var _filterInputAttributes = __webpack_require__(284);
 
 	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
 
@@ -30404,13 +30417,13 @@
 	exports.default = Input;
 
 /***/ },
-/* 284 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(285);
+	module.exports = __webpack_require__(287);
 
 /***/ },
-/* 285 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30425,7 +30438,7 @@
 
 	'use strict';
 
-	var shallowEqual = __webpack_require__(286);
+	var shallowEqual = __webpack_require__(288);
 
 	/**
 	 * Does a shallow comparison for props and state.
@@ -30439,7 +30452,7 @@
 	module.exports = shallowCompare;
 
 /***/ },
-/* 286 */
+/* 288 */
 /***/ function(module, exports) {
 
 	/**
@@ -30511,7 +30524,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 287 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30526,15 +30539,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsShallowCompare = __webpack_require__(284);
+	var _reactAddonsShallowCompare = __webpack_require__(286);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
-	var _classnames = __webpack_require__(278);
+	var _classnames = __webpack_require__(280);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _suggestItem = __webpack_require__(288);
+	var _suggestItem = __webpack_require__(290);
 
 	var _suggestItem2 = _interopRequireDefault(_suggestItem);
 
@@ -30647,7 +30660,7 @@
 	};
 
 /***/ },
-/* 288 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30662,11 +30675,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsShallowCompare = __webpack_require__(284);
+	var _reactAddonsShallowCompare = __webpack_require__(286);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
-	var _classnames = __webpack_require__(278);
+	var _classnames = __webpack_require__(280);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -30761,26 +30774,57 @@
 	};
 
 /***/ },
-/* 289 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var React = __webpack_require__(1);
 
-	var Another = React.createClass({
-	    displayName: 'Another',
+	var anotherChat = function (_React$Component) {
+	    _inherits(anotherChat, _React$Component);
 
-	    render: function render() {
-	        return React.createElement(
-	            'h2',
-	            null,
-	            'Another Chat!!'
-	        );
+	    function anotherChat(props) {
+	        _classCallCheck(this, anotherChat);
+
+	        var _this = _possibleConstructorReturn(this, (anotherChat.__proto__ || Object.getPrototypeOf(anotherChat)).call(this, props));
+
+	        console.log(_this.props.message);
+	        return _this;
 	    }
-	});
 
-	module.exports = Another;
+	    _createClass(anotherChat, [{
+	        key: 'render',
+	        value: function render() {
+	            return React.createElement(
+	                'div',
+	                null,
+	                React.createElement(
+	                    'h2',
+	                    null,
+	                    'Another Chat!!'
+	                ),
+	                React.createElement(
+	                    'h1',
+	                    null,
+	                    'ANOTHER'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return anotherChat;
+	}(React.Component);
+
+	module.exports = anotherChat;
 
 /***/ }
 /******/ ]);

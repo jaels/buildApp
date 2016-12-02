@@ -1,54 +1,54 @@
 var React = require('react');
-var {Link} = require('react-router');
+var {Link, IndexLink} = require('react-router');
 
 
 class ChatNav extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            gotAllusers: false
+            gotAllUsers: false
         }
+
         var that = this;
         axios.get('/getAllUsers').then(function(result) {
-            console.log(result);
-            that.state = {
+            that.setState({
                 users:result.data.file,
                 gotAllUsers: true
-            }
-            console.log(that.state.users);
+            })
             return;
         })
     }
     render() {
         var that = this;
         var { gotAllUsers, users } = this.state;
-
+        var details = this.props.details;
+        var address = this.props.details.address;
         function gotUsers() {
-            if(gotAllUsers) {
+            if(that.state.gotAllUsers) {
                 var users = that.state.users.map(function(user) {
                     return (
-                        <Link to={`/chatWithUser/${user.id}`} activeClassName="active"> <p>{user.firstname } {user.lastname}</p></Link>
-                )
-            })
-            return (
-                <div>
-                    {users}
-                </div>
-            )
-        }
-    }
-    var details = this.props.details;
-    var address = this.props.details.address;
-    return (
-        <div className="chatNav">
-            <h3> {address}</h3>
-        <Link to="/connectArea" activeClassName="active">General</Link>
-    <Link to="/anotherChat">another</Link>
+                        <div>
+                            <Link to={`/connectArea/privateChat/${user.id}`} activeClassName="active" key={user.id}> <p>{user.firstname } {user.lastname}</p></Link>
+                        </div>
+                    )
+                })
+                console.log('after map');
 
-    {gotUsers()}
-</div>
-)
-}
+                return (
+                    <div>
+                        {users}
+                    </div>
+                )
+            }
+        }
+        return (
+            <div className="chatNav">
+                <h3> {address}</h3>
+                <IndexLink to="connectArea" activeClassName="active">General</IndexLink>
+                {gotUsers()}
+            </div>
+        )
+    }
 
 }
 

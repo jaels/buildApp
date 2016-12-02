@@ -52,8 +52,8 @@ exports.checkEmail = function(email) {
     });
 };
 
-exports.insertUserData = function(firstname, lastname, floor, buildingSpec, aptNumber, buildingId, email, hashPassword) {
-    return getFromDb('INSERT into users(firstname, lastname, floor, building_specifications, apt_number,building_id, email, password) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',[firstname, lastname, floor, buildingSpec, aptNumber, buildingId, email, hashPassword]).then(function(result) {
+exports.insertUserData = function(firstname, lastname, floor, buildingSpec, aptNumber, buildingId, address, email, hashPassword) {
+    return getFromDb('INSERT into users(firstname, lastname, floor, building_specifications, apt_number,building_id, address, email, password) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',[firstname, lastname, floor, buildingSpec, aptNumber, buildingId, address, email, hashPassword]).then(function(result) {
         console.log(result.rows);
         return result.rows[0].id;
         res.json({success:true});

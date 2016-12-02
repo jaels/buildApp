@@ -32,6 +32,7 @@ var Login = React.createClass({
             email: email,
             password: password,
         }).then(function(res) {
+            console.log('heyyyy');
             console.log(res.data);
             if(res.data.success===true) {
                 window.location.href = "#/connectArea";

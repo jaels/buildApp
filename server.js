@@ -31,9 +31,11 @@ app.post('/checkBuilding', function(req,res) {
     db.checkBuilding(placeId).then(function(result) {
         if(result.rows.length>0) {
             req.session.buildingId = result.rows[0].id;
+            req.session.address = result.rows[0].address;
             res.json({success:true});
         }
         else {
+            req.session.address = req.body.address;
             res.json({success:false});
         }
     })
@@ -63,6 +65,7 @@ app.post('/checkUser', function(req,res) {
             var id=result.rows[0].id;
             var firstname=result.rows[0].firstname;
             var lastname=result.rows[0].lastname;
+            var address = result.rows[0].address;
             var email=result.rows[0].email;
             var floor = result.rows[0].email;
             var buildingSpec = result.rows[0].building_specifications;
@@ -74,6 +77,7 @@ app.post('/checkUser', function(req,res) {
                     req.session.buildingId = building_id;
                     req.session.user = {
                         id:id,
+                        address:address,
                         firstname:firstname,
                         lastname:lastname,
                         email:email,
@@ -102,13 +106,14 @@ app.post('/registerUser', function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
     var buildingId = req.session.buildingId;
+    var address = req.session.address;
 
     if(email.indexOf('@')>-1 && firstname && lastname && floor && email && password ) {
         db.checkEmail(email).then(function(result) {
             if(result.rows.length===0) {
                 db.hashPassword(password).then(function(hash) {
                     var hashPassword = hash;
-                    db.insertUserData(firstname, lastname, floor, buildingSpec, aptNumber, buildingId, email, hashPassword).then(function(id) {
+                    db.insertUserData(firstname, lastname, floor, buildingSpec, aptNumber, buildingId, address, email, hashPassword).then(function(id) {
                         req.session.user = {
                             id:id,
                             firstname:firstname,
@@ -116,6 +121,7 @@ app.post('/registerUser', function(req, res) {
                             floor:floor,
                             buildingSpec:buildingSpec,
                             buildingId:buildingId,
+                            address:address,
                             email: email
                         }
                     res.json({success:true});
@@ -144,6 +150,7 @@ app.get('/checkAddress', function(req, res) {
 
 app.get('/getAllDetails', function(req,res) {
     if(req.session) {
+        console.log(req.session);
         res.json({
             success:true,
             file: req.session
@@ -166,3 +173,7 @@ app.get('/getAllUsers', function(req, res) {
 app.listen(3000, function() {
     console.log('listening');
 });
+
+
+
+// Link to={`/chatWithUser/${user.id}`}

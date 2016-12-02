@@ -16,6 +16,7 @@ CREATE TABLE users (
     building_specifications VARCHAR(255),
     apt_number VARCHAR(255),
     building_id INTEGER not null,
+    address VARCHAR(255) not null,
     email VARCHAR(255) not null UNIQUE,
     password VARCHAR(255) not null,
     created_at TIMESTAMP default CURRENT_TIMESTAMP

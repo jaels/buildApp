@@ -1,14 +1,15 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var RegisterUser = require('./components/RegisterUser.jsx');
-var buildingExists = require('./components/buildingExists.jsx');
 var createBuilding = require('./components/createBuilding.jsx');
-var thankYou = require('./components/ThankYou.jsx')
 var connectArea = require('./components/ConnectArea.jsx')
 
-var anotherChat = require('./components/anotherChat.jsx');
+var privateChat = require('./components/privateChat.jsx');
+
+var generalChat = require('./components/generalChat.jsx');
 
 
+var Conversations = require('./components/Conversations.jsx');
 
 var Main = require('./components/Main.jsx');
 var LoginPage = require('./components/LoginPage.jsx');
@@ -19,13 +20,16 @@ var {Route, Router, IndexRoute, hashHistory} = require('react-router');
 ReactDOM.render(
     <Router history={hashHistory}>
         <Route path="/" component={Main}>
-            <Route path="register" component={RegisterUser}/>
-                <Route path="buildingExists" component={buildingExists}/>
-                    <Route path="createBuilding" component={createBuilding}/>
-                        <Route path="thankYou" component={thankYou}/>
-                            <Route path="connectArea" component={connectArea}/>
+        <IndexRoute component={LoginPage}/>
+    <Route path="register" component={RegisterUser}/>
+<Route path="connectArea" component={connectArea}>
+    <Route path="privateChat/:chat_with_id" component={privateChat}/>
+<IndexRoute component={generalChat}/>
 
-            <IndexRoute component={LoginPage}/>
+</Route>
+
+
+
         </Route>
 
     </Router>,

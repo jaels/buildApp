@@ -7,6 +7,7 @@ var Conversations = React.createClass({
         return (
             <div className="conversationsArea">
                 <h3>these are conversations</h3>
+            {this.props.children}
             </div>
         )
     }

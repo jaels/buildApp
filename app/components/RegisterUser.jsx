@@ -52,7 +52,7 @@ var RegisterUser = React.createClass({
             password: password
         }).then(function(res) {
             if(res.data.success===true) {
-                window.location.href = "#/thankYou";
+                window.location.href = "#/connectArea";
             }
             else {
 
