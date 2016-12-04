@@ -6,16 +6,14 @@ class ChatNav extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            gotAllUsers: false
+            users: []
         }
 
         var that = this;
         axios.get('/getAllUsers').then(function(result) {
             that.setState({
                 users:result.data.file,
-                gotAllUsers: true
             })
-            return;
         })
     }
     render() {
@@ -23,8 +21,6 @@ class ChatNav extends React.Component {
         var { gotAllUsers, users } = this.state;
         var details = this.props.details;
         var address = this.props.details.address;
-        function gotUsers() {
-            if(that.state.gotAllUsers) {
                 var users = that.state.users.map(function(user) {
                     return (
                         <div>
@@ -33,18 +29,13 @@ class ChatNav extends React.Component {
                     )
                 })
 
-                return (
-                    <div>
-                        {users}
-                    </div>
-                )
-            }
-        }
         return (
             <div className="chatNav">
                 <h3> {address}</h3>
                 <IndexLink to="connectArea" activeClassName="active">General</IndexLink>
-                {gotUsers()}
+                    <div>
+                        {users}
+                    </div>
             </div>
         )
     }

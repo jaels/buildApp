@@ -28541,16 +28541,14 @@
 	        var _this = _possibleConstructorReturn(this, (ChatNav.__proto__ || Object.getPrototypeOf(ChatNav)).call(this, props));
 
 	        _this.state = {
-	            gotAllUsers: false
+	            users: []
 	        };
 
 	        var that = _this;
 	        axios.get('/getAllUsers').then(function (result) {
 	            that.setState({
-	                users: result.data.file,
-	                gotAllUsers: true
+	                users: result.data.file
 	            });
-	            return;
 	        });
 	        return _this;
 	    }
@@ -28565,34 +28563,25 @@
 
 	            var details = this.props.details;
 	            var address = this.props.details.address;
-	            function gotUsers() {
-	                if (that.state.gotAllUsers) {
-	                    var users = that.state.users.map(function (user) {
-	                        return React.createElement(
-	                            'div',
+	            var users = that.state.users.map(function (user) {
+	                return React.createElement(
+	                    'div',
+	                    null,
+	                    React.createElement(
+	                        Link,
+	                        { to: '/connectArea/privateChat/' + user.id, activeClassName: 'active', key: user.id },
+	                        ' ',
+	                        React.createElement(
+	                            'p',
 	                            null,
-	                            React.createElement(
-	                                Link,
-	                                { to: '/connectArea/privateChat/' + user.id, activeClassName: 'active', key: user.id },
-	                                ' ',
-	                                React.createElement(
-	                                    'p',
-	                                    null,
-	                                    user.firstname,
-	                                    ' ',
-	                                    user.lastname
-	                                )
-	                            )
-	                        );
-	                    });
+	                            user.firstname,
+	                            ' ',
+	                            user.lastname
+	                        )
+	                    )
+	                );
+	            });
 
-	                    return React.createElement(
-	                        'div',
-	                        null,
-	                        users
-	                    );
-	                }
-	            }
 	            return React.createElement(
 	                'div',
 	                { className: 'chatNav' },
@@ -28607,7 +28596,11 @@
 	                    { to: 'connectArea', activeClassName: 'active' },
 	                    'General'
 	                ),
-	                gotUsers()
+	                React.createElement(
+	                    'div',
+	                    null,
+	                    users
+	                )
 	            );
 	        }
 	    }]);
@@ -28726,7 +28719,7 @@
 /* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -28747,14 +28740,15 @@
 	        var _this = _possibleConstructorReturn(this, (generalChat.__proto__ || Object.getPrototypeOf(generalChat)).call(this, props));
 
 	        var that = _this;
-	        _this.state = { messages: '',
+	        _this.state = {
+	            messages: [],
 	            gotMessages: false
 	        };
 	        _this.handleChange = _this.handleChange.bind(_this);
 	        _this.sendMessage = _this.sendMessage.bind(_this);
 	        var buildingId = _this.props.details.buildingId;
 
-	        axios.get('/getGeneralMessages/' + buildingId).then(function (result) {
+	        axios.get("/getGeneralMessages/" + buildingId).then(function (result) {
 	            that.setState({
 	                messages: result.data.file,
 	                gotMessages: true
@@ -28764,76 +28758,69 @@
 	    }
 
 	    _createClass(generalChat, [{
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	            var that = this;
+	            var messages = that.state.messages.map(function (message) {
+	                return React.createElement(
+	                    "div",
+	                    { className: "messagesContainer" },
+	                    React.createElement(
+	                        "div",
+	                        { id: message.id },
+	                        React.createElement(
+	                            "h4",
+	                            { className: "messageText" },
+	                            message.message
+	                        ),
+	                        React.createElement(
+	                            "h5",
+	                            { className: "messgageName" },
+	                            message.firstname,
+	                            " ",
+	                            message.lastname
+	                        ),
+	                        "  posted on ",
+	                        message.created_at,
+	                        ">"
+	                    )
+	                );
+	            });
+
 	            return React.createElement(
-	                'div',
-	                { className: 'inputAndChat' },
+	                "div",
+	                { className: "inputAndChat" },
 	                React.createElement(
-	                    'div',
-	                    { className: 'conversationsArea', ref: 'scrollDiv', onFocus: this.scrolling },
-	                    theMessages()
+	                    "div",
+	                    { className: "conversationsArea", ref: "scrollDiv", onFocus: this.scrolling },
+	                    React.createElement(
+	                        "div",
+	                        null,
+	                        messages
+	                    )
 	                ),
 	                React.createElement(
-	                    'div',
-	                    { className: 'chatContainer' },
-	                    React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.newMessage, onChange: this.handleChange }),
+	                    "div",
+	                    { className: "chatContainer" },
+	                    React.createElement("textArea", { className: "textArea", placeholder: "Write your message", value: this.state.newMessage, onChange: this.handleChange }),
 	                    React.createElement(
-	                        'button',
-	                        { className: 'message_button', onClick: this.sendMessage },
-	                        'Send'
+	                        "button",
+	                        { className: "message_button", onClick: this.sendMessage },
+	                        "Send"
 	                    )
 	                )
 	            );
-
-	            function theMessages() {
-	                if (that.state.gotMessages) {
-	                    var messages = that.state.messages.map(function (message) {
-	                        return React.createElement(
-	                            'div',
-	                            { className: 'messagesContainer' },
-	                            React.createElement(
-	                                'div',
-	                                { id: message.id },
-	                                React.createElement(
-	                                    'h4',
-	                                    { className: 'messageText' },
-	                                    message.message
-	                                ),
-	                                React.createElement(
-	                                    'h5',
-	                                    { className: 'messgageName' },
-	                                    message.firstname,
-	                                    ' ',
-	                                    message.lastname
-	                                ),
-	                                '  posted on ',
-	                                message.created_at,
-	                                '>'
-	                            )
-	                        );
-	                    });
-
-	                    return React.createElement(
-	                        'div',
-	                        null,
-	                        messages
-	                    );
-	                }
-	            }
 	        }
 	    }, {
-	        key: 'componentDidUpdate',
+	        key: "componentDidUpdate",
 	        value: function componentDidUpdate() {
 	            console.log('scrolling');
 	            this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
 	        }
 	    }, {
-	        key: 'sendMessage',
+	        key: "sendMessage",
 	        value: function sendMessage(e) {
 	            var that = this;
-
 	            e.preventDefault();
 	            var newMessage = this.state.newMessage;
 	            this.state.newMessage = "";
@@ -28850,7 +28837,7 @@
 	            });
 	        }
 	    }, {
-	        key: 'handleChange',
+	        key: "handleChange",
 	        value: function handleChange(event) {
 	            this.setState({ newMessage: event.target.value });
 	        }

@@ -5,7 +5,8 @@ class generalChat extends React.Component {
     constructor(props) {
         super(props);
         var that = this;
-        this.state = {messages: '',
+        this.state = {
+            messages:[],
             gotMessages:false
         };
         this.handleChange = this.handleChange.bind(this);
@@ -24,10 +25,23 @@ class generalChat extends React.Component {
 
     render() {
         var that = this;
+        var messages = that.state.messages.map(function(message) {
+            return (
+                <div className="messagesContainer">
+                    <div id={message.id}>
+                        <h4 className="messageText">{message.message}</h4>
+                        <h5 className="messgageName">{message.firstname} {message.lastname}</h5>  posted on {message.created_at}>
+                    </div>
+                </div>
+            )
+        })
+
         return(
             <div className="inputAndChat">
                 <div className = "conversationsArea" ref='scrollDiv' onFocus={this.scrolling}>
-                {theMessages()}
+                    <div>
+                {messages}
+                </div>
                 </div>
                 <div className="chatContainer">
                     <textArea className = "textArea"  placeholder="Write your message" value={this.state.newMessage} onChange={this.handleChange} ></textArea>
@@ -35,30 +49,6 @@ class generalChat extends React.Component {
                 </div>
             </div>
         )
-
-
-        function theMessages() {
-            if(that.state.gotMessages) {
-                var messages = that.state.messages.map(function(message) {
-                    return (
-                        <div className="messagesContainer">
-                            <div id={message.id}>
-                                <h4 className="messageText">{message.message}</h4>
-                                <h5 className="messgageName">{message.firstname} {message.lastname}</h5>  posted on {message.created_at}>
-                            </div>
-                        </div>
-                    )
-                })
-
-                return (
-                    <div>
-                        {messages}
-                    </div>
-                )
-
-            }
-        }
-
     }
 
     componentDidUpdate() {
@@ -68,7 +58,6 @@ class generalChat extends React.Component {
 
     sendMessage(e) {
         var that =this;
-
         e.preventDefault();
         var newMessage = this.state.newMessage;
         this.state.newMessage = "";
