@@ -12,6 +12,7 @@ class generalChat extends React.Component {
         this.sendMessage = this.sendMessage.bind(this);
         var buildingId = this.props.details.buildingId;
 
+
         axios.get(`/getGeneralMessages/${buildingId}`).then(function(result) {
             that.setState({
                 messages:result.data.file,
@@ -23,11 +24,9 @@ class generalChat extends React.Component {
 
     render() {
         var that = this;
-
         return(
-            <div>
-                <div className = "conversationsArea">
-                <h2>general Chat!!</h2>
+            <div className="inputAndChat">
+                <div className = "conversationsArea" ref='scrollDiv' onFocus={this.scrolling}>
                 {theMessages()}
                 </div>
                 <div className="chatContainer">
@@ -36,10 +35,11 @@ class generalChat extends React.Component {
                 </div>
             </div>
         )
+
+
         function theMessages() {
             if(that.state.gotMessages) {
                 var messages = that.state.messages.map(function(message) {
-
                     return (
                         <div className="messagesContainer">
                             <div id={message.id}>
@@ -61,8 +61,14 @@ class generalChat extends React.Component {
 
     }
 
+    componentDidUpdate() {
+        console.log('scrolling');
+            this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
+    }
+
     sendMessage(e) {
         var that =this;
+
         e.preventDefault();
         var newMessage = this.state.newMessage;
         this.state.newMessage = "";

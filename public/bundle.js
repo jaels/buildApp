@@ -52,9 +52,9 @@
 	var createBuilding = __webpack_require__(265);
 	var connectArea = __webpack_require__(266);
 
-	var privateChat = __webpack_require__(270);
+	var privateChat = __webpack_require__(269);
 
-	var generalChat = __webpack_require__(271);
+	var generalChat = __webpack_require__(270);
 
 	var Conversations = __webpack_require__(268);
 
@@ -28483,7 +28483,7 @@
 	                        React.createElement(ChatNav, { details: details }),
 	                        React.createElement(
 	                            'div',
-	                            { className: 'conversationsArea' },
+	                            null,
 	                            React.cloneElement(that.props.children, { details: details,
 	                                onNewMessage: that.handleNewMessage
 	                            })
@@ -28646,8 +28646,7 @@
 	module.exports = Conversations;
 
 /***/ },
-/* 269 */,
-/* 270 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28724,7 +28723,7 @@
 	module.exports = privateChat;
 
 /***/ },
-/* 271 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28768,18 +28767,12 @@
 	        key: 'render',
 	        value: function render() {
 	            var that = this;
-
 	            return React.createElement(
 	                'div',
-	                null,
+	                { className: 'inputAndChat' },
 	                React.createElement(
 	                    'div',
-	                    { className: 'conversationsArea' },
-	                    React.createElement(
-	                        'h2',
-	                        null,
-	                        'general Chat!!'
-	                    ),
+	                    { className: 'conversationsArea', ref: 'scrollDiv', onFocus: this.scrolling },
 	                    theMessages()
 	                ),
 	                React.createElement(
@@ -28793,10 +28786,10 @@
 	                    )
 	                )
 	            );
+
 	            function theMessages() {
 	                if (that.state.gotMessages) {
 	                    var messages = that.state.messages.map(function (message) {
-
 	                        return React.createElement(
 	                            'div',
 	                            { className: 'messagesContainer' },
@@ -28831,9 +28824,16 @@
 	            }
 	        }
 	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            console.log('scrolling');
+	            this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
+	        }
+	    }, {
 	        key: 'sendMessage',
 	        value: function sendMessage(e) {
 	            var that = this;
+
 	            e.preventDefault();
 	            var newMessage = this.state.newMessage;
 	            this.state.newMessage = "";
@@ -28862,6 +28862,7 @@
 	module.exports = generalChat;
 
 /***/ },
+/* 271 */,
 /* 272 */
 /***/ function(module, exports, __webpack_require__) {
 

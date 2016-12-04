@@ -35,7 +35,7 @@ class ConnectArea extends React.Component {
                 return (
                     <div className="connectArea">
                         <ChatNav details={details} />
-                    <div className="conversationsArea">
+                    <div>
                         {React.cloneElement(that.props.children, {details:details,
                             onNewMessage:that.handleNewMessage
                         })}
