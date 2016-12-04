@@ -49,17 +49,17 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
 	var RegisterUser = __webpack_require__(183);
-	var createBuilding = __webpack_require__(266);
-	var connectArea = __webpack_require__(268);
+	var createBuilding = __webpack_require__(265);
+	var connectArea = __webpack_require__(266);
 
-	var privateChat = __webpack_require__(291);
+	var privateChat = __webpack_require__(270);
 
-	var generalChat = __webpack_require__(273);
+	var generalChat = __webpack_require__(271);
 
-	var Conversations = __webpack_require__(270);
+	var Conversations = __webpack_require__(268);
 
-	var Main = __webpack_require__(274);
-	var LoginPage = __webpack_require__(276);
+	var Main = __webpack_require__(272);
+	var LoginPage = __webpack_require__(274);
 
 	var _require = __webpack_require__(184),
 	    Route = _require.Route,
@@ -28341,8 +28341,7 @@
 
 
 /***/ },
-/* 265 */,
-/* 266 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28424,8 +28423,7 @@
 	module.exports = createBuilding;
 
 /***/ },
-/* 267 */,
-/* 268 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28439,9 +28437,8 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(1);
-	var ChatNav = __webpack_require__(269);
-	var Conversations = __webpack_require__(270);
-	var ChatInput = __webpack_require__(271);
+	var ChatNav = __webpack_require__(267);
+	var Conversations = __webpack_require__(268);
 
 	var ConnectArea = function (_React$Component) {
 	    _inherits(ConnectArea, _React$Component);
@@ -28453,7 +28450,7 @@
 
 	        _this.state = {
 	            gotAllDetails: false,
-	            message: ""
+	            newMessage: ""
 	        };
 	        _this.handleNewMessage = _this.handleNewMessage.bind(_this);
 
@@ -28463,7 +28460,6 @@
 	                details: result.data.file,
 	                gotAllDetails: true
 	            });
-	            console.log(result.data.file);
 
 	            return;
 	        });
@@ -28484,13 +28480,14 @@
 	                    return React.createElement(
 	                        'div',
 	                        { className: 'connectArea' },
-	                        React.createElement(ChatNav, { message: that.state.message, details: details }),
+	                        React.createElement(ChatNav, { details: details }),
 	                        React.createElement(
 	                            'div',
 	                            { className: 'conversationsArea' },
-	                            React.cloneElement(that.props.children, { message: that.state.message })
-	                        ),
-	                        React.createElement(ChatInput, { onNewMessage: that.handleNewMessage })
+	                            React.cloneElement(that.props.children, { details: details,
+	                                onNewMessage: that.handleNewMessage
+	                            })
+	                        )
 	                    );
 	                }
 	            }
@@ -28503,9 +28500,9 @@
 	        }
 	    }, {
 	        key: 'handleNewMessage',
-	        value: function handleNewMessage(message) {
+	        value: function handleNewMessage(newMessage) {
 	            this.setState({
-	                message: message
+	                newMessage: newMessage
 	            });
 	        }
 	    }]);
@@ -28516,7 +28513,7 @@
 	module.exports = ConnectArea;
 
 /***/ },
-/* 269 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28588,7 +28585,6 @@
 	                            )
 	                        );
 	                    });
-	                    console.log('after map');
 
 	                    return React.createElement(
 	                        'div',
@@ -28622,7 +28618,7 @@
 	module.exports = ChatNav;
 
 /***/ },
-/* 270 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -28650,7 +28646,8 @@
 	module.exports = Conversations;
 
 /***/ },
-/* 271 */
+/* 269 */,
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28665,13 +28662,13 @@
 
 	var React = __webpack_require__(1);
 
-	var ChatInput = function (_React$Component) {
-	    _inherits(ChatInput, _React$Component);
+	var privateChat = function (_React$Component) {
+	    _inherits(privateChat, _React$Component);
 
-	    function ChatInput(props) {
-	        _classCallCheck(this, ChatInput);
+	    function privateChat(props) {
+	        _classCallCheck(this, privateChat);
 
-	        var _this = _possibleConstructorReturn(this, (ChatInput.__proto__ || Object.getPrototypeOf(ChatInput)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (privateChat.__proto__ || Object.getPrototypeOf(privateChat)).call(this, props));
 
 	        _this.state = { message: '' };
 	        _this.handleChange = _this.handleChange.bind(_this);
@@ -28679,17 +28676,30 @@
 	        return _this;
 	    }
 
-	    _createClass(ChatInput, [{
+	    _createClass(privateChat, [{
 	        key: 'render',
 	        value: function render() {
 	            return React.createElement(
 	                'div',
-	                { className: 'chatContainer' },
-	                React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.message, onChange: this.handleChange }),
+	                null,
 	                React.createElement(
-	                    'button',
-	                    { className: 'message_button', onClick: this.sendMessage },
-	                    'Send'
+	                    'div',
+	                    { className: 'conversationsArea' },
+	                    React.createElement(
+	                        'h2',
+	                        null,
+	                        'private Chat!!'
+	                    )
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'chatContainer' },
+	                    React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.message, onChange: this.handleChange }),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'message_button', onClick: this.sendMessage },
+	                        'Send'
+	                    )
 	                )
 	            );
 	        }
@@ -28708,56 +28718,157 @@
 	        }
 	    }]);
 
-	    return ChatInput;
+	    return privateChat;
 	}(React.Component);
 
-	module.exports = ChatInput;
+	module.exports = privateChat;
 
 /***/ },
-/* 272 */,
-/* 273 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var React = __webpack_require__(1);
 
-	var generalChat = React.createClass({
-	    displayName: 'generalChat',
+	var generalChat = function (_React$Component) {
+	    _inherits(generalChat, _React$Component);
 
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            null,
-	            React.createElement(
-	                'h2',
-	                null,
-	                'general Chat!!'
-	            ),
-	            React.createElement(
-	                'h1',
-	                null,
-	                'GENERALLLLL'
-	            ),
-	            React.createElement(
-	                'h2',
-	                null,
-	                this.props.message
-	            )
-	        );
+	    function generalChat(props) {
+	        _classCallCheck(this, generalChat);
+
+	        var _this = _possibleConstructorReturn(this, (generalChat.__proto__ || Object.getPrototypeOf(generalChat)).call(this, props));
+
+	        var that = _this;
+	        _this.state = { messages: '',
+	            gotMessages: false
+	        };
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        _this.sendMessage = _this.sendMessage.bind(_this);
+	        var buildingId = _this.props.details.buildingId;
+
+	        axios.get('/getGeneralMessages/' + buildingId).then(function (result) {
+	            that.setState({
+	                messages: result.data.file,
+	                gotMessages: true
+	            });
+	        });
+	        return _this;
 	    }
-	});
+
+	    _createClass(generalChat, [{
+	        key: 'render',
+	        value: function render() {
+	            var that = this;
+
+	            return React.createElement(
+	                'div',
+	                null,
+	                React.createElement(
+	                    'div',
+	                    { className: 'conversationsArea' },
+	                    React.createElement(
+	                        'h2',
+	                        null,
+	                        'general Chat!!'
+	                    ),
+	                    theMessages()
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'chatContainer' },
+	                    React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.newMessage, onChange: this.handleChange }),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'message_button', onClick: this.sendMessage },
+	                        'Send'
+	                    )
+	                )
+	            );
+	            function theMessages() {
+	                if (that.state.gotMessages) {
+	                    var messages = that.state.messages.map(function (message) {
+
+	                        return React.createElement(
+	                            'div',
+	                            { className: 'messagesContainer' },
+	                            React.createElement(
+	                                'div',
+	                                { id: message.id },
+	                                React.createElement(
+	                                    'h4',
+	                                    { className: 'messageText' },
+	                                    message.message
+	                                ),
+	                                React.createElement(
+	                                    'h5',
+	                                    { className: 'messgageName' },
+	                                    message.firstname,
+	                                    ' ',
+	                                    message.lastname
+	                                ),
+	                                '  posted on ',
+	                                message.created_at,
+	                                '>'
+	                            )
+	                        );
+	                    });
+
+	                    return React.createElement(
+	                        'div',
+	                        null,
+	                        messages
+	                    );
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'sendMessage',
+	        value: function sendMessage(e) {
+	            var that = this;
+	            e.preventDefault();
+	            var newMessage = this.state.newMessage;
+	            this.state.newMessage = "";
+	            axios.post('insertGeneralMessage', {
+	                newMessage: newMessage
+	            }).then(function (response) {
+	                newMessage = response.data.file;
+	                that.props.onNewMessage(newMessage);
+	                console.log(that.state.messages);
+	                var messages = that.state.messages.push(newMessage);
+	                that.setState({
+	                    gotMessages: true
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(event) {
+	            this.setState({ newMessage: event.target.value });
+	        }
+	    }]);
+
+	    return generalChat;
+	}(React.Component);
 
 	module.exports = generalChat;
 
 /***/ },
-/* 274 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var Logo = __webpack_require__(275);
+	var Logo = __webpack_require__(273);
 
 	var Main = React.createClass({
 	    displayName: 'Main',
@@ -28778,7 +28889,7 @@
 	module.exports = Main;
 
 /***/ },
-/* 275 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28804,14 +28915,14 @@
 	module.exports = Logo;
 
 /***/ },
-/* 276 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var Login = __webpack_require__(277);
-	var RegisterAddress = __webpack_require__(278);
+	var Login = __webpack_require__(275);
+	var RegisterAddress = __webpack_require__(276);
 
 	var LoginPage = React.createClass({
 	    displayName: 'LoginPage',
@@ -28829,7 +28940,7 @@
 	module.exports = LoginPage;
 
 /***/ },
-/* 277 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28904,12 +29015,12 @@
 	module.exports = Login;
 
 /***/ },
-/* 278 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _reactGeosuggest = __webpack_require__(279);
+	var _reactGeosuggest = __webpack_require__(277);
 
 	var _reactGeosuggest2 = _interopRequireDefault(_reactGeosuggest);
 
@@ -29096,7 +29207,7 @@
 	module.exports = RegisterAddress;
 
 /***/ },
-/* 279 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29113,31 +29224,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(280);
+	var _classnames = __webpack_require__(278);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(279);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _defaults = __webpack_require__(282);
+	var _defaults = __webpack_require__(280);
 
 	var _defaults2 = _interopRequireDefault(_defaults);
 
-	var _propTypes = __webpack_require__(283);
+	var _propTypes = __webpack_require__(281);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _filterInputAttributes = __webpack_require__(284);
+	var _filterInputAttributes = __webpack_require__(282);
 
 	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
 
-	var _input = __webpack_require__(285);
+	var _input = __webpack_require__(283);
 
 	var _input2 = _interopRequireDefault(_input);
 
-	var _suggestList = __webpack_require__(289);
+	var _suggestList = __webpack_require__(287);
 
 	var _suggestList2 = _interopRequireDefault(_suggestList);
 
@@ -29651,7 +29762,7 @@
 	exports.default = Geosuggest;
 
 /***/ },
-/* 280 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -29705,7 +29816,7 @@
 
 
 /***/ },
-/* 281 */
+/* 279 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -30089,7 +30200,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 282 */
+/* 280 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30135,7 +30246,7 @@
 	};
 
 /***/ },
-/* 283 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30185,7 +30296,7 @@
 	};
 
 /***/ },
-/* 284 */
+/* 282 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30218,7 +30329,7 @@
 	 */
 
 /***/ },
-/* 285 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30235,15 +30346,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsShallowCompare = __webpack_require__(286);
+	var _reactAddonsShallowCompare = __webpack_require__(284);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
-	var _classnames = __webpack_require__(280);
+	var _classnames = __webpack_require__(278);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _filterInputAttributes = __webpack_require__(284);
+	var _filterInputAttributes = __webpack_require__(282);
 
 	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
 
@@ -30417,13 +30528,13 @@
 	exports.default = Input;
 
 /***/ },
-/* 286 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(287);
+	module.exports = __webpack_require__(285);
 
 /***/ },
-/* 287 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30438,7 +30549,7 @@
 
 	'use strict';
 
-	var shallowEqual = __webpack_require__(288);
+	var shallowEqual = __webpack_require__(286);
 
 	/**
 	 * Does a shallow comparison for props and state.
@@ -30452,7 +30563,7 @@
 	module.exports = shallowCompare;
 
 /***/ },
-/* 288 */
+/* 286 */
 /***/ function(module, exports) {
 
 	/**
@@ -30524,7 +30635,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 289 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30539,15 +30650,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsShallowCompare = __webpack_require__(286);
+	var _reactAddonsShallowCompare = __webpack_require__(284);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
-	var _classnames = __webpack_require__(280);
+	var _classnames = __webpack_require__(278);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _suggestItem = __webpack_require__(290);
+	var _suggestItem = __webpack_require__(288);
 
 	var _suggestItem2 = _interopRequireDefault(_suggestItem);
 
@@ -30660,7 +30771,7 @@
 	};
 
 /***/ },
-/* 290 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30675,11 +30786,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsShallowCompare = __webpack_require__(286);
+	var _reactAddonsShallowCompare = __webpack_require__(284);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
-	var _classnames = __webpack_require__(280);
+	var _classnames = __webpack_require__(278);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -30772,59 +30883,6 @@
 	  className: '',
 	  suggest: {}
 	};
-
-/***/ },
-/* 291 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(1);
-
-	var anotherChat = function (_React$Component) {
-	    _inherits(anotherChat, _React$Component);
-
-	    function anotherChat(props) {
-	        _classCallCheck(this, anotherChat);
-
-	        var _this = _possibleConstructorReturn(this, (anotherChat.__proto__ || Object.getPrototypeOf(anotherChat)).call(this, props));
-
-	        console.log(_this.props.message);
-	        return _this;
-	    }
-
-	    _createClass(anotherChat, [{
-	        key: 'render',
-	        value: function render() {
-	            return React.createElement(
-	                'div',
-	                null,
-	                React.createElement(
-	                    'h2',
-	                    null,
-	                    'Another Chat!!'
-	                ),
-	                React.createElement(
-	                    'h1',
-	                    null,
-	                    'ANOTHER'
-	                )
-	            );
-	        }
-	    }]);
-
-	    return anotherChat;
-	}(React.Component);
-
-	module.exports = anotherChat;
 
 /***/ }
 /******/ ]);

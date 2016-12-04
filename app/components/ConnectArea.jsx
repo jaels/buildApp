@@ -1,7 +1,6 @@
 var React = require('react');
 var ChatNav = require('./ChatNav.jsx')
 var Conversations = require('./Conversations.jsx');
-var ChatInput = require('./ChatInput.jsx');
 
 
 
@@ -12,7 +11,7 @@ class ConnectArea extends React.Component {
         super(props);
         this.state = {
             gotAllDetails: false,
-            message: ""
+            newMessage: ""
         }
         this.handleNewMessage = this.handleNewMessage.bind(this);
 
@@ -22,7 +21,6 @@ class ConnectArea extends React.Component {
                 details:result.data.file,
                 gotAllDetails: true
             })
-            console.log(result.data.file);
 
             return;
         })
@@ -36,11 +34,12 @@ class ConnectArea extends React.Component {
             if(gotAllDetails) {
                 return (
                     <div className="connectArea">
-                        <ChatNav message= {that.state.message} details={details} />
+                        <ChatNav details={details} />
                     <div className="conversationsArea">
-                        {React.cloneElement(that.props.children, {message:that.state.message})}
+                        {React.cloneElement(that.props.children, {details:details,
+                            onNewMessage:that.handleNewMessage
+                        })}
                     </div>
-                    <ChatInput onNewMessage={that.handleNewMessage}/>
                     </div>
                 )
             }
@@ -53,9 +52,9 @@ return (
 )
 }
 
-handleNewMessage(message) {
+handleNewMessage(newMessage) {
 this.setState({
-    message:message
+    newMessage:newMessage
 })
 }
 

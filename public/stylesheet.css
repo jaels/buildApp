@@ -126,12 +126,9 @@ body {
     font-size: 18px;
 }
 
-.chatContainer {
-    margin-bottom: 20%;
-}
 
 .conversationsArea {
-    height:75vh;
+    height:70vh;
     background-color: #DCDCDC;
 }
 
@@ -140,7 +137,9 @@ body {
 }
 
 .chatContainer {
+    position: relative;
     display: inline-block;
+    margin-bottom: 40px;
 }
 .message_button {
     float: right;

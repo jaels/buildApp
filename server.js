@@ -150,7 +150,6 @@ app.get('/checkAddress', function(req, res) {
 
 app.get('/getAllDetails', function(req,res) {
     if(req.session) {
-        console.log(req.session);
         res.json({
             success:true,
             file: req.session
@@ -166,6 +165,31 @@ app.get('/getAllUsers', function(req, res) {
             file: result.rows
         })
     })
+})
+
+app.get('/getGeneralMessages/:buildingId', function(req,res) {
+var buildingId=req.params.buildingId;
+console.log(buildingId);
+ db.getGeneralMessages(buildingId).then(function(result){
+     res.json({
+         success:true,
+         file:result.rows
+     })
+ })
+
+})
+
+
+app.post('/insertGeneralMessage', function(req,res) {
+    var message = req.body.newMessage;
+    var buildingId = req.session.buildingId;
+    var firstname = req.session.user.firstname;
+    var lastname = req.session.user.lastname;
+    var user_id = req.session.user.id;
+        db.insertGeneralMessage(user_id, firstname, lastname, buildingId, message).then(function(result) {
+            res.json({success: true, file: result.rows[0]});
+        })
+
 })
 
 

@@ -68,6 +68,27 @@ exports.getUsers = function(buildingId) {
     });
 }
 
+exports.getGeneralMessages = function(buildingId) {
+    return getFromDb('SELECT * FROM generalMessages WHERE building_id=$1 ORDER BY created_at LIMIT 200',[buildingId]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+exports.insertGeneralMessage = function(user_id, firstname, lastname, buildingId, message) {
+    return getFromDb('INSERT into generalMessages(user_id, firstname, lastname, building_id, message) VALUES($1,$2,$3,$4,$5) RETURNING id,message, firstname, lastname, user_id, created_at', [user_id, firstname, lastname, buildingId, message]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+
 function getFromDb(str, params) {
     return new Promise(function(resolve, reject) {
         pool.connect(function(err, client, done) {

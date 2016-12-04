@@ -21,3 +21,15 @@ CREATE TABLE users (
     password VARCHAR(255) not null,
     created_at TIMESTAMP default CURRENT_TIMESTAMP
 );
+
+
+DROP TABLE IF EXISTS generalMessages;
+CREATE TABLE generalMessages (
+    id SERIAL primary key,
+    user_id INTEGER not null,
+    firstname VARCHAR(255) not null,
+    lastname VARCHAR(255) not null,
+    building_id INTEGER not null,
+    message VARCHAR(2000) not null,
+    created_at TIMESTAMP default CURRENT_TIMESTAMP
+);

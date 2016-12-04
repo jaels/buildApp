@@ -32,7 +32,6 @@ class ChatNav extends React.Component {
                         </div>
                     )
                 })
-                console.log('after map');
 
                 return (
                     <div>
