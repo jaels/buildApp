@@ -33,3 +33,16 @@ CREATE TABLE generalMessages (
     message VARCHAR(2000) not null,
     created_at TIMESTAMP default CURRENT_TIMESTAMP
 );
+
+
+DROP TABLE IF EXISTS privateMessages;
+CREATE TABLE privateMessages (
+    id SERIAL primary key,
+    chat_name VARCHAR(255) not null,
+    message VARCHAR(2000) not null,
+    user_id INTEGER not null,
+    firstname VARCHAR(255) not null,
+    lastname VARCHAR(255) not null,
+    building_id INTEGER not null,
+    created_at TIMESTAMP default CURRENT_TIMESTAMP
+);

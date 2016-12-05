@@ -156,3 +156,7 @@ body {
     color: green;
     font-weight: bold;
 }
+
+.logOutButton {
+    float: right;
+}

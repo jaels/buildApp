@@ -62,14 +62,15 @@ exports.insertUserData = function(firstname, lastname, floor, buildingSpec, aptN
     });
 };
 
-exports.getUsers = function(buildingId) {
-    return getFromDb('SELECT * FROM users WHERE building_id=$1',[buildingId]).then(function(result) {
+exports.getUsers = function(buildingId,currentUser) {
+    return getFromDb('SELECT * FROM users WHERE building_id=$1 AND id!=$2',[buildingId, currentUser]).then(function(result) {
         return result;
     });
 }
 
 exports.getGeneralMessages = function(buildingId) {
     return getFromDb('SELECT * FROM generalMessages WHERE building_id=$1 ORDER BY created_at LIMIT 200',[buildingId]).then(function(result) {
+        console.log(result);
         return result;
     }).catch(function(err) {
         if(err) {
@@ -78,8 +79,30 @@ exports.getGeneralMessages = function(buildingId) {
     });
 };
 
+exports.getPrivateMessages = function(whichChat) {
+    return getFromDb('SELECT * FROM privateMessages WHERE chat_name=$1 ORDER BY created_at LIMIT 200',[whichChat]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+
+
 exports.insertGeneralMessage = function(user_id, firstname, lastname, buildingId, message) {
     return getFromDb('INSERT into generalMessages(user_id, firstname, lastname, building_id, message) VALUES($1,$2,$3,$4,$5) RETURNING id,message, firstname, lastname, user_id, created_at', [user_id, firstname, lastname, buildingId, message]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+exports.insertPrivateMessage = function(whichChat, message, user_id, firstname, lastname, buildingId) {
+    return getFromDb('INSERT into privateMessages(chat_name, message, user_id, firstname, lastname, building_id) VALUES($1,$2,$3,$4,$5,$6) RETURNING id,chat_name, message, firstname, lastname, user_id, created_at', [whichChat, message, user_id, firstname, lastname, buildingId]).then(function(result) {
         return result;
     }).catch(function(err) {
         if(err) {

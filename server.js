@@ -2,6 +2,8 @@ var express = require('express'),
 app = express(),
 cookieParser = require('cookie-parser'),
 cookieSession = require('cookie-session'),
+http = require('http').Server(app),
+
 // csrf = require('csurf'),
 // csrfProtection = csrf({cookie: true}),
 bodyParser = require('body-parser'),
@@ -21,6 +23,23 @@ app.use(cookieSession({
 //     return next();
 // });
 
+var io = require('socket.io')(http);
+io.on('connection', function(socket){
+    console.log('a user connected');
+    socket.emit('connection');
+    socket.on('send:message', function(message){
+        io.emit('send:message', message);
+    });
+
+    socket.on("send:private", function(message){
+        io.emit("send:private", message);
+    });
+});
+
+// io.on('disconnect', function(){
+//     socket.emit('disconnection');
+// console.log('user disconnected');
+// });
 
 
 app.post('/checkBuilding', function(req,res) {
@@ -124,7 +143,7 @@ app.post('/registerUser', function(req, res) {
                             address:address,
                             email: email
                         }
-                    res.json({success:true});
+                        res.json({success:true});
                     })
                 })
             }
@@ -149,17 +168,24 @@ app.get('/checkAddress', function(req, res) {
 });
 
 app.get('/getAllDetails', function(req,res) {
-    if(req.session) {
+    if(req.session.user) {
         res.json({
             success:true,
             file: req.session
+        })
+    }
+    else {
+        res.json({
+            success:false
         })
     }
 })
 
 app.get('/getAllUsers', function(req, res) {
     var buildingId = req.session.buildingId;
-    db.getUsers(buildingId).then(function(result) {
+    var currentUser = req.session.user.id;
+    console.log(currentUser);
+    db.getUsers(buildingId,currentUser).then(function(result) {
         res.json({
             success:true,
             file: result.rows
@@ -168,33 +194,66 @@ app.get('/getAllUsers', function(req, res) {
 })
 
 app.get('/getGeneralMessages/:buildingId', function(req,res) {
-var buildingId=req.params.buildingId;
-console.log(buildingId);
- db.getGeneralMessages(buildingId).then(function(result){
-     res.json({
-         success:true,
-         file:result.rows
-     })
- })
+    var buildingId=req.params.buildingId;
+    db.getGeneralMessages(buildingId).then(function(result){
+        res.json({
+            success:true,
+            file:result.rows
+        })
+    })
+
+})
+
+app.get('/getPrivateMessages/:whichChat', function(req,res) {
+    var whichChat=req.params.whichChat;
+    console.log(whichChat);
+    db.getPrivateMessages(whichChat).then(function(result){
+        console.log(result.rows);
+        res.json({
+            success:true,
+            file:result.rows
+        })
+    })
 
 })
 
 
 app.post('/insertGeneralMessage', function(req,res) {
+
     var message = req.body.newMessage;
     var buildingId = req.session.buildingId;
     var firstname = req.session.user.firstname;
     var lastname = req.session.user.lastname;
     var user_id = req.session.user.id;
-        db.insertGeneralMessage(user_id, firstname, lastname, buildingId, message).then(function(result) {
-            res.json({success: true, file: result.rows[0]});
-        })
+    db.insertGeneralMessage(user_id, firstname, lastname, buildingId, message).then(function(result) {
+        res.json({success: true, file: result.rows[0]});
+    })
+
+})
+
+app.post('/insertPrivateMessage', function(req,res) {
+    console.log(req.body);
+    var message = req.body.newMessage;
+    var whichChat = req.body.whichChat;
+    var user_id = req.session.user.id;
+    var firstname = req.session.user.firstname;
+    var lastname = req.session.user.lastname;
+    var buildingId = req.session.buildingId;
+    db.insertPrivateMessage(whichChat, message, user_id, firstname, lastname, buildingId).then(function(result) {
+        res.json({success: true, file: result.rows[0]});
+    })
 
 })
 
 
+app.get('/logout', function(req, res) {
+    req.session = null;
+    console.log('logging out')
+    res.json({success: true});
+});
 
-app.listen(3000, function() {
+
+http.listen(3000, function() {
     console.log('listening');
 });
 

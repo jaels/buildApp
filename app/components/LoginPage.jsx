@@ -1,10 +1,18 @@
 var React = require('react');
 var Login = require('./Login.jsx');
 var RegisterAddress = require('./RegisterAddress.jsx');
+var axios = require('axios');
 
-
-var LoginPage = React.createClass({
-    render: function() {
+class LoginPage extends React.Component {
+    constructor(props) {
+        super(props);
+        axios.get('getAllDetails').then(function(response) {
+            if (response.data.success===true) {
+                window.location.href = "#/connectArea";
+            }
+        })
+    }
+    render() {
         return (
             <div>
                 <Login/>
@@ -12,6 +20,6 @@ var LoginPage = React.createClass({
             </div>
         )
     }
-})
+}
 
 module.exports = LoginPage;

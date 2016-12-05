@@ -8,11 +8,14 @@ var privateChat = require('./components/privateChat.jsx');
 
 var generalChat = require('./components/generalChat.jsx');
 
+var loggedOut = require('./components/loggedOut.jsx');
+
 
 var Conversations = require('./components/Conversations.jsx');
 
 var Main = require('./components/Main.jsx');
 var LoginPage = require('./components/LoginPage.jsx');
+
 
 
 var {Route, Router, IndexRoute, hashHistory} = require('react-router');
@@ -28,6 +31,7 @@ ReactDOM.render(
 
 </Route>
 
+<Route path="loggedOut" component={loggedOut}/>
 
 
         </Route>
