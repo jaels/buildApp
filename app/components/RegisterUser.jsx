@@ -52,6 +52,11 @@ var RegisterUser = React.createClass({
             password: password
         }).then(function(res) {
             if(res.data.success===true) {
+                var user = {
+                    id:res.data.file.user.id
+                }
+                        socket.emit('newUser', user);
+
                 window.location.href = "#/connectArea";
             }
             else {

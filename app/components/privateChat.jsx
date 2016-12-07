@@ -15,10 +15,6 @@ var user = {
 }
         socket.emit('newUser', user);
 
-        socket.on('hey', function(id) {
-            console.log('tryyyy');
-            console.log(id);
-        });
 
 
         var loc = this.props.location.pathname.split('/');
@@ -68,7 +64,6 @@ var user = {
         var whichChat = this.state.whichChat;
 
         axios.get(`/getPrivateMessages/${whichChat}`).then(function(result) {
-            console.log(result.data.file)
             that.setState({
                 messages:result.data.file,
                 gotMessages:true
@@ -108,9 +103,6 @@ var user = {
             this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
         }
         componentDidMount() {
-            console.log('back here');
-            console.log(socket);
-
             socket.on('send:private', this.messageRecieve);
 
         }
@@ -118,8 +110,10 @@ var user = {
         messageRecieve(message) {
             console.log('recievedddd')
             var {messages} = this.state;
-            messages.push(message);
-            this.setState({messages});
+            if(message.chat_name==this.state.whichChat) {
+                messages.push(message);
+                this.setState({messages});
+            }
         }
 
 
@@ -128,7 +122,9 @@ var user = {
             e.preventDefault();
 
             var newMessage = this.state.newMessage;
-            this.state.newMessage = "";
+            this.setState({
+            newMessage:""   
+            })
             axios.post('insertPrivateMessage', {
                 newMessage:newMessage,
                 whichChat:that.state.whichChat

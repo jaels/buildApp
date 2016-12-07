@@ -87,7 +87,9 @@ this.setState({messages});
             var that =this;
             e.preventDefault();
             var newMessage = this.state.newMessage;
-            this.state.newMessage = "";
+            this.setState({
+            newMessage:""
+            })
             axios.post('insertGeneralMessage', {
                 newMessage:newMessage
             }).then(function(response) {

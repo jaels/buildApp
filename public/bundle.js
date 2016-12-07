@@ -21852,6 +21852,11 @@
 	            password: password
 	        }).then(function (res) {
 	            if (res.data.success === true) {
+	                var user = {
+	                    id: res.data.file.user.id
+	                };
+	                socket.emit('newUser', user);
+
 	                window.location.href = "#/connectArea";
 	            } else {}
 	        });
@@ -28683,11 +28688,6 @@
 	        };
 	        socket.emit('newUser', user);
 
-	        socket.on('hey', function (id) {
-	            console.log('tryyyy');
-	            console.log(id);
-	        });
-
 	        var loc = _this.props.location.pathname.split('/');
 	        var whichChat = loc[loc.length - 1];
 	        var that = _this;
@@ -28739,7 +28739,6 @@
 	            var whichChat = this.state.whichChat;
 
 	            axios.get('/getPrivateMessages/' + whichChat).then(function (result) {
-	                console.log(result.data.file);
 	                that.setState({
 	                    messages: result.data.file,
 	                    gotMessages: true
@@ -28807,9 +28806,6 @@
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            console.log('back here');
-	            console.log(socket);
-
 	            socket.on('send:private', this.messageRecieve);
 	        }
 	    }, {
@@ -28818,8 +28814,10 @@
 	            console.log('recievedddd');
 	            var messages = this.state.messages;
 
-	            messages.push(message);
-	            this.setState({ messages: messages });
+	            if (message.chat_name == this.state.whichChat) {
+	                messages.push(message);
+	                this.setState({ messages: messages });
+	            }
 	        }
 	    }, {
 	        key: 'sendMessage',
@@ -28828,7 +28826,9 @@
 	            e.preventDefault();
 
 	            var newMessage = this.state.newMessage;
-	            this.state.newMessage = "";
+	            this.setState({
+	                newMessage: ""
+	            });
 	            axios.post('insertPrivateMessage', {
 	                newMessage: newMessage,
 	                whichChat: that.state.whichChat
@@ -37049,7 +37049,9 @@
 	            var that = this;
 	            e.preventDefault();
 	            var newMessage = this.state.newMessage;
-	            this.state.newMessage = "";
+	            this.setState({
+	                newMessage: ""
+	            });
 	            axios.post('insertGeneralMessage', {
 	                newMessage: newMessage
 	            }).then(function (response) {
@@ -37272,7 +37274,11 @@
 	        }).then(function (res) {
 	            console.log('heyyyy');
 	            if (res.data.success === true) {
-	                socket.userId = res.data.file.user.id;
+	                var user = {
+	                    id: res.data.file.user.id
+	                };
+	                socket.emit('newUser', user);
+
 	                window.location.href = "#/connectArea";
 	            } else {
 	                console.log('blaaa');

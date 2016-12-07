@@ -34,7 +34,11 @@ var Login = React.createClass({
         }).then(function(res) {
             console.log('heyyyy');
             if(res.data.success===true) {
-                socket.userId = res.data.file.user.id;
+                var user = {
+                    id:res.data.file.user.id
+                }
+                        socket.emit('newUser', user);
+
                 window.location.href = "#/connectArea";
             }
             else {
