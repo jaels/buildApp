@@ -33,8 +33,8 @@ var Login = React.createClass({
             password: password,
         }).then(function(res) {
             console.log('heyyyy');
-            console.log(res.data);
             if(res.data.success===true) {
+                socket.userId = res.data.file.user.id;
                 window.location.href = "#/connectArea";
             }
             else {

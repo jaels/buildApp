@@ -37,7 +37,7 @@ class generalChat extends React.Component {
                 <div className="messagesContainer">
                     <div id={message.id}>
                         <h4 className="messageText">{message.message}</h4>
-                        <h5 className="messgageName">{message.firstname} {message.lastname}</h5>  posted on {message.created_at}>
+                        <h5 className="messgageName">{message.firstname} {message.lastname}</h5>  posted on {message.created_at}
                         </div>
                     </div>
                 )

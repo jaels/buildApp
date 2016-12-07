@@ -54,14 +54,14 @@
 
 	var privateChat = __webpack_require__(269);
 
-	var generalChat = __webpack_require__(270);
+	var generalChat = __webpack_require__(322);
 
-	var loggedOut = __webpack_require__(515);
+	var loggedOut = __webpack_require__(323);
 
 	var Conversations = __webpack_require__(268);
 
-	var Main = __webpack_require__(272);
-	var LoginPage = __webpack_require__(274);
+	var Main = __webpack_require__(324);
+	var LoginPage = __webpack_require__(326);
 
 	var _require = __webpack_require__(184),
 	    Route = _require.Route,
@@ -80,7 +80,7 @@
 	        React.createElement(
 	            Route,
 	            { path: 'connectArea', component: connectArea },
-	            React.createElement(Route, { path: 'privateChat/:chat_with_id', component: privateChat }),
+	            React.createElement(Route, { path: ':chat_with_id', component: privateChat }),
 	            React.createElement(IndexRoute, { component: generalChat })
 	        ),
 	        React.createElement(Route, { path: 'loggedOut', component: loggedOut })
@@ -28576,7 +28576,7 @@
 	                    null,
 	                    React.createElement(
 	                        Link,
-	                        { to: '/connectArea/privateChat/' + chatUrl, activeClassName: 'active', key: user.id },
+	                        { to: '/connectArea/' + chatUrl, activeClassName: 'active', key: user.id },
 	                        ' ',
 	                        React.createElement(
 	                            'p',
@@ -28600,7 +28600,7 @@
 	                ),
 	                React.createElement(
 	                    IndexLink,
-	                    { to: 'connectArea', activeClassName: 'active' },
+	                    { to: '/connectArea', activeClassName: 'active' },
 	                    'General'
 	                ),
 	                React.createElement(
@@ -28653,7 +28653,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _socket = __webpack_require__(465);
+	var _socket = __webpack_require__(270);
 
 	var _socket2 = _interopRequireDefault(_socket);
 
@@ -28677,6 +28677,17 @@
 
 	        var _this = _possibleConstructorReturn(this, (privateChat.__proto__ || Object.getPrototypeOf(privateChat)).call(this, props));
 
+	        console.log(_this.props.details);
+	        var user = {
+	            id: _this.props.details.user.id
+	        };
+	        socket.emit('newUser', user);
+
+	        socket.on('hey', function (id) {
+	            console.log('tryyyy');
+	            console.log(id);
+	        });
+
 	        var loc = _this.props.location.pathname.split('/');
 	        var whichChat = loc[loc.length - 1];
 	        var that = _this;
@@ -28685,16 +28696,15 @@
 	            whichChat: whichChat
 	        };
 	        _this.setState({
-	            messages: []
+	            messages: [],
+	            whichChat: whichChat
 	        });
-	        console.log(_this.state.messages);
 
 	        _this.handleChange = _this.handleChange.bind(_this);
 	        _this.sendMessage = _this.sendMessage.bind(_this);
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
 	        _this.messageRecieve = _this.messageRecieve.bind(_this);
 	        var whichChat = _this.state.whichChat;
-	        console.log(whichChat);
 
 	        axios.get('/getPrivateMessages/' + whichChat).then(function (result) {
 	            console.log(result.data.file);
@@ -28707,6 +28717,36 @@
 	    }
 
 	    _createClass(privateChat, [{
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+
+	            var loc = this.props.location.pathname.split('/');
+	            var whichChat = loc[loc.length - 1];
+	            var that = this;
+	            this.state = {
+	                messages: [],
+	                whichChat: whichChat
+	            };
+	            this.setState({
+	                messages: [],
+	                whichChat: whichChat
+	            });
+
+	            this.handleChange = this.handleChange.bind(this);
+	            this.sendMessage = this.sendMessage.bind(this);
+	            this.componentDidMount = this.componentDidMount.bind(this);
+	            this.messageRecieve = this.messageRecieve.bind(this);
+	            var whichChat = this.state.whichChat;
+
+	            axios.get('/getPrivateMessages/' + whichChat).then(function (result) {
+	                console.log(result.data.file);
+	                that.setState({
+	                    messages: result.data.file,
+	                    gotMessages: true
+	                });
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var that = this;
@@ -28730,8 +28770,7 @@
 	                            message.lastname
 	                        ),
 	                        '  posted on ',
-	                        message.created_at,
-	                        '>'
+	                        message.created_at
 	                    )
 	                );
 	            });
@@ -28768,11 +28807,15 @@
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            socket.on("send:private", this.messageRecieve);
+	            console.log('back here');
+	            console.log(socket);
+
+	            socket.on('send:private', this.messageRecieve);
 	        }
 	    }, {
 	        key: 'messageRecieve',
 	        value: function messageRecieve(message) {
+	            console.log('recievedddd');
 	            var messages = this.state.messages;
 
 	            messages.push(message);
@@ -28791,11 +28834,18 @@
 	                whichChat: that.state.whichChat
 	            }).then(function (response) {
 	                newMessage = response.data.file;
-	                console.log('newMaessage');
-	                console.log(newMessage);
 	                that.props.onNewMessage(newMessage);
-	                console.log('that state messages');
-	                console.log(that.state.messages);
+	                var arr = that.state.whichChat.split('_');
+	                var thisUser = that.props.details.user.id;
+	                if (thisUser == arr[0]) {
+	                    var otherUser = arr[1];
+	                } else {
+	                    var otherUser = arr[0];
+	                }
+	                newMessage.otherUser = otherUser;
+	                console.log(newMessage);
+	                console.log(otherUser);
+	                console.log('sending private');
 	                socket.emit("send:private", newMessage);
 	            });
 	        }
@@ -28815,2436 +28865,15 @@
 /* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _socket = __webpack_require__(465);
-
-	var _socket2 = _interopRequireDefault(_socket);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(1);
-
-	var socket = (0, _socket2.default)('http://localhost:3000');
-
-	var generalChat = function (_React$Component) {
-	    _inherits(generalChat, _React$Component);
-
-	    function generalChat(props) {
-	        _classCallCheck(this, generalChat);
-
-	        var _this = _possibleConstructorReturn(this, (generalChat.__proto__ || Object.getPrototypeOf(generalChat)).call(this, props));
-
-	        var that = _this;
-	        _this.state = {
-	            messages: []
-	        };
-	        _this.handleChange = _this.handleChange.bind(_this);
-	        _this.sendMessage = _this.sendMessage.bind(_this);
-	        _this.componentDidMount = _this.componentDidMount.bind(_this);
-	        _this.messageRecieve = _this.messageRecieve.bind(_this);
-
-	        var buildingId = _this.props.details.buildingId;
-
-	        axios.get('/getGeneralMessages/' + buildingId).then(function (result) {
-	            that.setState({
-	                messages: result.data.file
-	            });
-	        });
-	        return _this;
-	    }
-
-	    _createClass(generalChat, [{
-	        key: 'render',
-	        value: function render() {
-	            var that = this;
-	            var messages = that.state.messages.map(function (message) {
-	                return React.createElement(
-	                    'div',
-	                    { className: 'messagesContainer' },
-	                    React.createElement(
-	                        'div',
-	                        { id: message.id },
-	                        React.createElement(
-	                            'h4',
-	                            { className: 'messageText' },
-	                            message.message
-	                        ),
-	                        React.createElement(
-	                            'h5',
-	                            { className: 'messgageName' },
-	                            message.firstname,
-	                            ' ',
-	                            message.lastname
-	                        ),
-	                        '  posted on ',
-	                        message.created_at,
-	                        '>'
-	                    )
-	                );
-	            });
-
-	            return React.createElement(
-	                'div',
-	                { className: 'inputAndChat' },
-	                React.createElement(
-	                    'div',
-	                    { className: 'conversationsArea', ref: 'scrollDiv', onFocus: this.scrolling },
-	                    React.createElement(
-	                        'div',
-	                        null,
-	                        messages
-	                    )
-	                ),
-	                React.createElement(
-	                    'div',
-	                    { className: 'chatContainer' },
-	                    React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.newMessage, onChange: this.handleChange }),
-	                    React.createElement(
-	                        'button',
-	                        { className: 'message_button', onClick: this.sendMessage },
-	                        'Send'
-	                    )
-	                )
-	            );
-	        }
-	    }, {
-	        key: 'componentDidUpdate',
-	        value: function componentDidUpdate() {
-	            console.log('scrolling');
-	            this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
-	        }
-	    }, {
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            socket.on('connection', this.connected);
-	            socket.on('disconnection', this.disconnected);
-	            socket.on('send:message', this.messageRecieve);
-	        }
-	    }, {
-	        key: 'connected',
-	        value: function connected() {
-	            console.log('connected!');
-	        }
-	    }, {
-	        key: 'disconnected',
-	        value: function disconnected() {
-	            console.log('disconnected!');
-	        }
-	    }, {
-	        key: 'messageRecieve',
-	        value: function messageRecieve(message) {
-	            var messages = this.state.messages;
-
-	            messages.push(message);
-	            this.setState({ messages: messages });
-	        }
-	    }, {
-	        key: 'sendMessage',
-	        value: function sendMessage(e) {
-	            var that = this;
-	            e.preventDefault();
-	            var newMessage = this.state.newMessage;
-	            this.state.newMessage = "";
-	            axios.post('insertGeneralMessage', {
-	                newMessage: newMessage
-	            }).then(function (response) {
-	                newMessage = response.data.file;
-	                that.props.onNewMessage(newMessage);
-	                console.log(that.state.messages);
-	                socket.emit('send:message', newMessage);
-	            });
-	        }
-	    }, {
-	        key: 'handleChange',
-	        value: function handleChange(event) {
-	            this.setState({ newMessage: event.target.value });
-	        }
-	    }]);
-
-	    return generalChat;
-	}(React.Component);
-
-	module.exports = generalChat;
-
-/***/ },
-/* 271 */,
-/* 272 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-	var Logo = __webpack_require__(273);
-
-	var Main = React.createClass({
-	    displayName: 'Main',
-
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            null,
-	            React.createElement(Logo, null),
-	            this.props.children
-	        );
-	    }
-	});
-
-	module.exports = Main;
-
-/***/ },
-/* 273 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var Logo = React.createClass({
-	    displayName: 'Logo',
-
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            { id: 'logoContainer' },
-	            React.createElement(
-	                'h1',
-	                { id: 'mainHeadline' },
-	                'Neighbours'
-	            ),
-	            React.createElement(
-	                'button',
-	                { className: 'logOutButton', onClick: this.logOut },
-	                'Logout'
-	            )
-	        );
-	    },
-	    logOut: function logOut() {
-	        axios.get('logOut').then(function (reponse) {
-	            console.log('logged out');
-	            window.location.href = "#/loggedOut";
-	        });
-	    }
-	});
-
-	module.exports = Logo;
-
-/***/ },
-/* 274 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(1);
-	var Login = __webpack_require__(275);
-	var RegisterAddress = __webpack_require__(276);
-	var axios = __webpack_require__(240);
-
-	var LoginPage = function (_React$Component) {
-	    _inherits(LoginPage, _React$Component);
-
-	    function LoginPage(props) {
-	        _classCallCheck(this, LoginPage);
-
-	        var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props));
-
-	        axios.get('getAllDetails').then(function (response) {
-	            if (response.data.success === true) {
-	                window.location.href = "#/connectArea";
-	            }
-	        });
-	        return _this;
-	    }
-
-	    _createClass(LoginPage, [{
-	        key: 'render',
-	        value: function render() {
-	            return React.createElement(
-	                'div',
-	                null,
-	                React.createElement(Login, null),
-	                React.createElement(RegisterAddress, null)
-	            );
-	        }
-	    }]);
-
-	    return LoginPage;
-	}(React.Component);
-
-	module.exports = LoginPage;
-
-/***/ },
-/* 275 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var _require = __webpack_require__(184),
-	    Link = _require.Link;
-
-	var Login = React.createClass({
-	    displayName: 'Login',
-
-	    getInitialState: function getInitialState() {
-	        return { error: false };
-	    },
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            { className: 'LoginRegister', id: 'loginMain' },
-	            React.createElement(
-	                'h3',
-	                { id: 'loginHeadline' },
-	                'Already a user?'
-	            ),
-	            React.createElement(
-	                'form',
-	                null,
-	                React.createElement(
-	                    'div',
-	                    null,
-	                    React.createElement('input', { type: 'text', placeholder: 'email', ref: 'email' })
-	                ),
-	                React.createElement(
-	                    'div',
-	                    null,
-	                    React.createElement('input', { type: 'text', placeholder: 'password', ref: 'password' })
-	                ),
-	                React.createElement(
-	                    'button',
-	                    { className: 'button', onClick: this.loginUser },
-	                    'Submit'
-	                )
-	            ),
-	            this.state.error ? React.createElement(
-	                'h4',
-	                { className: 'userError' },
-	                'wrong email or password'
-	            ) : null
-	        );
-	    },
-	    loginUser: function loginUser() {
-	        var that = this;
-	        var email = this.refs.email.value;
-	        var password = this.refs.password.value;
-	        axios.post('/checkUser', {
-	            email: email,
-	            password: password
-	        }).then(function (res) {
-	            console.log('heyyyy');
-	            console.log(res.data);
-	            if (res.data.success === true) {
-	                window.location.href = "#/connectArea";
-	            } else {
-	                console.log('blaaa');
-	                that.setState({ error: true });
-	            }
-	        });
-	    }
-
-	});
-
-	module.exports = Login;
-
-/***/ },
-/* 276 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _reactGeosuggest = __webpack_require__(277);
-
-	var _reactGeosuggest2 = _interopRequireDefault(_reactGeosuggest);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	var ReactDOM = __webpack_require__(32);
-	var React = __webpack_require__(1);
-
-	var _require = __webpack_require__(184),
-	    Link = _require.Link;
-
-	React.createElement(_reactGeosuggest2.default
-	// className="geosuggest"
-	, null);
-	var axios = __webpack_require__(240);
-
-	var _require2 = __webpack_require__(184),
-	    Route = _require2.Route,
-	    Router = _require2.Router,
-	    IndexRoute = _require2.IndexRoute,
-	    hashHistory = _require2.hashHistory,
-	    browserHistory = _require2.browserHistory;
-
-	var RegisterAddress = React.createClass({
-	    displayName: 'RegisterAddress',
-
-	    getInitialState: function getInitialState() {
-	        return { exists: false,
-	            doesntExist: false,
-	            creationSuccess: false
-	        };
-	    },
-	    render: function render() {
-	        var _React$createElement;
-
-	        var address = this.state.address;
-	        var creationSuccess = this.state.creationSuccess;
-	        var exists = this.state.exists;
-	        var doesntExist = this.state.doesntExist;
-
-	        var fixtures = [];
-	        var that = this;
-	        function checkExist() {
-	            if (exists) {
-	                return React.createElement(
-	                    'div',
-	                    { className: 'buildingExist' },
-	                    React.createElement(
-	                        'h3',
-	                        { id: 'loginHeadline' },
-	                        'Your building already exists here, would you like to join the group?'
-	                    ),
-	                    React.createElement(
-	                        'button',
-	                        { className: 'button' },
-	                        React.createElement(
-	                            Link,
-	                            { to: '/register' },
-	                            'Yes'
-	                        )
-	                    )
-	                );
-	            };
-	            if (doesntExist) {
-	                return React.createElement(
-	                    'div',
-	                    { className: 'buildingExist' },
-	                    React.createElement(
-	                        'h3',
-	                        { id: 'loginHeadline' },
-	                        'Your building is new here! Do you wanna create it?'
-	                    ),
-	                    React.createElement(
-	                        'button',
-	                        { className: 'button', onClick: that.makeBuilding },
-	                        'Yes!'
-	                    ),
-	                    renderSuccess()
-	                );
-	            }
-	        };
-	        function renderSuccess() {
-	            if (creationSuccess) {
-	                return React.createElement(
-	                    'div',
-	                    { className: 'buildingExist' },
-	                    React.createElement(
-	                        'h3',
-	                        { id: 'loginHeadline' },
-	                        ' Your building in ',
-	                        React.createElement(
-	                            'span',
-	                            { id: 'createdAddress' },
-	                            ' ',
-	                            address,
-	                            ' '
-	                        ),
-	                        ' was created! Please register and tell your neighbours to join!'
-	                    ),
-	                    React.createElement(
-	                        'button',
-	                        { className: 'button' },
-	                        React.createElement(
-	                            Link,
-	                            { to: '/register' },
-	                            'Register'
-	                        )
-	                    )
-	                );
-	            }
-	        }
-	        return React.createElement(
-	            'div',
-	            { className: 'LoginRegister', id: 'registerMain' },
-	            React.createElement(
-	                'h3',
-	                { id: 'loginHeadline' },
-	                'If not - Where do you live?'
-	            ),
-	            React.createElement(_reactGeosuggest2.default, { placeholder: 'Type your address and choose from the list',
-	                initialValue: '',
-	                fixtures: fixtures,
-	                onSuggestSelect: this.onSuggestSelect,
-	                onKeyPress: this.onKeyPress,
-	                onSuggestNoResults: this.onSuggestNoResults,
-	                location: new google.maps.LatLng(53.558572, 9.9278215),
-	                radius: '20' }),
-	            React.createElement(
-	                'h4',
-	                { id: 'noAddressResults' },
-	                'Please submit an address'
-	            ),
-	            React.createElement(
-	                'button',
-	                (_React$createElement = { className: 'button', id: 'submitAddress' }, _defineProperty(_React$createElement, 'className', 'button'), _defineProperty(_React$createElement, 'onClick', this.saveAddress), _React$createElement),
-	                'Submit'
-	            ),
-	            checkExist()
-	        );
-	    },
-	    onSuggestSelect: function onSuggestSelect(suggest) {
-	        this.setState({ suggest: suggest });
-	        document.getElementsByClassName("geosuggest__suggests-wrapper")[0].style.display = "none";
-	    },
-	    onKeyPress: function onKeyPress(event) {
-	        document.getElementsByClassName("geosuggest__suggests-wrapper")[0].style.display = "block";
-	    },
-	    saveAddress: function saveAddress(e) {
-	        e.preventDefault();
-	        var that = this;
-	        var suggest = this.state.suggest;
-	        var address = suggest.label;
-	        var placeId = suggest.placeId;
-	        axios.post('/checkBuilding', {
-	            address: address,
-	            placeId: placeId
-	        }).then(function (res) {
-	            if (res.data.success === true) {
-	                that.setState({
-	                    exists: true
-	                });
-	            } else {
-	                that.setState({
-	                    doesntExist: true
-	                });
-	            }
-	        });
-	    },
-	    makeBuilding: function makeBuilding(e) {
-	        e.preventDefault();
-	        var that = this;
-	        axios.get('/registerBuilding').then(function (result) {
-	            that.setState({
-	                creationSuccess: true,
-	                address: result.data.file
-	            });
-	        });
-	    }
-
-	});
-
-	module.exports = RegisterAddress;
-
-/***/ },
-/* 277 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _classnames = __webpack_require__(278);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var _lodash = __webpack_require__(279);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _defaults = __webpack_require__(280);
-
-	var _defaults2 = _interopRequireDefault(_defaults);
-
-	var _propTypes = __webpack_require__(281);
-
-	var _propTypes2 = _interopRequireDefault(_propTypes);
-
-	var _filterInputAttributes = __webpack_require__(282);
-
-	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
-
-	var _input = __webpack_require__(283);
-
-	var _input2 = _interopRequireDefault(_input);
-
-	var _suggestList = __webpack_require__(287);
-
-	var _suggestList2 = _interopRequireDefault(_suggestList);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global window */
-
-	// Escapes special characters in user input for regex
-	function escapeRegExp(str) {
-	  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-	}
-
-	/**
-	 * Entry point for the Geosuggest component
-	 */
-
-	var Geosuggest = function (_React$Component) {
-	  _inherits(Geosuggest, _React$Component);
-
-	  /**
-	   * The constructor. Sets the initial state.
-	   * @param  {Object} props The properties object.
-	   */
-	  function Geosuggest(props) {
-	    _classCallCheck(this, Geosuggest);
-
-	    var _this = _possibleConstructorReturn(this, (Geosuggest.__proto__ || Object.getPrototypeOf(Geosuggest)).call(this, props));
-
-	    _this.onInputChange = function (userInput) {
-	      _this.setState({ userInput: userInput }, _this.onAfterInputChange);
-	    };
-
-	    _this.onAfterInputChange = function () {
-	      if (!_this.state.isSuggestsHidden) {
-	        _this.showSuggests();
-	      }
-	      _this.props.onChange(_this.state.userInput);
-	    };
-
-	    _this.onInputFocus = function () {
-	      _this.props.onFocus();
-	      _this.showSuggests();
-	    };
-
-	    _this.onInputBlur = function () {
-	      if (!_this.state.ignoreBlur) {
-	        _this.hideSuggests();
-	      }
-	    };
-
-	    _this.onNext = function () {
-	      return _this.activateSuggest('next');
-	    };
-
-	    _this.onPrev = function () {
-	      return _this.activateSuggest('prev');
-	    };
-
-	    _this.onSelect = function () {
-	      return _this.selectSuggest(_this.state.activeSuggest);
-	    };
-
-	    _this.onSuggestMouseDown = function () {
-	      return _this.setState({ ignoreBlur: true });
-	    };
-
-	    _this.onSuggestMouseOut = function () {
-	      return _this.setState({ ignoreBlur: false });
-	    };
-
-	    _this.onSuggestNoResults = function () {
-	      _this.props.onSuggestNoResults(_this.state.userInput);
-	    };
-
-	    _this.hideSuggests = function () {
-	      _this.props.onBlur(_this.state.userInput);
-	      var timer = setTimeout(function () {
-	        _this.setState({
-	          isSuggestsHidden: true,
-	          activeSuggest: null
-	        });
-	      }, 100);
-
-	      _this.setState({ timer: timer });
-	    };
-
-	    _this.selectSuggest = function (suggest) {
-	      if (!suggest) {
-	        suggest = {
-	          label: _this.state.userInput
-	        };
-	      }
-
-	      _this.setState({
-	        isSuggestsHidden: true,
-	        userInput: suggest.label
-	      });
-
-	      if (suggest.location) {
-	        _this.setState({ ignoreBlur: false });
-	        _this.props.onSuggestSelect(suggest);
-	        return;
-	      }
-
-	      _this.geocodeSuggest(suggest);
-	    };
-
-	    _this.state = {
-	      isSuggestsHidden: true,
-	      isLoading: false,
-	      userInput: props.initialValue,
-	      activeSuggest: null,
-	      suggests: [],
-	      timer: null
-	    };
-
-	    _this.onInputChange = _this.onInputChange.bind(_this);
-	    _this.onAfterInputChange = _this.onAfterInputChange.bind(_this);
-
-	    if (props.queryDelay) {
-	      _this.onAfterInputChange = (0, _lodash2.default)(_this.onAfterInputChange, props.queryDelay);
-	    }
-	    return _this;
-	  }
-
-	  /**
-	   * Change inputValue if prop changes
-	   * @param {Object} props The new props
-	   */
-
-
-	  _createClass(Geosuggest, [{
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(props) {
-	      if (this.props.initialValue !== props.initialValue) {
-	        this.setState({ userInput: props.initialValue });
-	      }
-	    }
-
-	    /**
-	     * Called on the client side after component is mounted.
-	     * Google api sdk object will be obtained and cached as a instance property.
-	     * Necessary objects of google api will also be determined and saved.
-	     */
-
-	  }, {
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      if (typeof window === 'undefined') {
-	        return;
-	      }
-
-	      var googleMaps = this.props.googleMaps || window.google && // eslint-disable-line no-extra-parens
-	      window.google.maps || this.googleMaps;
-
-	      /* istanbul ignore next */
-	      if (!googleMaps) {
-	        console.error( // eslint-disable-line no-console
-	        'Google map api was not found in the page.');
-	        return;
-	      }
-	      this.googleMaps = googleMaps;
-
-	      this.autocompleteService = new googleMaps.places.AutocompleteService();
-	      this.geocoder = new googleMaps.Geocoder();
-	    }
-
-	    /**
-	     * When the component will unmount
-	     */
-
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      clearTimeout(this.state.timer);
-	    }
-
-	    /**
-	     * When the input changed
-	     * @param {String} userInput The input value of the user
-	     */
-
-
-	    /**
-	     * On After the input got changed
-	     */
-
-
-	    /**
-	     * When the input gets focused
-	     */
-
-
-	    /**
-	     * When the input gets blurred
-	     */
-
-	  }, {
-	    key: 'focus',
-
-
-	    /**
-	     * Focus the input
-	     */
-	    value: function focus() {
-	      this.refs.input.focus();
-	    }
-
-	    /**
-	     * Update the value of the user input
-	     * @param {String} userInput the new value of the user input
-	     */
-
-	  }, {
-	    key: 'update',
-	    value: function update(userInput) {
-	      this.setState({ userInput: userInput });
-	      this.props.onChange(userInput);
-	    }
-
-	    /*
-	     * Clear the input and close the suggestion pane
-	     */
-
-	  }, {
-	    key: 'clear',
-	    value: function clear() {
-	      this.setState({ userInput: '' }, this.hideSuggests);
-	    }
-
-	    /**
-	     * Search for new suggests
-	     */
-
-	  }, {
-	    key: 'searchSuggests',
-	    value: function searchSuggests() {
-	      var _this2 = this;
-
-	      if (!this.state.userInput) {
-	        this.updateSuggests();
-	        return;
-	      }
-
-	      var options = {
-	        input: this.state.userInput
-	      };
-
-	      ['location', 'radius', 'bounds', 'types'].forEach(function (option) {
-	        if (_this2.props[option]) {
-	          options[option] = _this2.props[option];
-	        }
-	      });
-
-	      if (this.props.country) {
-	        options.componentRestrictions = {
-	          country: this.props.country
-	        };
-	      }
-
-	      this.setState({ isLoading: true }, function () {
-	        _this2.autocompleteService.getPlacePredictions(options, function (suggestsGoogle) {
-	          _this2.setState({ isLoading: false });
-	          _this2.updateSuggests(suggestsGoogle || [], // can be null
-	          function () {
-	            if (_this2.props.autoActivateFirstSuggest && !_this2.state.activeSuggest) {
-	              _this2.activateSuggest('next');
-	            }
-	          });
-	        });
-	      });
-	    }
-
-	    /**
-	     * Update the suggests
-	     * @param {Array} suggestsGoogle The new google suggests
-	     * @param {Function} callback Called once the state has been updated
-	     */
-
-	  }, {
-	    key: 'updateSuggests',
-	    value: function updateSuggests() {
-	      var _this3 = this;
-
-	      var suggestsGoogle = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	      var callback = arguments[1];
-
-	      var suggests = [],
-	          regex = new RegExp(escapeRegExp(this.state.userInput), 'gim'),
-	          skipSuggest = this.props.skipSuggest,
-	          maxFixtures = 10,
-	          fixturesSearched = 0,
-	          activeSuggest = null;
-
-	      this.props.fixtures.forEach(function (suggest) {
-	        if (fixturesSearched >= maxFixtures) {
-	          return;
-	        }
-
-	        if (!skipSuggest(suggest) && suggest.label.match(regex)) {
-	          fixturesSearched++;
-
-	          suggest.placeId = suggest.label;
-	          suggest.isFixture = true;
-	          suggests.push(suggest);
-	        }
-	      });
-
-	      suggestsGoogle.forEach(function (suggest) {
-	        if (!skipSuggest(suggest)) {
-	          suggests.push({
-	            label: _this3.props.getSuggestLabel(suggest),
-	            placeId: suggest.place_id,
-	            isFixture: false
-	          });
-	        }
-	      });
-
-	      activeSuggest = this.updateActiveSuggest(suggests);
-	      this.setState({ suggests: suggests, activeSuggest: activeSuggest }, callback);
-	    }
-
-	    /**
-	     * Return the new activeSuggest object after suggests have been updated
-	     * @param {Array} suggests The new list of suggests
-	     * @return {Object} The new activeSuggest
-	     **/
-
-	  }, {
-	    key: 'updateActiveSuggest',
-	    value: function updateActiveSuggest() {
-	      var suggests = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-
-	      var activeSuggest = this.state.activeSuggest;
-
-	      if (activeSuggest) {
-	        var newSuggest = suggests.find(function (listedSuggest) {
-	          return activeSuggest.placeId === listedSuggest.placeId && activeSuggest.isFixture === listedSuggest.isFixture;
-	        });
-
-	        activeSuggest = newSuggest || null;
-	      }
-
-	      return activeSuggest;
-	    }
-
-	    /**
-	     * Show the suggestions
-	     */
-
-	  }, {
-	    key: 'showSuggests',
-	    value: function showSuggests() {
-	      this.searchSuggests();
-	      this.setState({ isSuggestsHidden: false });
-	    }
-
-	    /**
-	     * Hide the suggestions
-	     */
-
-	  }, {
-	    key: 'activateSuggest',
-
-
-	    /**
-	     * Activate a new suggest
-	     * @param {String} direction The direction in which to activate new suggest
-	     */
-	    value: function activateSuggest(direction) {
-	      // eslint-disable-line complexity
-	      if (this.state.isSuggestsHidden) {
-	        this.showSuggests();
-	        return;
-	      }
-
-	      var suggestsCount = this.state.suggests.length - 1,
-	          next = direction === 'next';
-	      var newActiveSuggest = null,
-	          newIndex = 0,
-	          i = 0;
-
-	      for (i; i <= suggestsCount; i++) {
-	        if (this.state.suggests[i] === this.state.activeSuggest) {
-	          newIndex = next ? i + 1 : i - 1;
-	        }
-	      }
-
-	      if (!this.state.activeSuggest) {
-	        newIndex = next ? 0 : suggestsCount;
-	      }
-
-	      if (newIndex >= 0 && newIndex <= suggestsCount) {
-	        newActiveSuggest = this.state.suggests[newIndex];
-	      }
-
-	      this.props.onActivateSuggest(newActiveSuggest);
-
-	      this.setState({ activeSuggest: newActiveSuggest });
-	    }
-
-	    /**
-	     * When an item got selected
-	     * @param {GeosuggestItem} suggest The selected suggest item
-	     */
-
-	  }, {
-	    key: 'geocodeSuggest',
-
-
-	    /**
-	     * Geocode a suggest
-	     * @param  {Object} suggest The suggest
-	     */
-	    value: function geocodeSuggest(suggest) {
-	      var _this4 = this;
-
-	      this.geocoder.geocode(suggest.placeId && !suggest.isFixture ? { placeId: suggest.placeId } : { address: suggest.label }, function (results, status) {
-	        if (status === _this4.googleMaps.GeocoderStatus.OK) {
-	          var gmaps = results[0],
-	              location = gmaps.geometry.location;
-
-	          suggest.gmaps = gmaps;
-	          suggest.location = {
-	            lat: location.lat(),
-	            lng: location.lng()
-	          };
-	        }
-	        _this4.props.onSuggestSelect(suggest);
-	      });
-	    }
-
-	    /**
-	     * Render the view
-	     * @return {Function} The React element to render
-	     */
-
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var attributes = (0, _filterInputAttributes2.default)(this.props),
-	          classes = (0, _classnames2.default)('geosuggest', this.props.className, { 'geosuggest--loading': this.state.isLoading }),
-	          shouldRenderLabel = this.props.label && attributes.id,
-	          input = _react2.default.createElement(_input2.default, _extends({ className: this.props.inputClassName,
-	        ref: 'input',
-	        value: this.state.userInput,
-	        ignoreEnter: !this.state.isSuggestsHidden,
-	        ignoreTab: this.props.ignoreTab,
-	        style: this.props.style.input,
-	        onChange: this.onInputChange,
-	        onFocus: this.onInputFocus,
-	        onBlur: this.onInputBlur,
-	        onKeyPress: this.props.onKeyPress,
-	        onNext: this.onNext,
-	        onPrev: this.onPrev,
-	        onSelect: this.onSelect,
-	        onEscape: this.hideSuggests }, attributes)),
-	          suggestionsList = _react2.default.createElement(_suggestList2.default, { isHidden: this.state.isSuggestsHidden,
-	        style: this.props.style.suggests,
-	        suggestItemStyle: this.props.style.suggestItem,
-	        suggests: this.state.suggests,
-	        activeSuggest: this.state.activeSuggest,
-	        onSuggestNoResults: this.onSuggestNoResults,
-	        onSuggestMouseDown: this.onSuggestMouseDown,
-	        onSuggestMouseOut: this.onSuggestMouseOut,
-	        onSuggestSelect: this.selectSuggest });
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: classes },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'geosuggest__input-wrapper' },
-	          shouldRenderLabel && _react2.default.createElement(
-	            'label',
-	            { htmlFor: attributes.id },
-	            this.props.label
-	          ),
-	          input
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'geosuggest__suggests-wrapper' },
-	          suggestionsList
-	        )
-	      );
-	    }
-	  }]);
-
-	  return Geosuggest;
-	}(_react2.default.Component);
-
-	/**
-	 * Types for the properties
-	 * @type {Object}
-	 */
-
-
-	Geosuggest.propTypes = _propTypes2.default;
-
-	/**
-	 * Default values for the properties
-	 * @type {Object}
-	 */
-	Geosuggest.defaultProps = _defaults2.default;
-
-	exports.default = Geosuggest;
-
-/***/ },
-/* 278 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2016 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-
-	(function () {
-		'use strict';
-
-		var hasOwn = {}.hasOwnProperty;
-
-		function classNames () {
-			var classes = [];
-
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-
-				var argType = typeof arg;
-
-				if (argType === 'string' || argType === 'number') {
-					classes.push(arg);
-				} else if (Array.isArray(arg)) {
-					classes.push(classNames.apply(null, arg));
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				}
-			}
-
-			return classes.join(' ');
-		}
-
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	}());
-
-
-/***/ },
-/* 279 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * lodash (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modularize exports="npm" -o ./`
-	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
-	 * Released under MIT license <https://lodash.com/license>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 */
-
-	/** Used as the `TypeError` message for "Functions" methods. */
-	var FUNC_ERROR_TEXT = 'Expected a function';
-
-	/** Used as references for various `Number` constants. */
-	var NAN = 0 / 0;
-
-	/** `Object#toString` result references. */
-	var symbolTag = '[object Symbol]';
-
-	/** Used to match leading and trailing whitespace. */
-	var reTrim = /^\s+|\s+$/g;
-
-	/** Used to detect bad signed hexadecimal string values. */
-	var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
-
-	/** Used to detect binary string values. */
-	var reIsBinary = /^0b[01]+$/i;
-
-	/** Used to detect octal string values. */
-	var reIsOctal = /^0o[0-7]+$/i;
-
-	/** Built-in method references without a dependency on `root`. */
-	var freeParseInt = parseInt;
-
-	/** Detect free variable `global` from Node.js. */
-	var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
-
-	/** Detect free variable `self`. */
-	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-	/** Used as a reference to the global object. */
-	var root = freeGlobal || freeSelf || Function('return this')();
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/**
-	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objectToString = objectProto.toString;
-
-	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeMax = Math.max,
-	    nativeMin = Math.min;
-
-	/**
-	 * Gets the timestamp of the number of milliseconds that have elapsed since
-	 * the Unix epoch (1 January 1970 00:00:00 UTC).
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 2.4.0
-	 * @category Date
-	 * @returns {number} Returns the timestamp.
-	 * @example
-	 *
-	 * _.defer(function(stamp) {
-	 *   console.log(_.now() - stamp);
-	 * }, _.now());
-	 * // => Logs the number of milliseconds it took for the deferred invocation.
-	 */
-	var now = function() {
-	  return root.Date.now();
-	};
-
-	/**
-	 * Creates a debounced function that delays invoking `func` until after `wait`
-	 * milliseconds have elapsed since the last time the debounced function was
-	 * invoked. The debounced function comes with a `cancel` method to cancel
-	 * delayed `func` invocations and a `flush` method to immediately invoke them.
-	 * Provide `options` to indicate whether `func` should be invoked on the
-	 * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
-	 * with the last arguments provided to the debounced function. Subsequent
-	 * calls to the debounced function return the result of the last `func`
-	 * invocation.
-	 *
-	 * **Note:** If `leading` and `trailing` options are `true`, `func` is
-	 * invoked on the trailing edge of the timeout only if the debounced function
-	 * is invoked more than once during the `wait` timeout.
-	 *
-	 * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
-	 * until to the next tick, similar to `setTimeout` with a timeout of `0`.
-	 *
-	 * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
-	 * for details over the differences between `_.debounce` and `_.throttle`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Function
-	 * @param {Function} func The function to debounce.
-	 * @param {number} [wait=0] The number of milliseconds to delay.
-	 * @param {Object} [options={}] The options object.
-	 * @param {boolean} [options.leading=false]
-	 *  Specify invoking on the leading edge of the timeout.
-	 * @param {number} [options.maxWait]
-	 *  The maximum time `func` is allowed to be delayed before it's invoked.
-	 * @param {boolean} [options.trailing=true]
-	 *  Specify invoking on the trailing edge of the timeout.
-	 * @returns {Function} Returns the new debounced function.
-	 * @example
-	 *
-	 * // Avoid costly calculations while the window size is in flux.
-	 * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
-	 *
-	 * // Invoke `sendMail` when clicked, debouncing subsequent calls.
-	 * jQuery(element).on('click', _.debounce(sendMail, 300, {
-	 *   'leading': true,
-	 *   'trailing': false
-	 * }));
-	 *
-	 * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
-	 * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
-	 * var source = new EventSource('/stream');
-	 * jQuery(source).on('message', debounced);
-	 *
-	 * // Cancel the trailing debounced invocation.
-	 * jQuery(window).on('popstate', debounced.cancel);
-	 */
-	function debounce(func, wait, options) {
-	  var lastArgs,
-	      lastThis,
-	      maxWait,
-	      result,
-	      timerId,
-	      lastCallTime,
-	      lastInvokeTime = 0,
-	      leading = false,
-	      maxing = false,
-	      trailing = true;
-
-	  if (typeof func != 'function') {
-	    throw new TypeError(FUNC_ERROR_TEXT);
-	  }
-	  wait = toNumber(wait) || 0;
-	  if (isObject(options)) {
-	    leading = !!options.leading;
-	    maxing = 'maxWait' in options;
-	    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
-	    trailing = 'trailing' in options ? !!options.trailing : trailing;
-	  }
-
-	  function invokeFunc(time) {
-	    var args = lastArgs,
-	        thisArg = lastThis;
-
-	    lastArgs = lastThis = undefined;
-	    lastInvokeTime = time;
-	    result = func.apply(thisArg, args);
-	    return result;
-	  }
-
-	  function leadingEdge(time) {
-	    // Reset any `maxWait` timer.
-	    lastInvokeTime = time;
-	    // Start the timer for the trailing edge.
-	    timerId = setTimeout(timerExpired, wait);
-	    // Invoke the leading edge.
-	    return leading ? invokeFunc(time) : result;
-	  }
-
-	  function remainingWait(time) {
-	    var timeSinceLastCall = time - lastCallTime,
-	        timeSinceLastInvoke = time - lastInvokeTime,
-	        result = wait - timeSinceLastCall;
-
-	    return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
-	  }
-
-	  function shouldInvoke(time) {
-	    var timeSinceLastCall = time - lastCallTime,
-	        timeSinceLastInvoke = time - lastInvokeTime;
-
-	    // Either this is the first call, activity has stopped and we're at the
-	    // trailing edge, the system time has gone backwards and we're treating
-	    // it as the trailing edge, or we've hit the `maxWait` limit.
-	    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
-	      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
-	  }
-
-	  function timerExpired() {
-	    var time = now();
-	    if (shouldInvoke(time)) {
-	      return trailingEdge(time);
-	    }
-	    // Restart the timer.
-	    timerId = setTimeout(timerExpired, remainingWait(time));
-	  }
-
-	  function trailingEdge(time) {
-	    timerId = undefined;
-
-	    // Only invoke if we have `lastArgs` which means `func` has been
-	    // debounced at least once.
-	    if (trailing && lastArgs) {
-	      return invokeFunc(time);
-	    }
-	    lastArgs = lastThis = undefined;
-	    return result;
-	  }
-
-	  function cancel() {
-	    if (timerId !== undefined) {
-	      clearTimeout(timerId);
-	    }
-	    lastInvokeTime = 0;
-	    lastArgs = lastCallTime = lastThis = timerId = undefined;
-	  }
-
-	  function flush() {
-	    return timerId === undefined ? result : trailingEdge(now());
-	  }
-
-	  function debounced() {
-	    var time = now(),
-	        isInvoking = shouldInvoke(time);
-
-	    lastArgs = arguments;
-	    lastThis = this;
-	    lastCallTime = time;
-
-	    if (isInvoking) {
-	      if (timerId === undefined) {
-	        return leadingEdge(lastCallTime);
-	      }
-	      if (maxing) {
-	        // Handle invocations in a tight loop.
-	        timerId = setTimeout(timerExpired, wait);
-	        return invokeFunc(lastCallTime);
-	      }
-	    }
-	    if (timerId === undefined) {
-	      timerId = setTimeout(timerExpired, wait);
-	    }
-	    return result;
-	  }
-	  debounced.cancel = cancel;
-	  debounced.flush = flush;
-	  return debounced;
-	}
-
-	/**
-	 * Checks if `value` is the
-	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
-	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
-	 * @example
-	 *
-	 * _.isObject({});
-	 * // => true
-	 *
-	 * _.isObject([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObject(_.noop);
-	 * // => true
-	 *
-	 * _.isObject(null);
-	 * // => false
-	 */
-	function isObject(value) {
-	  var type = typeof value;
-	  return !!value && (type == 'object' || type == 'function');
-	}
-
-	/**
-	 * Checks if `value` is object-like. A value is object-like if it's not `null`
-	 * and has a `typeof` result of "object".
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 * @example
-	 *
-	 * _.isObjectLike({});
-	 * // => true
-	 *
-	 * _.isObjectLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObjectLike(_.noop);
-	 * // => false
-	 *
-	 * _.isObjectLike(null);
-	 * // => false
-	 */
-	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
-	}
-
-	/**
-	 * Checks if `value` is classified as a `Symbol` primitive or object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
-	 * @example
-	 *
-	 * _.isSymbol(Symbol.iterator);
-	 * // => true
-	 *
-	 * _.isSymbol('abc');
-	 * // => false
-	 */
-	function isSymbol(value) {
-	  return typeof value == 'symbol' ||
-	    (isObjectLike(value) && objectToString.call(value) == symbolTag);
-	}
-
-	/**
-	 * Converts `value` to a number.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to process.
-	 * @returns {number} Returns the number.
-	 * @example
-	 *
-	 * _.toNumber(3.2);
-	 * // => 3.2
-	 *
-	 * _.toNumber(Number.MIN_VALUE);
-	 * // => 5e-324
-	 *
-	 * _.toNumber(Infinity);
-	 * // => Infinity
-	 *
-	 * _.toNumber('3.2');
-	 * // => 3.2
-	 */
-	function toNumber(value) {
-	  if (typeof value == 'number') {
-	    return value;
-	  }
-	  if (isSymbol(value)) {
-	    return NAN;
-	  }
-	  if (isObject(value)) {
-	    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-	    value = isObject(other) ? (other + '') : other;
-	  }
-	  if (typeof value != 'string') {
-	    return value === 0 ? value : +value;
-	  }
-	  value = value.replace(reTrim, '');
-	  var isBinary = reIsBinary.test(value);
-	  return (isBinary || reIsOctal.test(value))
-	    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
-	    : (reIsBadHex.test(value) ? NAN : +value);
-	}
-
-	module.exports = debounce;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 280 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	/* istanbul ignore next */
-	/**
-	 * Default values
-	 */
-	exports.default = {
-	  fixtures: [],
-	  initialValue: '',
-	  placeholder: 'Search places',
-	  disabled: false,
-	  className: '',
-	  inputClassName: '',
-	  location: null,
-	  radius: null,
-	  bounds: null,
-	  country: null,
-	  types: null,
-	  queryDelay: 250,
-	  googleMaps: null,
-	  onActivateSuggest: function onActivateSuggest() {},
-	  onSuggestSelect: function onSuggestSelect() {},
-	  onSuggestNoResults: function onSuggestNoResults() {},
-	  onFocus: function onFocus() {},
-	  onBlur: function onBlur() {},
-	  onChange: function onChange() {},
-	  skipSuggest: function skipSuggest() {},
-	  getSuggestLabel: function getSuggestLabel(suggest) {
-	    return suggest.description;
-	  },
-	  autoActivateFirstSuggest: false,
-	  style: {
-	    'input': {},
-	    'suggests': {},
-	    'suggestItem': {}
-	  },
-	  ignoreTab: false
-	};
-
-/***/ },
-/* 281 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Default values
-	 */
-	exports.default = {
-	  fixtures: _react2.default.PropTypes.array,
-	  initialValue: _react2.default.PropTypes.string,
-	  placeholder: _react2.default.PropTypes.string,
-	  disabled: _react2.default.PropTypes.bool,
-	  className: _react2.default.PropTypes.string,
-	  inputClassName: _react2.default.PropTypes.string,
-	  location: _react2.default.PropTypes.object,
-	  radius: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.number]),
-	  bounds: _react2.default.PropTypes.object,
-	  country: _react2.default.PropTypes.string,
-	  types: _react2.default.PropTypes.array,
-	  queryDelay: _react2.default.PropTypes.number,
-	  googleMaps: _react2.default.PropTypes.object,
-	  onSuggestSelect: _react2.default.PropTypes.func,
-	  onFocus: _react2.default.PropTypes.func,
-	  onBlur: _react2.default.PropTypes.func,
-	  onChange: _react2.default.PropTypes.func,
-	  onKeyPress: _react2.default.PropTypes.func,
-	  skipSuggest: _react2.default.PropTypes.func,
-	  getSuggestLabel: _react2.default.PropTypes.func,
-	  autoActivateFirstSuggest: _react2.default.PropTypes.bool,
-	  style: _react2.default.PropTypes.shape({
-	    input: _react2.default.PropTypes.object,
-	    suggests: _react2.default.PropTypes.object,
-	    suggestItem: _react2.default.PropTypes.object
-	  }),
-	  ignoreTab: _react2.default.PropTypes.bool,
-	  label: _react2.default.PropTypes.string
-	};
-
-/***/ },
-/* 282 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports.default = function (props) {
-	  var attributes = {};
-
-	  allowedAttributes.forEach(function (allowedAttribute) {
-	    if (props[allowedAttribute]) {
-	      attributes[allowedAttribute] = props[allowedAttribute];
-	    }
-	  });
-
-	  return attributes;
-	};
-
-	/**
-	 * Attributes allowed on input elements
-	 */
-	var allowedAttributes = ['autoFocus', 'disabled', 'form', 'formAction', 'formEncType', 'formMethod', 'formNoValidate', 'formTarget', 'height', 'id', 'inputMode', 'maxLength', 'name', 'onClick', 'onContextMenu', 'onCopy', 'onCut', 'onDoubleClick', 'onMouseDown', 'onMouseEnter', 'onMouseLeave', 'onMouseMove', 'onMouseOut', 'onMouseOver', 'onMouseUp', 'onPaste', 'pattern', 'placeholder', 'readOnly', 'required', 'size', 'spellCheck', 'tabIndex'];
-
-	/**
-	 * Filter the properties for only allowed input properties
-	 * @param  {Object} props The properties to filter
-	 * @return {Object} The filtered, allowed properties
-	 */
-
-/***/ },
-/* 283 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactAddonsShallowCompare = __webpack_require__(284);
-
-	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
-
-	var _classnames = __webpack_require__(278);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var _filterInputAttributes = __webpack_require__(282);
-
-	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // eslint-disable-line no-unused-vars
-
-
-	/**
-	 * The input field
-	 * @param {Object} props The component's props
-	 * @return {JSX} The icon component.
-	 */
-	var Input = function (_React$Component) {
-	  _inherits(Input, _React$Component);
-
-	  function Input() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
-	    _classCallCheck(this, Input);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Input.__proto__ || Object.getPrototypeOf(Input)).call.apply(_ref, [this].concat(args))), _this), _this.onChange = function () {
-	      _this.props.onChange(_this.refs.input.value);
-	    }, _this.onFocus = function () {
-	      _this.props.onFocus();
-	    }, _this.onBlur = function () {
-	      _this.props.onBlur();
-	    }, _this.onKeyPress = function (event) {
-	      _this.props.onKeyPress(event);
-	    }, _this.onInputKeyDown = function (event) {
-	      // eslint-disable-line complexity
-	      switch (event.which) {
-	        case 40:
-	          // DOWN
-	          event.preventDefault();
-	          _this.props.onNext();
-	          break;
-	        case 38:
-	          // UP
-	          event.preventDefault();
-	          _this.props.onPrev();
-	          break;
-	        case 13:
-	          // ENTER
-	          if (_this.props.ignoreEnter) {
-	            event.preventDefault();
-	          }
-
-	          _this.props.onSelect();
-	          break;
-	        case 9:
-	          // TAB
-	          if (!_this.props.ignoreTab) {
-	            _this.props.onSelect();
-	          }
-	          break;
-	        case 27:
-	          // ESC
-	          _this.props.onEscape();
-	          break;
-	        /* istanbul ignore next */
-	        default:
-	          break;
-	      }
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  _createClass(Input, [{
-	    key: 'shouldComponentUpdate',
-
-	    /**
-	     * Whether or not the component should update
-	     * @param {Object} nextProps The new properties
-	     * @param {Object} nextState The new state
-	     * @return {Boolean} Update or not?
-	     */
-	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
-	    }
-
-	    /**
-	     * When the input got changed
-	     */
-
-
-	    /**
-	     * When the input got focused
-	     */
-
-
-	    /**
-	     * When the input loses focus
-	     */
-
-
-	    /**
-	     * When a key gets pressed in the input
-	     * @param  {Event} event The keypress event
-	     */
-
-
-	    /**
-	     * When a key gets pressed in the input
-	     * @param  {Event} event The keydown event
-	     */
-
-	  }, {
-	    key: 'focus',
-
-
-	    /**
-	     * Focus the input
-	     */
-	    value: function focus() {
-	      this.refs.input.focus();
-	    }
-
-	    /**
-	     * Render the view
-	     * @return {Function} The React element to render
-	     */
-
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var attributes = (0, _filterInputAttributes2.default)(this.props),
-	          classes = (0, _classnames2.default)('geosuggest__input', this.props.className);
-
-	      return _react2.default.createElement('input', _extends({ className: classes,
-	        ref: 'input',
-	        type: 'text',
-	        autoComplete: 'off'
-	      }, attributes, {
-	        value: this.props.value,
-	        style: this.props.style,
-	        onKeyDown: this.onInputKeyDown,
-	        onChange: this.onChange,
-	        onKeyPress: this.onKeyPress,
-	        onFocus: this.onFocus,
-	        onBlur: this.onBlur }));
-	    }
-	  }]);
-
-	  return Input;
-	}(_react2.default.Component);
-
-	/**
-	 * Default values for the properties
-	 * @type {Object}
-	 */
-
-
-	Input.defaultProps = {
-	  className: '',
-	  value: '',
-	  ignoreTab: false,
-	  onKeyDown: function onKeyDown() {},
-	  onKeyPress: function onKeyPress() {}
-	};
-
-	exports.default = Input;
-
-/***/ },
-/* 284 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(285);
-
-/***/ },
-/* 285 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 */
-
-	'use strict';
-
-	var shallowEqual = __webpack_require__(286);
-
-	/**
-	 * Does a shallow comparison for props and state.
-	 * See ReactComponentWithPureRenderMixin
-	 * See also https://facebook.github.io/react/docs/shallow-compare.html
-	 */
-	function shallowCompare(instance, nextProps, nextState) {
-	  return !shallowEqual(instance.props, nextProps) || !shallowEqual(instance.state, nextState);
-	}
-
-	module.exports = shallowCompare;
-
-/***/ },
-/* 286 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @typechecks
-	 * 
-	 */
-
-	/*eslint-disable no-self-compare */
-
-	'use strict';
-
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-	/**
-	 * inlined Object.is polyfill to avoid requiring consumers ship their own
-	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-	 */
-	function is(x, y) {
-	  // SameValue algorithm
-	  if (x === y) {
-	    // Steps 1-5, 7-10
-	    // Steps 6.b-6.e: +0 != -0
-	    // Added the nonzero y check to make Flow happy, but it is redundant
-	    return x !== 0 || y !== 0 || 1 / x === 1 / y;
-	  } else {
-	    // Step 6.a: NaN == NaN
-	    return x !== x && y !== y;
-	  }
-	}
-
-	/**
-	 * Performs equality by iterating through keys on an object and returning false
-	 * when any key has values which are not strictly equal between the arguments.
-	 * Returns true when the values of all keys are strictly equal.
-	 */
-	function shallowEqual(objA, objB) {
-	  if (is(objA, objB)) {
-	    return true;
-	  }
-
-	  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
-	    return false;
-	  }
-
-	  var keysA = Object.keys(objA);
-	  var keysB = Object.keys(objB);
-
-	  if (keysA.length !== keysB.length) {
-	    return false;
-	  }
-
-	  // Test for A's keys different from B.
-	  for (var i = 0; i < keysA.length; i++) {
-	    if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
-	      return false;
-	    }
-	  }
-
-	  return true;
-	}
-
-	module.exports = shallowEqual;
-
-/***/ },
-/* 287 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactAddonsShallowCompare = __webpack_require__(284);
-
-	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
-
-	var _classnames = __webpack_require__(278);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var _suggestItem = __webpack_require__(288);
-
-	var _suggestItem2 = _interopRequireDefault(_suggestItem);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // eslint-disable-line no-unused-vars
-
-
-	/**
-	 * The list with suggestions. Either from an API or provided as fixture
-	 * @param {Object} props The component's props
-	 * @return {JSX} The icon component.
-	 */
-	var SuggestList = function (_React$Component) {
-	  _inherits(SuggestList, _React$Component);
-
-	  function SuggestList() {
-	    _classCallCheck(this, SuggestList);
-
-	    return _possibleConstructorReturn(this, (SuggestList.__proto__ || Object.getPrototypeOf(SuggestList)).apply(this, arguments));
-	  }
-
-	  _createClass(SuggestList, [{
-	    key: 'shouldComponentUpdate',
-
-	    /**
-	     * Whether or not the component should update
-	     * @param {Object} nextProps The new properties
-	     * @param {Object} nextState The new state
-	     * @return {Boolean} Update or not?
-	     */
-	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
-	    }
-
-	    /**
-	     * Whether or not it is hidden
-	     * @return {Boolean} Hidden or not?
-	     */
-
-	  }, {
-	    key: 'isHidden',
-	    value: function isHidden() {
-	      return this.props.isHidden || this.props.suggests.length === 0;
-	    }
-
-	    /**
-	     * There are new properties available for the list
-	     * @param {Object} nextProps The new properties
-	     */
-
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      if (nextProps.suggests !== this.props.suggests) {
-	        if (nextProps.suggests.length === 0) {
-	          this.props.onSuggestNoResults();
-	        }
-	      }
-	    }
-
-	    /**
-	     * Render the view
-	     * @return {Function} The React element to render
-	     */
-
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var classes = (0, _classnames2.default)('geosuggest__suggests', { 'geosuggest__suggests--hidden': this.isHidden() });
-
-	      return _react2.default.createElement(
-	        'ul',
-	        { className: classes, style: this.props.style },
-	        this.props.suggests.map(function (suggest) {
-	          var isActive = _this2.props.activeSuggest && suggest.placeId === _this2.props.activeSuggest.placeId;
-
-	          return _react2.default.createElement(_suggestItem2.default, { key: suggest.placeId,
-	            className: suggest.className,
-	            suggest: suggest,
-	            style: _this2.props.suggestItemStyle,
-	            isActive: isActive,
-	            onMouseDown: _this2.props.onSuggestMouseDown,
-	            onMouseOut: _this2.props.onSuggestMouseOut,
-	            onSelect: _this2.props.onSuggestSelect });
-	        })
-	      );
-	    }
-	  }]);
-
-	  return SuggestList;
-	}(_react2.default.Component);
-
-	/**
-	 * Default values for the properties
-	 * @type {Object}
-	 */
-
-
-	exports.default = SuggestList;
-	SuggestList.defaultProps = {
-	  isHidden: true,
-	  suggests: []
-	};
-
-/***/ },
-/* 288 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactAddonsShallowCompare = __webpack_require__(284);
-
-	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
-
-	var _classnames = __webpack_require__(278);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	 * A single Geosuggest item in the list
-	 * @param {Object} props The component's props
-	 * @return {JSX} The icon component.
-	 */
-	var SuggestItem = function (_React$Component) {
-	  _inherits(SuggestItem, _React$Component);
-
-	  function SuggestItem() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
-	    _classCallCheck(this, SuggestItem);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SuggestItem.__proto__ || Object.getPrototypeOf(SuggestItem)).call.apply(_ref, [this].concat(args))), _this), _this.onClick = function (event) {
-	      event.preventDefault();
-	      _this.props.onSelect(_this.props.suggest);
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  _createClass(SuggestItem, [{
-	    key: 'shouldComponentUpdate',
-
-	    /**
-	     * Whether or not the component should update
-	     * @param {Object} nextProps The new properties
-	     * @param {Object} nextState The new state
-	     * @return {Boolean} Update or not?
-	     */
-	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
-	    }
-
-	    /**
-	     * When the suggest item got clicked
-	     * @param {Event} event The click event
-	     */
-
-	  }, {
-	    key: 'render',
-
-
-	    /**
-	     * Render the view
-	     * @return {Function} The React element to render
-	     */
-	    value: function render() {
-	      var classes = (0, _classnames2.default)('geosuggest__item', this.props.className, { 'geosuggest__item--active': this.props.isActive });
-
-	      return _react2.default.createElement(
-	        'li',
-	        { className: classes,
-	          style: this.props.style,
-	          onMouseDown: this.props.onMouseDown,
-	          onMouseOut: this.props.onMouseOut,
-	          onClick: this.onClick },
-	        this.props.suggest.label
-	      );
-	    }
-	  }]);
-
-	  return SuggestItem;
-	}(_react2.default.Component);
-
-	/**
-	 * Default values for the properties
-	 * @type {Object}
-	 */
-
-
-	exports.default = SuggestItem;
-	SuggestItem.defaultProps = {
-	  isActive: false,
-	  className: '',
-	  suggest: {}
-	};
-
-/***/ },
-/* 289 */,
-/* 290 */,
-/* 291 */,
-/* 292 */,
-/* 293 */,
-/* 294 */,
-/* 295 */,
-/* 296 */,
-/* 297 */,
-/* 298 */,
-/* 299 */,
-/* 300 */,
-/* 301 */,
-/* 302 */,
-/* 303 */,
-/* 304 */,
-/* 305 */,
-/* 306 */,
-/* 307 */,
-/* 308 */,
-/* 309 */,
-/* 310 */,
-/* 311 */,
-/* 312 */,
-/* 313 */,
-/* 314 */,
-/* 315 */,
-/* 316 */,
-/* 317 */,
-/* 318 */,
-/* 319 */,
-/* 320 */,
-/* 321 */,
-/* 322 */
-/***/ function(module, exports) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
-/* 323 */,
-/* 324 */,
-/* 325 */,
-/* 326 */,
-/* 327 */,
-/* 328 */,
-/* 329 */,
-/* 330 */,
-/* 331 */,
-/* 332 */,
-/* 333 */,
-/* 334 */,
-/* 335 */,
-/* 336 */,
-/* 337 */,
-/* 338 */,
-/* 339 */,
-/* 340 */,
-/* 341 */,
-/* 342 */,
-/* 343 */,
-/* 344 */,
-/* 345 */,
-/* 346 */,
-/* 347 */,
-/* 348 */,
-/* 349 */,
-/* 350 */,
-/* 351 */,
-/* 352 */,
-/* 353 */,
-/* 354 */,
-/* 355 */,
-/* 356 */,
-/* 357 */,
-/* 358 */,
-/* 359 */,
-/* 360 */,
-/* 361 */,
-/* 362 */,
-/* 363 */,
-/* 364 */,
-/* 365 */,
-/* 366 */,
-/* 367 */,
-/* 368 */,
-/* 369 */,
-/* 370 */,
-/* 371 */,
-/* 372 */,
-/* 373 */,
-/* 374 */,
-/* 375 */,
-/* 376 */,
-/* 377 */,
-/* 378 */,
-/* 379 */,
-/* 380 */,
-/* 381 */,
-/* 382 */,
-/* 383 */,
-/* 384 */,
-/* 385 */,
-/* 386 */,
-/* 387 */,
-/* 388 */,
-/* 389 */,
-/* 390 */,
-/* 391 */,
-/* 392 */,
-/* 393 */,
-/* 394 */,
-/* 395 */,
-/* 396 */,
-/* 397 */,
-/* 398 */,
-/* 399 */,
-/* 400 */,
-/* 401 */,
-/* 402 */,
-/* 403 */,
-/* 404 */,
-/* 405 */,
-/* 406 */,
-/* 407 */,
-/* 408 */,
-/* 409 */,
-/* 410 */,
-/* 411 */,
-/* 412 */,
-/* 413 */,
-/* 414 */,
-/* 415 */,
-/* 416 */,
-/* 417 */,
-/* 418 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ },
-/* 419 */,
-/* 420 */,
-/* 421 */,
-/* 422 */,
-/* 423 */,
-/* 424 */,
-/* 425 */,
-/* 426 */,
-/* 427 */,
-/* 428 */,
-/* 429 */,
-/* 430 */,
-/* 431 */,
-/* 432 */,
-/* 433 */,
-/* 434 */,
-/* 435 */,
-/* 436 */,
-/* 437 */,
-/* 438 */,
-/* 439 */,
-/* 440 */,
-/* 441 */,
-/* 442 */,
-/* 443 */,
-/* 444 */,
-/* 445 */,
-/* 446 */,
-/* 447 */,
-/* 448 */,
-/* 449 */,
-/* 450 */,
-/* 451 */,
-/* 452 */,
-/* 453 */,
-/* 454 */,
-/* 455 */,
-/* 456 */,
-/* 457 */,
-/* 458 */,
-/* 459 */,
-/* 460 */,
-/* 461 */,
-/* 462 */,
-/* 463 */,
-/* 464 */,
-/* 465 */
-/***/ function(module, exports, __webpack_require__) {
-
 	
 	/**
 	 * Module dependencies.
 	 */
 
-	var url = __webpack_require__(466);
-	var parser = __webpack_require__(471);
-	var Manager = __webpack_require__(480);
-	var debug = __webpack_require__(468)('socket.io-client');
+	var url = __webpack_require__(271);
+	var parser = __webpack_require__(276);
+	var Manager = __webpack_require__(287);
+	var debug = __webpack_require__(273)('socket.io-client');
 
 	/**
 	 * Module exports.
@@ -31343,12 +28972,12 @@
 	 * @api public
 	 */
 
-	exports.Manager = __webpack_require__(480);
-	exports.Socket = __webpack_require__(508);
+	exports.Manager = __webpack_require__(287);
+	exports.Socket = __webpack_require__(315);
 
 
 /***/ },
-/* 466 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -31356,8 +28985,8 @@
 	 * Module dependencies.
 	 */
 
-	var parseuri = __webpack_require__(467);
-	var debug = __webpack_require__(468)('socket.io-client:url');
+	var parseuri = __webpack_require__(272);
+	var debug = __webpack_require__(273)('socket.io-client:url');
 
 	/**
 	 * Module exports.
@@ -31430,7 +29059,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 467 */
+/* 272 */
 /***/ function(module, exports) {
 
 	/**
@@ -31475,7 +29104,7 @@
 
 
 /***/ },
-/* 468 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {
@@ -31485,7 +29114,7 @@
 	 * Expose `debug()` as the module.
 	 */
 
-	exports = module.exports = __webpack_require__(469);
+	exports = module.exports = __webpack_require__(274);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -31659,7 +29288,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 469 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -31675,7 +29304,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(470);
+	exports.humanize = __webpack_require__(275);
 
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -31865,7 +29494,7 @@
 
 
 /***/ },
-/* 470 */
+/* 275 */
 /***/ function(module, exports) {
 
 	/**
@@ -32020,7 +29649,7 @@
 
 
 /***/ },
-/* 471 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -32028,11 +29657,11 @@
 	 * Module dependencies.
 	 */
 
-	var debug = __webpack_require__(472)('socket.io-parser');
-	var json = __webpack_require__(475);
-	var Emitter = __webpack_require__(476);
-	var binary = __webpack_require__(477);
-	var isBuf = __webpack_require__(479);
+	var debug = __webpack_require__(277)('socket.io-parser');
+	var json = __webpack_require__(280);
+	var Emitter = __webpack_require__(283);
+	var binary = __webpack_require__(284);
+	var isBuf = __webpack_require__(286);
 
 	/**
 	 * Protocol version.
@@ -32430,7 +30059,7 @@
 
 
 /***/ },
-/* 472 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -32440,7 +30069,7 @@
 	 * Expose `debug()` as the module.
 	 */
 
-	exports = module.exports = __webpack_require__(473);
+	exports = module.exports = __webpack_require__(278);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -32604,7 +30233,7 @@
 
 
 /***/ },
-/* 473 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -32620,7 +30249,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(474);
+	exports.humanize = __webpack_require__(279);
 
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -32807,7 +30436,7 @@
 
 
 /***/ },
-/* 474 */
+/* 279 */
 /***/ function(module, exports) {
 
 	/**
@@ -32938,14 +30567,14 @@
 
 
 /***/ },
-/* 475 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 	;(function () {
 	  // Detect the `define` function exposed by asynchronous module loaders. The
 	  // strict `define` check is necessary for compatibility with `r.js`.
-	  var isLoader = "function" === "function" && __webpack_require__(418);
+	  var isLoader = "function" === "function" && __webpack_require__(282);
 
 	  // A set of types used to distinguish objects from primitives.
 	  var objectTypes = {
@@ -33844,10 +31473,34 @@
 	  }
 	}).call(this);
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(322)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(281)(module), (function() { return this; }())))
 
 /***/ },
-/* 476 */
+/* 281 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 282 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ },
+/* 283 */
 /***/ function(module, exports) {
 
 	
@@ -34017,7 +31670,7 @@
 
 
 /***/ },
-/* 477 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -34026,8 +31679,8 @@
 	 * Module requirements
 	 */
 
-	var isArray = __webpack_require__(478);
-	var isBuf = __webpack_require__(479);
+	var isArray = __webpack_require__(285);
+	var isBuf = __webpack_require__(286);
 
 	/**
 	 * Replaces every Buffer | ArrayBuffer in packet with a numbered placeholder.
@@ -34165,7 +31818,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 478 */
+/* 285 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -34174,7 +31827,7 @@
 
 
 /***/ },
-/* 479 */
+/* 286 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -34194,7 +31847,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 480 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -34202,15 +31855,15 @@
 	 * Module dependencies.
 	 */
 
-	var eio = __webpack_require__(481);
-	var Socket = __webpack_require__(508);
-	var Emitter = __webpack_require__(499);
-	var parser = __webpack_require__(471);
-	var on = __webpack_require__(510);
-	var bind = __webpack_require__(511);
-	var debug = __webpack_require__(468)('socket.io-client:manager');
-	var indexOf = __webpack_require__(506);
-	var Backoff = __webpack_require__(514);
+	var eio = __webpack_require__(288);
+	var Socket = __webpack_require__(315);
+	var Emitter = __webpack_require__(306);
+	var parser = __webpack_require__(276);
+	var on = __webpack_require__(317);
+	var bind = __webpack_require__(318);
+	var debug = __webpack_require__(273)('socket.io-client:manager');
+	var indexOf = __webpack_require__(313);
+	var Backoff = __webpack_require__(321);
 
 	/**
 	 * IE6+ hasOwnProperty
@@ -34760,19 +32413,19 @@
 
 
 /***/ },
-/* 481 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports = __webpack_require__(482);
+	module.exports = __webpack_require__(289);
 
 
 /***/ },
-/* 482 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports = __webpack_require__(483);
+	module.exports = __webpack_require__(290);
 
 	/**
 	 * Exports parser
@@ -34780,25 +32433,25 @@
 	 * @api public
 	 *
 	 */
-	module.exports.parser = __webpack_require__(490);
+	module.exports.parser = __webpack_require__(297);
 
 
 /***/ },
-/* 483 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 
-	var transports = __webpack_require__(484);
-	var Emitter = __webpack_require__(499);
-	var debug = __webpack_require__(468)('engine.io-client:socket');
-	var index = __webpack_require__(506);
-	var parser = __webpack_require__(490);
-	var parseuri = __webpack_require__(467);
-	var parsejson = __webpack_require__(507);
-	var parseqs = __webpack_require__(500);
+	var transports = __webpack_require__(291);
+	var Emitter = __webpack_require__(306);
+	var debug = __webpack_require__(273)('engine.io-client:socket');
+	var index = __webpack_require__(313);
+	var parser = __webpack_require__(297);
+	var parseuri = __webpack_require__(272);
+	var parsejson = __webpack_require__(314);
+	var parseqs = __webpack_require__(307);
 
 	/**
 	 * Module exports.
@@ -34930,9 +32583,9 @@
 	 */
 
 	Socket.Socket = Socket;
-	Socket.Transport = __webpack_require__(489);
-	Socket.transports = __webpack_require__(484);
-	Socket.parser = __webpack_require__(490);
+	Socket.Transport = __webpack_require__(296);
+	Socket.transports = __webpack_require__(291);
+	Socket.parser = __webpack_require__(297);
 
 	/**
 	 * Creates transport of the given type.
@@ -35529,17 +33182,17 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 484 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies
 	 */
 
-	var XMLHttpRequest = __webpack_require__(485);
-	var XHR = __webpack_require__(487);
-	var JSONP = __webpack_require__(503);
-	var websocket = __webpack_require__(504);
+	var XMLHttpRequest = __webpack_require__(292);
+	var XHR = __webpack_require__(294);
+	var JSONP = __webpack_require__(310);
+	var websocket = __webpack_require__(311);
 
 	/**
 	 * Export transports.
@@ -35589,12 +33242,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 485 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
-	var hasCORS = __webpack_require__(486);
+	var hasCORS = __webpack_require__(293);
 
 	module.exports = function (opts) {
 	  var xdomain = opts.xdomain;
@@ -35633,7 +33286,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 486 */
+/* 293 */
 /***/ function(module, exports) {
 
 	
@@ -35656,18 +33309,18 @@
 
 
 /***/ },
-/* 487 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module requirements.
 	 */
 
-	var XMLHttpRequest = __webpack_require__(485);
-	var Polling = __webpack_require__(488);
-	var Emitter = __webpack_require__(499);
-	var inherit = __webpack_require__(501);
-	var debug = __webpack_require__(468)('engine.io-client:polling-xhr');
+	var XMLHttpRequest = __webpack_require__(292);
+	var Polling = __webpack_require__(295);
+	var Emitter = __webpack_require__(306);
+	var inherit = __webpack_require__(308);
+	var debug = __webpack_require__(273)('engine.io-client:polling-xhr');
 
 	/**
 	 * Module exports.
@@ -36087,19 +33740,19 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 488 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 
-	var Transport = __webpack_require__(489);
-	var parseqs = __webpack_require__(500);
-	var parser = __webpack_require__(490);
-	var inherit = __webpack_require__(501);
-	var yeast = __webpack_require__(502);
-	var debug = __webpack_require__(468)('engine.io-client:polling');
+	var Transport = __webpack_require__(296);
+	var parseqs = __webpack_require__(307);
+	var parser = __webpack_require__(297);
+	var inherit = __webpack_require__(308);
+	var yeast = __webpack_require__(309);
+	var debug = __webpack_require__(273)('engine.io-client:polling');
 
 	/**
 	 * Module exports.
@@ -36112,7 +33765,7 @@
 	 */
 
 	var hasXHR2 = (function () {
-	  var XMLHttpRequest = __webpack_require__(485);
+	  var XMLHttpRequest = __webpack_require__(292);
 	  var xhr = new XMLHttpRequest({ xdomain: false });
 	  return null != xhr.responseType;
 	})();
@@ -36338,15 +33991,15 @@
 
 
 /***/ },
-/* 489 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 
-	var parser = __webpack_require__(490);
-	var Emitter = __webpack_require__(499);
+	var parser = __webpack_require__(297);
+	var Emitter = __webpack_require__(306);
 
 	/**
 	 * Module exports.
@@ -36501,22 +34154,22 @@
 
 
 /***/ },
-/* 490 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 
-	var keys = __webpack_require__(491);
-	var hasBinary = __webpack_require__(492);
-	var sliceBuffer = __webpack_require__(494);
-	var after = __webpack_require__(495);
-	var utf8 = __webpack_require__(496);
+	var keys = __webpack_require__(298);
+	var hasBinary = __webpack_require__(299);
+	var sliceBuffer = __webpack_require__(301);
+	var after = __webpack_require__(302);
+	var utf8 = __webpack_require__(303);
 
 	var base64encoder;
 	if (global && global.ArrayBuffer) {
-	  base64encoder = __webpack_require__(497);
+	  base64encoder = __webpack_require__(304);
 	}
 
 	/**
@@ -36574,7 +34227,7 @@
 	 * Create a blob api even for blob builder when vendor prefixes exist
 	 */
 
-	var Blob = __webpack_require__(498);
+	var Blob = __webpack_require__(305);
 
 	/**
 	 * Encodes a packet.
@@ -37117,7 +34770,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 491 */
+/* 298 */
 /***/ function(module, exports) {
 
 	
@@ -37142,7 +34795,7 @@
 
 
 /***/ },
-/* 492 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -37150,7 +34803,7 @@
 	 * Module requirements.
 	 */
 
-	var isArray = __webpack_require__(493);
+	var isArray = __webpack_require__(300);
 
 	/**
 	 * Module exports.
@@ -37207,7 +34860,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 493 */
+/* 300 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -37216,7 +34869,7 @@
 
 
 /***/ },
-/* 494 */
+/* 301 */
 /***/ function(module, exports) {
 
 	/**
@@ -37251,7 +34904,7 @@
 
 
 /***/ },
-/* 495 */
+/* 302 */
 /***/ function(module, exports) {
 
 	module.exports = after
@@ -37285,7 +34938,7 @@
 
 
 /***/ },
-/* 496 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/wtf8 v1.0.0 by @mathias */
@@ -37521,10 +35174,10 @@
 
 	}(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(322)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(281)(module), (function() { return this; }())))
 
 /***/ },
-/* 497 */
+/* 304 */
 /***/ function(module, exports) {
 
 	/*
@@ -37597,7 +35250,7 @@
 
 
 /***/ },
-/* 498 */
+/* 305 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -37700,7 +35353,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 499 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -37869,7 +35522,7 @@
 
 
 /***/ },
-/* 500 */
+/* 307 */
 /***/ function(module, exports) {
 
 	/**
@@ -37912,7 +35565,7 @@
 
 
 /***/ },
-/* 501 */
+/* 308 */
 /***/ function(module, exports) {
 
 	
@@ -37924,7 +35577,7 @@
 	};
 
 /***/ },
-/* 502 */
+/* 309 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37998,7 +35651,7 @@
 
 
 /***/ },
-/* 503 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -38006,8 +35659,8 @@
 	 * Module requirements.
 	 */
 
-	var Polling = __webpack_require__(488);
-	var inherit = __webpack_require__(501);
+	var Polling = __webpack_require__(295);
+	var inherit = __webpack_require__(308);
 
 	/**
 	 * Module exports.
@@ -38236,24 +35889,24 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 504 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 
-	var Transport = __webpack_require__(489);
-	var parser = __webpack_require__(490);
-	var parseqs = __webpack_require__(500);
-	var inherit = __webpack_require__(501);
-	var yeast = __webpack_require__(502);
-	var debug = __webpack_require__(468)('engine.io-client:websocket');
+	var Transport = __webpack_require__(296);
+	var parser = __webpack_require__(297);
+	var parseqs = __webpack_require__(307);
+	var inherit = __webpack_require__(308);
+	var yeast = __webpack_require__(309);
+	var debug = __webpack_require__(273)('engine.io-client:websocket');
 	var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 	var NodeWebSocket;
 	if (typeof window === 'undefined') {
 	  try {
-	    NodeWebSocket = __webpack_require__(505);
+	    NodeWebSocket = __webpack_require__(312);
 	  } catch (e) { }
 	}
 
@@ -38528,13 +36181,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 505 */
+/* 312 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 506 */
+/* 313 */
 /***/ function(module, exports) {
 
 	
@@ -38549,7 +36202,7 @@
 	};
 
 /***/ },
-/* 507 */
+/* 314 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -38587,7 +36240,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 508 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -38595,13 +36248,13 @@
 	 * Module dependencies.
 	 */
 
-	var parser = __webpack_require__(471);
-	var Emitter = __webpack_require__(499);
-	var toArray = __webpack_require__(509);
-	var on = __webpack_require__(510);
-	var bind = __webpack_require__(511);
-	var debug = __webpack_require__(468)('socket.io-client:socket');
-	var hasBin = __webpack_require__(512);
+	var parser = __webpack_require__(276);
+	var Emitter = __webpack_require__(306);
+	var toArray = __webpack_require__(316);
+	var on = __webpack_require__(317);
+	var bind = __webpack_require__(318);
+	var debug = __webpack_require__(273)('socket.io-client:socket');
+	var hasBin = __webpack_require__(319);
 
 	/**
 	 * Module exports.
@@ -39012,7 +36665,7 @@
 
 
 /***/ },
-/* 509 */
+/* 316 */
 /***/ function(module, exports) {
 
 	module.exports = toArray
@@ -39031,7 +36684,7 @@
 
 
 /***/ },
-/* 510 */
+/* 317 */
 /***/ function(module, exports) {
 
 	
@@ -39061,7 +36714,7 @@
 
 
 /***/ },
-/* 511 */
+/* 318 */
 /***/ function(module, exports) {
 
 	/**
@@ -39090,7 +36743,7 @@
 
 
 /***/ },
-/* 512 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -39098,7 +36751,7 @@
 	 * Module requirements.
 	 */
 
-	var isArray = __webpack_require__(513);
+	var isArray = __webpack_require__(320);
 
 	/**
 	 * Module exports.
@@ -39156,7 +36809,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 513 */
+/* 320 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -39165,7 +36818,7 @@
 
 
 /***/ },
-/* 514 */
+/* 321 */
 /***/ function(module, exports) {
 
 	
@@ -39256,7 +36909,170 @@
 
 
 /***/ },
-/* 515 */
+/* 322 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _socket = __webpack_require__(270);
+
+	var _socket2 = _interopRequireDefault(_socket);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(1);
+
+	var socket = (0, _socket2.default)('http://localhost:3000');
+
+	var generalChat = function (_React$Component) {
+	    _inherits(generalChat, _React$Component);
+
+	    function generalChat(props) {
+	        _classCallCheck(this, generalChat);
+
+	        var _this = _possibleConstructorReturn(this, (generalChat.__proto__ || Object.getPrototypeOf(generalChat)).call(this, props));
+
+	        var that = _this;
+	        _this.state = {
+	            messages: []
+	        };
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        _this.sendMessage = _this.sendMessage.bind(_this);
+	        _this.componentDidMount = _this.componentDidMount.bind(_this);
+	        _this.messageRecieve = _this.messageRecieve.bind(_this);
+
+	        var buildingId = _this.props.details.buildingId;
+
+	        axios.get('/getGeneralMessages/' + buildingId).then(function (result) {
+	            that.setState({
+	                messages: result.data.file
+	            });
+	        });
+	        return _this;
+	    }
+
+	    _createClass(generalChat, [{
+	        key: 'render',
+	        value: function render() {
+	            var that = this;
+	            var messages = that.state.messages.map(function (message) {
+	                return React.createElement(
+	                    'div',
+	                    { className: 'messagesContainer' },
+	                    React.createElement(
+	                        'div',
+	                        { id: message.id },
+	                        React.createElement(
+	                            'h4',
+	                            { className: 'messageText' },
+	                            message.message
+	                        ),
+	                        React.createElement(
+	                            'h5',
+	                            { className: 'messgageName' },
+	                            message.firstname,
+	                            ' ',
+	                            message.lastname
+	                        ),
+	                        '  posted on ',
+	                        message.created_at
+	                    )
+	                );
+	            });
+
+	            return React.createElement(
+	                'div',
+	                { className: 'inputAndChat' },
+	                React.createElement(
+	                    'div',
+	                    { className: 'conversationsArea', ref: 'scrollDiv', onFocus: this.scrolling },
+	                    React.createElement(
+	                        'div',
+	                        null,
+	                        messages
+	                    )
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'chatContainer' },
+	                    React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.newMessage, onChange: this.handleChange }),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'message_button', onClick: this.sendMessage },
+	                        'Send'
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            console.log('scrolling');
+	            this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            socket.on('connection', this.connected);
+	            socket.on('disconnection', this.disconnected);
+	            socket.on('send:message', this.messageRecieve);
+	        }
+	    }, {
+	        key: 'connected',
+	        value: function connected() {
+	            console.log('connected!');
+	        }
+	    }, {
+	        key: 'disconnected',
+	        value: function disconnected() {
+	            console.log('disconnected!');
+	        }
+	    }, {
+	        key: 'messageRecieve',
+	        value: function messageRecieve(message) {
+	            var messages = this.state.messages;
+
+	            messages.push(message);
+	            this.setState({ messages: messages });
+	        }
+	    }, {
+	        key: 'sendMessage',
+	        value: function sendMessage(e) {
+	            var that = this;
+	            e.preventDefault();
+	            var newMessage = this.state.newMessage;
+	            this.state.newMessage = "";
+	            axios.post('insertGeneralMessage', {
+	                newMessage: newMessage
+	            }).then(function (response) {
+	                newMessage = response.data.file;
+	                that.props.onNewMessage(newMessage);
+	                console.log(that.state.messages);
+	                socket.emit('send:message', newMessage);
+	            });
+	        }
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(event) {
+	            this.setState({ newMessage: event.target.value });
+	        }
+	    }]);
+
+	    return generalChat;
+	}(React.Component);
+
+	module.exports = generalChat;
+
+/***/ },
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39280,6 +37096,2064 @@
 	});
 
 	module.exports = loggedOut;
+
+/***/ },
+/* 324 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var Logo = __webpack_require__(325);
+
+	var Main = React.createClass({
+	    displayName: 'Main',
+
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(Logo, null),
+	            this.props.children
+	        );
+	    }
+	});
+
+	module.exports = Main;
+
+/***/ },
+/* 325 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Logo = React.createClass({
+	    displayName: 'Logo',
+
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            { id: 'logoContainer' },
+	            React.createElement(
+	                'h1',
+	                { id: 'mainHeadline' },
+	                'Neighbours'
+	            ),
+	            React.createElement(
+	                'button',
+	                { className: 'logOutButton', onClick: this.logOut },
+	                'Logout'
+	            )
+	        );
+	    },
+	    logOut: function logOut() {
+	        axios.get('logOut').then(function (reponse) {
+	            console.log('logged out');
+	            window.location.href = "#/loggedOut";
+	        });
+	    }
+	});
+
+	module.exports = Logo;
+
+/***/ },
+/* 326 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(1);
+	var Login = __webpack_require__(327);
+	var RegisterAddress = __webpack_require__(328);
+	var axios = __webpack_require__(240);
+
+	var LoginPage = function (_React$Component) {
+	    _inherits(LoginPage, _React$Component);
+
+	    function LoginPage(props) {
+	        _classCallCheck(this, LoginPage);
+
+	        var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props));
+
+	        axios.get('getAllDetails').then(function (response) {
+	            if (response.data.success === true) {
+	                window.location.href = "#/connectArea";
+	            }
+	        });
+	        return _this;
+	    }
+
+	    _createClass(LoginPage, [{
+	        key: 'render',
+	        value: function render() {
+	            return React.createElement(
+	                'div',
+	                null,
+	                React.createElement(Login, null),
+	                React.createElement(RegisterAddress, null)
+	            );
+	        }
+	    }]);
+
+	    return LoginPage;
+	}(React.Component);
+
+	module.exports = LoginPage;
+
+/***/ },
+/* 327 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var _require = __webpack_require__(184),
+	    Link = _require.Link;
+
+	var Login = React.createClass({
+	    displayName: 'Login',
+
+	    getInitialState: function getInitialState() {
+	        return { error: false };
+	    },
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            { className: 'LoginRegister', id: 'loginMain' },
+	            React.createElement(
+	                'h3',
+	                { id: 'loginHeadline' },
+	                'Already a user?'
+	            ),
+	            React.createElement(
+	                'form',
+	                null,
+	                React.createElement(
+	                    'div',
+	                    null,
+	                    React.createElement('input', { type: 'text', placeholder: 'email', ref: 'email' })
+	                ),
+	                React.createElement(
+	                    'div',
+	                    null,
+	                    React.createElement('input', { type: 'text', placeholder: 'password', ref: 'password' })
+	                ),
+	                React.createElement(
+	                    'button',
+	                    { className: 'button', onClick: this.loginUser },
+	                    'Submit'
+	                )
+	            ),
+	            this.state.error ? React.createElement(
+	                'h4',
+	                { className: 'userError' },
+	                'wrong email or password'
+	            ) : null
+	        );
+	    },
+	    loginUser: function loginUser() {
+	        var that = this;
+	        var email = this.refs.email.value;
+	        var password = this.refs.password.value;
+	        axios.post('/checkUser', {
+	            email: email,
+	            password: password
+	        }).then(function (res) {
+	            console.log('heyyyy');
+	            if (res.data.success === true) {
+	                socket.userId = res.data.file.user.id;
+	                window.location.href = "#/connectArea";
+	            } else {
+	                console.log('blaaa');
+	                that.setState({ error: true });
+	            }
+	        });
+	    }
+
+	});
+
+	module.exports = Login;
+
+/***/ },
+/* 328 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _reactGeosuggest = __webpack_require__(329);
+
+	var _reactGeosuggest2 = _interopRequireDefault(_reactGeosuggest);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var ReactDOM = __webpack_require__(32);
+	var React = __webpack_require__(1);
+
+	var _require = __webpack_require__(184),
+	    Link = _require.Link;
+
+	React.createElement(_reactGeosuggest2.default
+	// className="geosuggest"
+	, null);
+	var axios = __webpack_require__(240);
+
+	var _require2 = __webpack_require__(184),
+	    Route = _require2.Route,
+	    Router = _require2.Router,
+	    IndexRoute = _require2.IndexRoute,
+	    hashHistory = _require2.hashHistory,
+	    browserHistory = _require2.browserHistory;
+
+	var RegisterAddress = React.createClass({
+	    displayName: 'RegisterAddress',
+
+	    getInitialState: function getInitialState() {
+	        return { exists: false,
+	            doesntExist: false,
+	            creationSuccess: false
+	        };
+	    },
+	    render: function render() {
+	        var _React$createElement;
+
+	        var address = this.state.address;
+	        var creationSuccess = this.state.creationSuccess;
+	        var exists = this.state.exists;
+	        var doesntExist = this.state.doesntExist;
+
+	        var fixtures = [];
+	        var that = this;
+	        function checkExist() {
+	            if (exists) {
+	                return React.createElement(
+	                    'div',
+	                    { className: 'buildingExist' },
+	                    React.createElement(
+	                        'h3',
+	                        { id: 'loginHeadline' },
+	                        'Your building already exists here, would you like to join the group?'
+	                    ),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'button' },
+	                        React.createElement(
+	                            Link,
+	                            { to: '/register' },
+	                            'Yes'
+	                        )
+	                    )
+	                );
+	            };
+	            if (doesntExist) {
+	                return React.createElement(
+	                    'div',
+	                    { className: 'buildingExist' },
+	                    React.createElement(
+	                        'h3',
+	                        { id: 'loginHeadline' },
+	                        'Your building is new here! Do you wanna create it?'
+	                    ),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'button', onClick: that.makeBuilding },
+	                        'Yes!'
+	                    ),
+	                    renderSuccess()
+	                );
+	            }
+	        };
+	        function renderSuccess() {
+	            if (creationSuccess) {
+	                return React.createElement(
+	                    'div',
+	                    { className: 'buildingExist' },
+	                    React.createElement(
+	                        'h3',
+	                        { id: 'loginHeadline' },
+	                        ' Your building in ',
+	                        React.createElement(
+	                            'span',
+	                            { id: 'createdAddress' },
+	                            ' ',
+	                            address,
+	                            ' '
+	                        ),
+	                        ' was created! Please register and tell your neighbours to join!'
+	                    ),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'button' },
+	                        React.createElement(
+	                            Link,
+	                            { to: '/register' },
+	                            'Register'
+	                        )
+	                    )
+	                );
+	            }
+	        }
+	        return React.createElement(
+	            'div',
+	            { className: 'LoginRegister', id: 'registerMain' },
+	            React.createElement(
+	                'h3',
+	                { id: 'loginHeadline' },
+	                'If not - Where do you live?'
+	            ),
+	            React.createElement(_reactGeosuggest2.default, { placeholder: 'Type your address and choose from the list',
+	                initialValue: '',
+	                fixtures: fixtures,
+	                onSuggestSelect: this.onSuggestSelect,
+	                onKeyPress: this.onKeyPress,
+	                onSuggestNoResults: this.onSuggestNoResults,
+	                location: new google.maps.LatLng(53.558572, 9.9278215),
+	                radius: '20' }),
+	            React.createElement(
+	                'h4',
+	                { id: 'noAddressResults' },
+	                'Please submit an address'
+	            ),
+	            React.createElement(
+	                'button',
+	                (_React$createElement = { className: 'button', id: 'submitAddress' }, _defineProperty(_React$createElement, 'className', 'button'), _defineProperty(_React$createElement, 'onClick', this.saveAddress), _React$createElement),
+	                'Submit'
+	            ),
+	            checkExist()
+	        );
+	    },
+	    onSuggestSelect: function onSuggestSelect(suggest) {
+	        this.setState({ suggest: suggest });
+	        document.getElementsByClassName("geosuggest__suggests-wrapper")[0].style.display = "none";
+	    },
+	    onKeyPress: function onKeyPress(event) {
+	        document.getElementsByClassName("geosuggest__suggests-wrapper")[0].style.display = "block";
+	    },
+	    saveAddress: function saveAddress(e) {
+	        e.preventDefault();
+	        var that = this;
+	        var suggest = this.state.suggest;
+	        var address = suggest.label;
+	        var placeId = suggest.placeId;
+	        axios.post('/checkBuilding', {
+	            address: address,
+	            placeId: placeId
+	        }).then(function (res) {
+	            if (res.data.success === true) {
+	                that.setState({
+	                    exists: true
+	                });
+	            } else {
+	                that.setState({
+	                    doesntExist: true
+	                });
+	            }
+	        });
+	    },
+	    makeBuilding: function makeBuilding(e) {
+	        e.preventDefault();
+	        var that = this;
+	        axios.get('/registerBuilding').then(function (result) {
+	            that.setState({
+	                creationSuccess: true,
+	                address: result.data.file
+	            });
+	        });
+	    }
+
+	});
+
+	module.exports = RegisterAddress;
+
+/***/ },
+/* 329 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(330);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _lodash = __webpack_require__(331);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _defaults = __webpack_require__(332);
+
+	var _defaults2 = _interopRequireDefault(_defaults);
+
+	var _propTypes = __webpack_require__(333);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _filterInputAttributes = __webpack_require__(334);
+
+	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
+
+	var _input = __webpack_require__(335);
+
+	var _input2 = _interopRequireDefault(_input);
+
+	var _suggestList = __webpack_require__(339);
+
+	var _suggestList2 = _interopRequireDefault(_suggestList);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global window */
+
+	// Escapes special characters in user input for regex
+	function escapeRegExp(str) {
+	  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+	}
+
+	/**
+	 * Entry point for the Geosuggest component
+	 */
+
+	var Geosuggest = function (_React$Component) {
+	  _inherits(Geosuggest, _React$Component);
+
+	  /**
+	   * The constructor. Sets the initial state.
+	   * @param  {Object} props The properties object.
+	   */
+	  function Geosuggest(props) {
+	    _classCallCheck(this, Geosuggest);
+
+	    var _this = _possibleConstructorReturn(this, (Geosuggest.__proto__ || Object.getPrototypeOf(Geosuggest)).call(this, props));
+
+	    _this.onInputChange = function (userInput) {
+	      _this.setState({ userInput: userInput }, _this.onAfterInputChange);
+	    };
+
+	    _this.onAfterInputChange = function () {
+	      if (!_this.state.isSuggestsHidden) {
+	        _this.showSuggests();
+	      }
+	      _this.props.onChange(_this.state.userInput);
+	    };
+
+	    _this.onInputFocus = function () {
+	      _this.props.onFocus();
+	      _this.showSuggests();
+	    };
+
+	    _this.onInputBlur = function () {
+	      if (!_this.state.ignoreBlur) {
+	        _this.hideSuggests();
+	      }
+	    };
+
+	    _this.onNext = function () {
+	      return _this.activateSuggest('next');
+	    };
+
+	    _this.onPrev = function () {
+	      return _this.activateSuggest('prev');
+	    };
+
+	    _this.onSelect = function () {
+	      return _this.selectSuggest(_this.state.activeSuggest);
+	    };
+
+	    _this.onSuggestMouseDown = function () {
+	      return _this.setState({ ignoreBlur: true });
+	    };
+
+	    _this.onSuggestMouseOut = function () {
+	      return _this.setState({ ignoreBlur: false });
+	    };
+
+	    _this.onSuggestNoResults = function () {
+	      _this.props.onSuggestNoResults(_this.state.userInput);
+	    };
+
+	    _this.hideSuggests = function () {
+	      _this.props.onBlur(_this.state.userInput);
+	      var timer = setTimeout(function () {
+	        _this.setState({
+	          isSuggestsHidden: true,
+	          activeSuggest: null
+	        });
+	      }, 100);
+
+	      _this.setState({ timer: timer });
+	    };
+
+	    _this.selectSuggest = function (suggest) {
+	      if (!suggest) {
+	        suggest = {
+	          label: _this.state.userInput
+	        };
+	      }
+
+	      _this.setState({
+	        isSuggestsHidden: true,
+	        userInput: suggest.label
+	      });
+
+	      if (suggest.location) {
+	        _this.setState({ ignoreBlur: false });
+	        _this.props.onSuggestSelect(suggest);
+	        return;
+	      }
+
+	      _this.geocodeSuggest(suggest);
+	    };
+
+	    _this.state = {
+	      isSuggestsHidden: true,
+	      isLoading: false,
+	      userInput: props.initialValue,
+	      activeSuggest: null,
+	      suggests: [],
+	      timer: null
+	    };
+
+	    _this.onInputChange = _this.onInputChange.bind(_this);
+	    _this.onAfterInputChange = _this.onAfterInputChange.bind(_this);
+
+	    if (props.queryDelay) {
+	      _this.onAfterInputChange = (0, _lodash2.default)(_this.onAfterInputChange, props.queryDelay);
+	    }
+	    return _this;
+	  }
+
+	  /**
+	   * Change inputValue if prop changes
+	   * @param {Object} props The new props
+	   */
+
+
+	  _createClass(Geosuggest, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(props) {
+	      if (this.props.initialValue !== props.initialValue) {
+	        this.setState({ userInput: props.initialValue });
+	      }
+	    }
+
+	    /**
+	     * Called on the client side after component is mounted.
+	     * Google api sdk object will be obtained and cached as a instance property.
+	     * Necessary objects of google api will also be determined and saved.
+	     */
+
+	  }, {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      if (typeof window === 'undefined') {
+	        return;
+	      }
+
+	      var googleMaps = this.props.googleMaps || window.google && // eslint-disable-line no-extra-parens
+	      window.google.maps || this.googleMaps;
+
+	      /* istanbul ignore next */
+	      if (!googleMaps) {
+	        console.error( // eslint-disable-line no-console
+	        'Google map api was not found in the page.');
+	        return;
+	      }
+	      this.googleMaps = googleMaps;
+
+	      this.autocompleteService = new googleMaps.places.AutocompleteService();
+	      this.geocoder = new googleMaps.Geocoder();
+	    }
+
+	    /**
+	     * When the component will unmount
+	     */
+
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      clearTimeout(this.state.timer);
+	    }
+
+	    /**
+	     * When the input changed
+	     * @param {String} userInput The input value of the user
+	     */
+
+
+	    /**
+	     * On After the input got changed
+	     */
+
+
+	    /**
+	     * When the input gets focused
+	     */
+
+
+	    /**
+	     * When the input gets blurred
+	     */
+
+	  }, {
+	    key: 'focus',
+
+
+	    /**
+	     * Focus the input
+	     */
+	    value: function focus() {
+	      this.refs.input.focus();
+	    }
+
+	    /**
+	     * Update the value of the user input
+	     * @param {String} userInput the new value of the user input
+	     */
+
+	  }, {
+	    key: 'update',
+	    value: function update(userInput) {
+	      this.setState({ userInput: userInput });
+	      this.props.onChange(userInput);
+	    }
+
+	    /*
+	     * Clear the input and close the suggestion pane
+	     */
+
+	  }, {
+	    key: 'clear',
+	    value: function clear() {
+	      this.setState({ userInput: '' }, this.hideSuggests);
+	    }
+
+	    /**
+	     * Search for new suggests
+	     */
+
+	  }, {
+	    key: 'searchSuggests',
+	    value: function searchSuggests() {
+	      var _this2 = this;
+
+	      if (!this.state.userInput) {
+	        this.updateSuggests();
+	        return;
+	      }
+
+	      var options = {
+	        input: this.state.userInput
+	      };
+
+	      ['location', 'radius', 'bounds', 'types'].forEach(function (option) {
+	        if (_this2.props[option]) {
+	          options[option] = _this2.props[option];
+	        }
+	      });
+
+	      if (this.props.country) {
+	        options.componentRestrictions = {
+	          country: this.props.country
+	        };
+	      }
+
+	      this.setState({ isLoading: true }, function () {
+	        _this2.autocompleteService.getPlacePredictions(options, function (suggestsGoogle) {
+	          _this2.setState({ isLoading: false });
+	          _this2.updateSuggests(suggestsGoogle || [], // can be null
+	          function () {
+	            if (_this2.props.autoActivateFirstSuggest && !_this2.state.activeSuggest) {
+	              _this2.activateSuggest('next');
+	            }
+	          });
+	        });
+	      });
+	    }
+
+	    /**
+	     * Update the suggests
+	     * @param {Array} suggestsGoogle The new google suggests
+	     * @param {Function} callback Called once the state has been updated
+	     */
+
+	  }, {
+	    key: 'updateSuggests',
+	    value: function updateSuggests() {
+	      var _this3 = this;
+
+	      var suggestsGoogle = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	      var callback = arguments[1];
+
+	      var suggests = [],
+	          regex = new RegExp(escapeRegExp(this.state.userInput), 'gim'),
+	          skipSuggest = this.props.skipSuggest,
+	          maxFixtures = 10,
+	          fixturesSearched = 0,
+	          activeSuggest = null;
+
+	      this.props.fixtures.forEach(function (suggest) {
+	        if (fixturesSearched >= maxFixtures) {
+	          return;
+	        }
+
+	        if (!skipSuggest(suggest) && suggest.label.match(regex)) {
+	          fixturesSearched++;
+
+	          suggest.placeId = suggest.label;
+	          suggest.isFixture = true;
+	          suggests.push(suggest);
+	        }
+	      });
+
+	      suggestsGoogle.forEach(function (suggest) {
+	        if (!skipSuggest(suggest)) {
+	          suggests.push({
+	            label: _this3.props.getSuggestLabel(suggest),
+	            placeId: suggest.place_id,
+	            isFixture: false
+	          });
+	        }
+	      });
+
+	      activeSuggest = this.updateActiveSuggest(suggests);
+	      this.setState({ suggests: suggests, activeSuggest: activeSuggest }, callback);
+	    }
+
+	    /**
+	     * Return the new activeSuggest object after suggests have been updated
+	     * @param {Array} suggests The new list of suggests
+	     * @return {Object} The new activeSuggest
+	     **/
+
+	  }, {
+	    key: 'updateActiveSuggest',
+	    value: function updateActiveSuggest() {
+	      var suggests = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+
+	      var activeSuggest = this.state.activeSuggest;
+
+	      if (activeSuggest) {
+	        var newSuggest = suggests.find(function (listedSuggest) {
+	          return activeSuggest.placeId === listedSuggest.placeId && activeSuggest.isFixture === listedSuggest.isFixture;
+	        });
+
+	        activeSuggest = newSuggest || null;
+	      }
+
+	      return activeSuggest;
+	    }
+
+	    /**
+	     * Show the suggestions
+	     */
+
+	  }, {
+	    key: 'showSuggests',
+	    value: function showSuggests() {
+	      this.searchSuggests();
+	      this.setState({ isSuggestsHidden: false });
+	    }
+
+	    /**
+	     * Hide the suggestions
+	     */
+
+	  }, {
+	    key: 'activateSuggest',
+
+
+	    /**
+	     * Activate a new suggest
+	     * @param {String} direction The direction in which to activate new suggest
+	     */
+	    value: function activateSuggest(direction) {
+	      // eslint-disable-line complexity
+	      if (this.state.isSuggestsHidden) {
+	        this.showSuggests();
+	        return;
+	      }
+
+	      var suggestsCount = this.state.suggests.length - 1,
+	          next = direction === 'next';
+	      var newActiveSuggest = null,
+	          newIndex = 0,
+	          i = 0;
+
+	      for (i; i <= suggestsCount; i++) {
+	        if (this.state.suggests[i] === this.state.activeSuggest) {
+	          newIndex = next ? i + 1 : i - 1;
+	        }
+	      }
+
+	      if (!this.state.activeSuggest) {
+	        newIndex = next ? 0 : suggestsCount;
+	      }
+
+	      if (newIndex >= 0 && newIndex <= suggestsCount) {
+	        newActiveSuggest = this.state.suggests[newIndex];
+	      }
+
+	      this.props.onActivateSuggest(newActiveSuggest);
+
+	      this.setState({ activeSuggest: newActiveSuggest });
+	    }
+
+	    /**
+	     * When an item got selected
+	     * @param {GeosuggestItem} suggest The selected suggest item
+	     */
+
+	  }, {
+	    key: 'geocodeSuggest',
+
+
+	    /**
+	     * Geocode a suggest
+	     * @param  {Object} suggest The suggest
+	     */
+	    value: function geocodeSuggest(suggest) {
+	      var _this4 = this;
+
+	      this.geocoder.geocode(suggest.placeId && !suggest.isFixture ? { placeId: suggest.placeId } : { address: suggest.label }, function (results, status) {
+	        if (status === _this4.googleMaps.GeocoderStatus.OK) {
+	          var gmaps = results[0],
+	              location = gmaps.geometry.location;
+
+	          suggest.gmaps = gmaps;
+	          suggest.location = {
+	            lat: location.lat(),
+	            lng: location.lng()
+	          };
+	        }
+	        _this4.props.onSuggestSelect(suggest);
+	      });
+	    }
+
+	    /**
+	     * Render the view
+	     * @return {Function} The React element to render
+	     */
+
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var attributes = (0, _filterInputAttributes2.default)(this.props),
+	          classes = (0, _classnames2.default)('geosuggest', this.props.className, { 'geosuggest--loading': this.state.isLoading }),
+	          shouldRenderLabel = this.props.label && attributes.id,
+	          input = _react2.default.createElement(_input2.default, _extends({ className: this.props.inputClassName,
+	        ref: 'input',
+	        value: this.state.userInput,
+	        ignoreEnter: !this.state.isSuggestsHidden,
+	        ignoreTab: this.props.ignoreTab,
+	        style: this.props.style.input,
+	        onChange: this.onInputChange,
+	        onFocus: this.onInputFocus,
+	        onBlur: this.onInputBlur,
+	        onKeyPress: this.props.onKeyPress,
+	        onNext: this.onNext,
+	        onPrev: this.onPrev,
+	        onSelect: this.onSelect,
+	        onEscape: this.hideSuggests }, attributes)),
+	          suggestionsList = _react2.default.createElement(_suggestList2.default, { isHidden: this.state.isSuggestsHidden,
+	        style: this.props.style.suggests,
+	        suggestItemStyle: this.props.style.suggestItem,
+	        suggests: this.state.suggests,
+	        activeSuggest: this.state.activeSuggest,
+	        onSuggestNoResults: this.onSuggestNoResults,
+	        onSuggestMouseDown: this.onSuggestMouseDown,
+	        onSuggestMouseOut: this.onSuggestMouseOut,
+	        onSuggestSelect: this.selectSuggest });
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: classes },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'geosuggest__input-wrapper' },
+	          shouldRenderLabel && _react2.default.createElement(
+	            'label',
+	            { htmlFor: attributes.id },
+	            this.props.label
+	          ),
+	          input
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'geosuggest__suggests-wrapper' },
+	          suggestionsList
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Geosuggest;
+	}(_react2.default.Component);
+
+	/**
+	 * Types for the properties
+	 * @type {Object}
+	 */
+
+
+	Geosuggest.propTypes = _propTypes2.default;
+
+	/**
+	 * Default values for the properties
+	 * @type {Object}
+	 */
+	Geosuggest.defaultProps = _defaults2.default;
+
+	exports.default = Geosuggest;
+
+/***/ },
+/* 330 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ },
+/* 331 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/**
+	 * lodash (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modularize exports="npm" -o ./`
+	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Released under MIT license <https://lodash.com/license>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 */
+
+	/** Used as the `TypeError` message for "Functions" methods. */
+	var FUNC_ERROR_TEXT = 'Expected a function';
+
+	/** Used as references for various `Number` constants. */
+	var NAN = 0 / 0;
+
+	/** `Object#toString` result references. */
+	var symbolTag = '[object Symbol]';
+
+	/** Used to match leading and trailing whitespace. */
+	var reTrim = /^\s+|\s+$/g;
+
+	/** Used to detect bad signed hexadecimal string values. */
+	var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+	/** Used to detect binary string values. */
+	var reIsBinary = /^0b[01]+$/i;
+
+	/** Used to detect octal string values. */
+	var reIsOctal = /^0o[0-7]+$/i;
+
+	/** Built-in method references without a dependency on `root`. */
+	var freeParseInt = parseInt;
+
+	/** Detect free variable `global` from Node.js. */
+	var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+	/** Detect free variable `self`. */
+	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+	/** Used as a reference to the global object. */
+	var root = freeGlobal || freeSelf || Function('return this')();
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objectToString = objectProto.toString;
+
+	/* Built-in method references for those with the same name as other `lodash` methods. */
+	var nativeMax = Math.max,
+	    nativeMin = Math.min;
+
+	/**
+	 * Gets the timestamp of the number of milliseconds that have elapsed since
+	 * the Unix epoch (1 January 1970 00:00:00 UTC).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 2.4.0
+	 * @category Date
+	 * @returns {number} Returns the timestamp.
+	 * @example
+	 *
+	 * _.defer(function(stamp) {
+	 *   console.log(_.now() - stamp);
+	 * }, _.now());
+	 * // => Logs the number of milliseconds it took for the deferred invocation.
+	 */
+	var now = function() {
+	  return root.Date.now();
+	};
+
+	/**
+	 * Creates a debounced function that delays invoking `func` until after `wait`
+	 * milliseconds have elapsed since the last time the debounced function was
+	 * invoked. The debounced function comes with a `cancel` method to cancel
+	 * delayed `func` invocations and a `flush` method to immediately invoke them.
+	 * Provide `options` to indicate whether `func` should be invoked on the
+	 * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
+	 * with the last arguments provided to the debounced function. Subsequent
+	 * calls to the debounced function return the result of the last `func`
+	 * invocation.
+	 *
+	 * **Note:** If `leading` and `trailing` options are `true`, `func` is
+	 * invoked on the trailing edge of the timeout only if the debounced function
+	 * is invoked more than once during the `wait` timeout.
+	 *
+	 * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+	 * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+	 *
+	 * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+	 * for details over the differences between `_.debounce` and `_.throttle`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Function
+	 * @param {Function} func The function to debounce.
+	 * @param {number} [wait=0] The number of milliseconds to delay.
+	 * @param {Object} [options={}] The options object.
+	 * @param {boolean} [options.leading=false]
+	 *  Specify invoking on the leading edge of the timeout.
+	 * @param {number} [options.maxWait]
+	 *  The maximum time `func` is allowed to be delayed before it's invoked.
+	 * @param {boolean} [options.trailing=true]
+	 *  Specify invoking on the trailing edge of the timeout.
+	 * @returns {Function} Returns the new debounced function.
+	 * @example
+	 *
+	 * // Avoid costly calculations while the window size is in flux.
+	 * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+	 *
+	 * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+	 * jQuery(element).on('click', _.debounce(sendMail, 300, {
+	 *   'leading': true,
+	 *   'trailing': false
+	 * }));
+	 *
+	 * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+	 * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+	 * var source = new EventSource('/stream');
+	 * jQuery(source).on('message', debounced);
+	 *
+	 * // Cancel the trailing debounced invocation.
+	 * jQuery(window).on('popstate', debounced.cancel);
+	 */
+	function debounce(func, wait, options) {
+	  var lastArgs,
+	      lastThis,
+	      maxWait,
+	      result,
+	      timerId,
+	      lastCallTime,
+	      lastInvokeTime = 0,
+	      leading = false,
+	      maxing = false,
+	      trailing = true;
+
+	  if (typeof func != 'function') {
+	    throw new TypeError(FUNC_ERROR_TEXT);
+	  }
+	  wait = toNumber(wait) || 0;
+	  if (isObject(options)) {
+	    leading = !!options.leading;
+	    maxing = 'maxWait' in options;
+	    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+	    trailing = 'trailing' in options ? !!options.trailing : trailing;
+	  }
+
+	  function invokeFunc(time) {
+	    var args = lastArgs,
+	        thisArg = lastThis;
+
+	    lastArgs = lastThis = undefined;
+	    lastInvokeTime = time;
+	    result = func.apply(thisArg, args);
+	    return result;
+	  }
+
+	  function leadingEdge(time) {
+	    // Reset any `maxWait` timer.
+	    lastInvokeTime = time;
+	    // Start the timer for the trailing edge.
+	    timerId = setTimeout(timerExpired, wait);
+	    // Invoke the leading edge.
+	    return leading ? invokeFunc(time) : result;
+	  }
+
+	  function remainingWait(time) {
+	    var timeSinceLastCall = time - lastCallTime,
+	        timeSinceLastInvoke = time - lastInvokeTime,
+	        result = wait - timeSinceLastCall;
+
+	    return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
+	  }
+
+	  function shouldInvoke(time) {
+	    var timeSinceLastCall = time - lastCallTime,
+	        timeSinceLastInvoke = time - lastInvokeTime;
+
+	    // Either this is the first call, activity has stopped and we're at the
+	    // trailing edge, the system time has gone backwards and we're treating
+	    // it as the trailing edge, or we've hit the `maxWait` limit.
+	    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
+	      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+	  }
+
+	  function timerExpired() {
+	    var time = now();
+	    if (shouldInvoke(time)) {
+	      return trailingEdge(time);
+	    }
+	    // Restart the timer.
+	    timerId = setTimeout(timerExpired, remainingWait(time));
+	  }
+
+	  function trailingEdge(time) {
+	    timerId = undefined;
+
+	    // Only invoke if we have `lastArgs` which means `func` has been
+	    // debounced at least once.
+	    if (trailing && lastArgs) {
+	      return invokeFunc(time);
+	    }
+	    lastArgs = lastThis = undefined;
+	    return result;
+	  }
+
+	  function cancel() {
+	    if (timerId !== undefined) {
+	      clearTimeout(timerId);
+	    }
+	    lastInvokeTime = 0;
+	    lastArgs = lastCallTime = lastThis = timerId = undefined;
+	  }
+
+	  function flush() {
+	    return timerId === undefined ? result : trailingEdge(now());
+	  }
+
+	  function debounced() {
+	    var time = now(),
+	        isInvoking = shouldInvoke(time);
+
+	    lastArgs = arguments;
+	    lastThis = this;
+	    lastCallTime = time;
+
+	    if (isInvoking) {
+	      if (timerId === undefined) {
+	        return leadingEdge(lastCallTime);
+	      }
+	      if (maxing) {
+	        // Handle invocations in a tight loop.
+	        timerId = setTimeout(timerExpired, wait);
+	        return invokeFunc(lastCallTime);
+	      }
+	    }
+	    if (timerId === undefined) {
+	      timerId = setTimeout(timerExpired, wait);
+	    }
+	    return result;
+	  }
+	  debounced.cancel = cancel;
+	  debounced.flush = flush;
+	  return debounced;
+	}
+
+	/**
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(_.noop);
+	 * // => true
+	 *
+	 * _.isObject(null);
+	 * // => false
+	 */
+	function isObject(value) {
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Symbol` primitive or object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+	 * @example
+	 *
+	 * _.isSymbol(Symbol.iterator);
+	 * // => true
+	 *
+	 * _.isSymbol('abc');
+	 * // => false
+	 */
+	function isSymbol(value) {
+	  return typeof value == 'symbol' ||
+	    (isObjectLike(value) && objectToString.call(value) == symbolTag);
+	}
+
+	/**
+	 * Converts `value` to a number.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to process.
+	 * @returns {number} Returns the number.
+	 * @example
+	 *
+	 * _.toNumber(3.2);
+	 * // => 3.2
+	 *
+	 * _.toNumber(Number.MIN_VALUE);
+	 * // => 5e-324
+	 *
+	 * _.toNumber(Infinity);
+	 * // => Infinity
+	 *
+	 * _.toNumber('3.2');
+	 * // => 3.2
+	 */
+	function toNumber(value) {
+	  if (typeof value == 'number') {
+	    return value;
+	  }
+	  if (isSymbol(value)) {
+	    return NAN;
+	  }
+	  if (isObject(value)) {
+	    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+	    value = isObject(other) ? (other + '') : other;
+	  }
+	  if (typeof value != 'string') {
+	    return value === 0 ? value : +value;
+	  }
+	  value = value.replace(reTrim, '');
+	  var isBinary = reIsBinary.test(value);
+	  return (isBinary || reIsOctal.test(value))
+	    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+	    : (reIsBadHex.test(value) ? NAN : +value);
+	}
+
+	module.exports = debounce;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 332 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/* istanbul ignore next */
+	/**
+	 * Default values
+	 */
+	exports.default = {
+	  fixtures: [],
+	  initialValue: '',
+	  placeholder: 'Search places',
+	  disabled: false,
+	  className: '',
+	  inputClassName: '',
+	  location: null,
+	  radius: null,
+	  bounds: null,
+	  country: null,
+	  types: null,
+	  queryDelay: 250,
+	  googleMaps: null,
+	  onActivateSuggest: function onActivateSuggest() {},
+	  onSuggestSelect: function onSuggestSelect() {},
+	  onSuggestNoResults: function onSuggestNoResults() {},
+	  onFocus: function onFocus() {},
+	  onBlur: function onBlur() {},
+	  onChange: function onChange() {},
+	  skipSuggest: function skipSuggest() {},
+	  getSuggestLabel: function getSuggestLabel(suggest) {
+	    return suggest.description;
+	  },
+	  autoActivateFirstSuggest: false,
+	  style: {
+	    'input': {},
+	    'suggests': {},
+	    'suggestItem': {}
+	  },
+	  ignoreTab: false
+	};
+
+/***/ },
+/* 333 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Default values
+	 */
+	exports.default = {
+	  fixtures: _react2.default.PropTypes.array,
+	  initialValue: _react2.default.PropTypes.string,
+	  placeholder: _react2.default.PropTypes.string,
+	  disabled: _react2.default.PropTypes.bool,
+	  className: _react2.default.PropTypes.string,
+	  inputClassName: _react2.default.PropTypes.string,
+	  location: _react2.default.PropTypes.object,
+	  radius: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.number]),
+	  bounds: _react2.default.PropTypes.object,
+	  country: _react2.default.PropTypes.string,
+	  types: _react2.default.PropTypes.array,
+	  queryDelay: _react2.default.PropTypes.number,
+	  googleMaps: _react2.default.PropTypes.object,
+	  onSuggestSelect: _react2.default.PropTypes.func,
+	  onFocus: _react2.default.PropTypes.func,
+	  onBlur: _react2.default.PropTypes.func,
+	  onChange: _react2.default.PropTypes.func,
+	  onKeyPress: _react2.default.PropTypes.func,
+	  skipSuggest: _react2.default.PropTypes.func,
+	  getSuggestLabel: _react2.default.PropTypes.func,
+	  autoActivateFirstSuggest: _react2.default.PropTypes.bool,
+	  style: _react2.default.PropTypes.shape({
+	    input: _react2.default.PropTypes.object,
+	    suggests: _react2.default.PropTypes.object,
+	    suggestItem: _react2.default.PropTypes.object
+	  }),
+	  ignoreTab: _react2.default.PropTypes.bool,
+	  label: _react2.default.PropTypes.string
+	};
+
+/***/ },
+/* 334 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports.default = function (props) {
+	  var attributes = {};
+
+	  allowedAttributes.forEach(function (allowedAttribute) {
+	    if (props[allowedAttribute]) {
+	      attributes[allowedAttribute] = props[allowedAttribute];
+	    }
+	  });
+
+	  return attributes;
+	};
+
+	/**
+	 * Attributes allowed on input elements
+	 */
+	var allowedAttributes = ['autoFocus', 'disabled', 'form', 'formAction', 'formEncType', 'formMethod', 'formNoValidate', 'formTarget', 'height', 'id', 'inputMode', 'maxLength', 'name', 'onClick', 'onContextMenu', 'onCopy', 'onCut', 'onDoubleClick', 'onMouseDown', 'onMouseEnter', 'onMouseLeave', 'onMouseMove', 'onMouseOut', 'onMouseOver', 'onMouseUp', 'onPaste', 'pattern', 'placeholder', 'readOnly', 'required', 'size', 'spellCheck', 'tabIndex'];
+
+	/**
+	 * Filter the properties for only allowed input properties
+	 * @param  {Object} props The properties to filter
+	 * @return {Object} The filtered, allowed properties
+	 */
+
+/***/ },
+/* 335 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsShallowCompare = __webpack_require__(336);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
+	var _classnames = __webpack_require__(330);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _filterInputAttributes = __webpack_require__(334);
+
+	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // eslint-disable-line no-unused-vars
+
+
+	/**
+	 * The input field
+	 * @param {Object} props The component's props
+	 * @return {JSX} The icon component.
+	 */
+	var Input = function (_React$Component) {
+	  _inherits(Input, _React$Component);
+
+	  function Input() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, Input);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Input.__proto__ || Object.getPrototypeOf(Input)).call.apply(_ref, [this].concat(args))), _this), _this.onChange = function () {
+	      _this.props.onChange(_this.refs.input.value);
+	    }, _this.onFocus = function () {
+	      _this.props.onFocus();
+	    }, _this.onBlur = function () {
+	      _this.props.onBlur();
+	    }, _this.onKeyPress = function (event) {
+	      _this.props.onKeyPress(event);
+	    }, _this.onInputKeyDown = function (event) {
+	      // eslint-disable-line complexity
+	      switch (event.which) {
+	        case 40:
+	          // DOWN
+	          event.preventDefault();
+	          _this.props.onNext();
+	          break;
+	        case 38:
+	          // UP
+	          event.preventDefault();
+	          _this.props.onPrev();
+	          break;
+	        case 13:
+	          // ENTER
+	          if (_this.props.ignoreEnter) {
+	            event.preventDefault();
+	          }
+
+	          _this.props.onSelect();
+	          break;
+	        case 9:
+	          // TAB
+	          if (!_this.props.ignoreTab) {
+	            _this.props.onSelect();
+	          }
+	          break;
+	        case 27:
+	          // ESC
+	          _this.props.onEscape();
+	          break;
+	        /* istanbul ignore next */
+	        default:
+	          break;
+	      }
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(Input, [{
+	    key: 'shouldComponentUpdate',
+
+	    /**
+	     * Whether or not the component should update
+	     * @param {Object} nextProps The new properties
+	     * @param {Object} nextState The new state
+	     * @return {Boolean} Update or not?
+	     */
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+	    }
+
+	    /**
+	     * When the input got changed
+	     */
+
+
+	    /**
+	     * When the input got focused
+	     */
+
+
+	    /**
+	     * When the input loses focus
+	     */
+
+
+	    /**
+	     * When a key gets pressed in the input
+	     * @param  {Event} event The keypress event
+	     */
+
+
+	    /**
+	     * When a key gets pressed in the input
+	     * @param  {Event} event The keydown event
+	     */
+
+	  }, {
+	    key: 'focus',
+
+
+	    /**
+	     * Focus the input
+	     */
+	    value: function focus() {
+	      this.refs.input.focus();
+	    }
+
+	    /**
+	     * Render the view
+	     * @return {Function} The React element to render
+	     */
+
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var attributes = (0, _filterInputAttributes2.default)(this.props),
+	          classes = (0, _classnames2.default)('geosuggest__input', this.props.className);
+
+	      return _react2.default.createElement('input', _extends({ className: classes,
+	        ref: 'input',
+	        type: 'text',
+	        autoComplete: 'off'
+	      }, attributes, {
+	        value: this.props.value,
+	        style: this.props.style,
+	        onKeyDown: this.onInputKeyDown,
+	        onChange: this.onChange,
+	        onKeyPress: this.onKeyPress,
+	        onFocus: this.onFocus,
+	        onBlur: this.onBlur }));
+	    }
+	  }]);
+
+	  return Input;
+	}(_react2.default.Component);
+
+	/**
+	 * Default values for the properties
+	 * @type {Object}
+	 */
+
+
+	Input.defaultProps = {
+	  className: '',
+	  value: '',
+	  ignoreTab: false,
+	  onKeyDown: function onKeyDown() {},
+	  onKeyPress: function onKeyPress() {}
+	};
+
+	exports.default = Input;
+
+/***/ },
+/* 336 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(337);
+
+/***/ },
+/* 337 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	'use strict';
+
+	var shallowEqual = __webpack_require__(338);
+
+	/**
+	 * Does a shallow comparison for props and state.
+	 * See ReactComponentWithPureRenderMixin
+	 * See also https://facebook.github.io/react/docs/shallow-compare.html
+	 */
+	function shallowCompare(instance, nextProps, nextState) {
+	  return !shallowEqual(instance.props, nextProps) || !shallowEqual(instance.state, nextState);
+	}
+
+	module.exports = shallowCompare;
+
+/***/ },
+/* 338 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @typechecks
+	 * 
+	 */
+
+	/*eslint-disable no-self-compare */
+
+	'use strict';
+
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+	/**
+	 * inlined Object.is polyfill to avoid requiring consumers ship their own
+	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+	 */
+	function is(x, y) {
+	  // SameValue algorithm
+	  if (x === y) {
+	    // Steps 1-5, 7-10
+	    // Steps 6.b-6.e: +0 != -0
+	    // Added the nonzero y check to make Flow happy, but it is redundant
+	    return x !== 0 || y !== 0 || 1 / x === 1 / y;
+	  } else {
+	    // Step 6.a: NaN == NaN
+	    return x !== x && y !== y;
+	  }
+	}
+
+	/**
+	 * Performs equality by iterating through keys on an object and returning false
+	 * when any key has values which are not strictly equal between the arguments.
+	 * Returns true when the values of all keys are strictly equal.
+	 */
+	function shallowEqual(objA, objB) {
+	  if (is(objA, objB)) {
+	    return true;
+	  }
+
+	  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+	    return false;
+	  }
+
+	  var keysA = Object.keys(objA);
+	  var keysB = Object.keys(objB);
+
+	  if (keysA.length !== keysB.length) {
+	    return false;
+	  }
+
+	  // Test for A's keys different from B.
+	  for (var i = 0; i < keysA.length; i++) {
+	    if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+	      return false;
+	    }
+	  }
+
+	  return true;
+	}
+
+	module.exports = shallowEqual;
+
+/***/ },
+/* 339 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsShallowCompare = __webpack_require__(336);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
+	var _classnames = __webpack_require__(330);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _suggestItem = __webpack_require__(340);
+
+	var _suggestItem2 = _interopRequireDefault(_suggestItem);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // eslint-disable-line no-unused-vars
+
+
+	/**
+	 * The list with suggestions. Either from an API or provided as fixture
+	 * @param {Object} props The component's props
+	 * @return {JSX} The icon component.
+	 */
+	var SuggestList = function (_React$Component) {
+	  _inherits(SuggestList, _React$Component);
+
+	  function SuggestList() {
+	    _classCallCheck(this, SuggestList);
+
+	    return _possibleConstructorReturn(this, (SuggestList.__proto__ || Object.getPrototypeOf(SuggestList)).apply(this, arguments));
+	  }
+
+	  _createClass(SuggestList, [{
+	    key: 'shouldComponentUpdate',
+
+	    /**
+	     * Whether or not the component should update
+	     * @param {Object} nextProps The new properties
+	     * @param {Object} nextState The new state
+	     * @return {Boolean} Update or not?
+	     */
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+	    }
+
+	    /**
+	     * Whether or not it is hidden
+	     * @return {Boolean} Hidden or not?
+	     */
+
+	  }, {
+	    key: 'isHidden',
+	    value: function isHidden() {
+	      return this.props.isHidden || this.props.suggests.length === 0;
+	    }
+
+	    /**
+	     * There are new properties available for the list
+	     * @param {Object} nextProps The new properties
+	     */
+
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.suggests !== this.props.suggests) {
+	        if (nextProps.suggests.length === 0) {
+	          this.props.onSuggestNoResults();
+	        }
+	      }
+	    }
+
+	    /**
+	     * Render the view
+	     * @return {Function} The React element to render
+	     */
+
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var classes = (0, _classnames2.default)('geosuggest__suggests', { 'geosuggest__suggests--hidden': this.isHidden() });
+
+	      return _react2.default.createElement(
+	        'ul',
+	        { className: classes, style: this.props.style },
+	        this.props.suggests.map(function (suggest) {
+	          var isActive = _this2.props.activeSuggest && suggest.placeId === _this2.props.activeSuggest.placeId;
+
+	          return _react2.default.createElement(_suggestItem2.default, { key: suggest.placeId,
+	            className: suggest.className,
+	            suggest: suggest,
+	            style: _this2.props.suggestItemStyle,
+	            isActive: isActive,
+	            onMouseDown: _this2.props.onSuggestMouseDown,
+	            onMouseOut: _this2.props.onSuggestMouseOut,
+	            onSelect: _this2.props.onSuggestSelect });
+	        })
+	      );
+	    }
+	  }]);
+
+	  return SuggestList;
+	}(_react2.default.Component);
+
+	/**
+	 * Default values for the properties
+	 * @type {Object}
+	 */
+
+
+	exports.default = SuggestList;
+	SuggestList.defaultProps = {
+	  isHidden: true,
+	  suggests: []
+	};
+
+/***/ },
+/* 340 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsShallowCompare = __webpack_require__(336);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
+	var _classnames = __webpack_require__(330);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * A single Geosuggest item in the list
+	 * @param {Object} props The component's props
+	 * @return {JSX} The icon component.
+	 */
+	var SuggestItem = function (_React$Component) {
+	  _inherits(SuggestItem, _React$Component);
+
+	  function SuggestItem() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, SuggestItem);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SuggestItem.__proto__ || Object.getPrototypeOf(SuggestItem)).call.apply(_ref, [this].concat(args))), _this), _this.onClick = function (event) {
+	      event.preventDefault();
+	      _this.props.onSelect(_this.props.suggest);
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(SuggestItem, [{
+	    key: 'shouldComponentUpdate',
+
+	    /**
+	     * Whether or not the component should update
+	     * @param {Object} nextProps The new properties
+	     * @param {Object} nextState The new state
+	     * @return {Boolean} Update or not?
+	     */
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+	    }
+
+	    /**
+	     * When the suggest item got clicked
+	     * @param {Event} event The click event
+	     */
+
+	  }, {
+	    key: 'render',
+
+
+	    /**
+	     * Render the view
+	     * @return {Function} The React element to render
+	     */
+	    value: function render() {
+	      var classes = (0, _classnames2.default)('geosuggest__item', this.props.className, { 'geosuggest__item--active': this.props.isActive });
+
+	      return _react2.default.createElement(
+	        'li',
+	        { className: classes,
+	          style: this.props.style,
+	          onMouseDown: this.props.onMouseDown,
+	          onMouseOut: this.props.onMouseOut,
+	          onClick: this.onClick },
+	        this.props.suggest.label
+	      );
+	    }
+	  }]);
+
+	  return SuggestItem;
+	}(_react2.default.Component);
+
+	/**
+	 * Default values for the properties
+	 * @type {Object}
+	 */
+
+
+	exports.default = SuggestItem;
+	SuggestItem.defaultProps = {
+	  isActive: false,
+	  className: '',
+	  suggest: {}
+	};
 
 /***/ }
 /******/ ]);

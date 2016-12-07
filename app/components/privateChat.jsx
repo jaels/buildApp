@@ -9,6 +9,18 @@ var socket = io(`http://localhost:3000`);
 class privateChat extends React.Component {
     constructor(props) {
         super(props);
+console.log(this.props.details);
+var user = {
+    id:this.props.details.user.id
+}
+        socket.emit('newUser', user);
+
+        socket.on('hey', function(id) {
+            console.log('tryyyy');
+            console.log(id);
+        });
+
+
         var loc = this.props.location.pathname.split('/');
         var whichChat = loc[loc.length-1];
         var that = this;
@@ -17,16 +29,43 @@ class privateChat extends React.Component {
             whichChat:whichChat
         };
         this.setState({
-            messages:[]
+            messages:[],
+            whichChat:whichChat
         })
-        console.log(this.state.messages)
 
         this.handleChange = this.handleChange.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.messageRecieve = this.messageRecieve.bind(this);
         var whichChat = this.state.whichChat;
-        console.log(whichChat);
+
+        axios.get(`/getPrivateMessages/${whichChat}`).then(function(result) {
+            console.log(result.data.file)
+            that.setState({
+                messages:result.data.file,
+                gotMessages:true
+            })
+        })
+    }
+    componentWillReceiveProps(nextProps) {
+
+        var loc = this.props.location.pathname.split('/');
+        var whichChat = loc[loc.length-1];
+        var that = this;
+        this.state = {
+            messages:[],
+            whichChat:whichChat
+        };
+        this.setState({
+            messages:[],
+            whichChat:whichChat
+        })
+
+        this.handleChange = this.handleChange.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
+        this.messageRecieve = this.messageRecieve.bind(this);
+        var whichChat = this.state.whichChat;
 
         axios.get(`/getPrivateMessages/${whichChat}`).then(function(result) {
             console.log(result.data.file)
@@ -44,7 +83,7 @@ class privateChat extends React.Component {
                 <div className="messagesContainer">
                     <div id={message.id}>
                         <h4 className="messageText">{message.message}</h4>
-                        <h5 className="messgageName">{message.firstname} {message.lastname}</h5>  posted on {message.created_at}>
+                        <h5 className="messgageName">{message.firstname} {message.lastname}</h5>  posted on {message.created_at}
                         </div>
                     </div>
                 )
@@ -69,14 +108,19 @@ class privateChat extends React.Component {
             this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
         }
         componentDidMount() {
-            socket.on("send:private", this.messageRecieve);
-}
+            console.log('back here');
+            console.log(socket);
 
-messageRecieve(message) {
-    var {messages} = this.state;
-messages.push(message);
-this.setState({messages});
-}
+            socket.on('send:private', this.messageRecieve);
+
+        }
+
+        messageRecieve(message) {
+            console.log('recievedddd')
+            var {messages} = this.state;
+            messages.push(message);
+            this.setState({messages});
+        }
 
 
         sendMessage(e) {
@@ -90,12 +134,20 @@ this.setState({messages});
                 whichChat:that.state.whichChat
             }).then(function(response) {
                 newMessage = response.data.file;
-                console.log('newMaessage');
-                console.log(newMessage)
                 that.props.onNewMessage(newMessage);
-                console.log('that state messages')
-                console.log(that.state.messages);
-                 socket.emit("send:private", newMessage);
+                var arr = that.state.whichChat.split('_');
+                var thisUser = that.props.details.user.id;
+                if(thisUser==arr[0]) {
+                    var otherUser = arr[1]
+                }
+                else {
+                    var otherUser = arr[0]
+                }
+                newMessage.otherUser = otherUser;
+                console.log(newMessage);
+                console.log(otherUser);
+                    console.log('sending private')
+                socket.emit("send:private", newMessage);
 
 
             })

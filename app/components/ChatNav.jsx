@@ -28,7 +28,7 @@ class ChatNav extends React.Component {
                     }).join('_');
                     return (
                         <div>
-                            <Link to={`/connectArea/privateChat/${chatUrl}`} activeClassName="active" key={user.id}> <p>{user.firstname } {user.lastname}</p></Link>
+                            <Link to={`/connectArea/${chatUrl}`} activeClassName="active" key={user.id}> <p>{user.firstname } {user.lastname}</p></Link>
                         </div>
                     )
                 })
@@ -36,7 +36,7 @@ class ChatNav extends React.Component {
         return (
             <div className="chatNav">
                 <h3> {address}</h3>
-                <IndexLink to="connectArea" activeClassName="active">General</IndexLink>
+                <IndexLink to="/connectArea" activeClassName="active">General</IndexLink>
                     <div>
                         {users}
                     </div>
@@ -45,7 +45,6 @@ class ChatNav extends React.Component {
     }
 
 }
-
 
 
 

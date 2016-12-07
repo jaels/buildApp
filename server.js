@@ -24,22 +24,47 @@ app.use(cookieSession({
 // });
 
 var io = require('socket.io')(http);
-io.on('connection', function(socket){
-    console.log('a user connected');
+
+
+var users={};
+
+io.sockets.on('connection', function(socket){
     socket.emit('connection');
+
     socket.on('send:message', function(message){
         io.emit('send:message', message);
     });
-
     socket.on("send:private", function(message){
-        io.emit("send:private", message);
+        console.log('recievePrivate');
+                console.log('yessss')
+                var sockett=users[message.otherUser];
+        sockett.emit("send:private", message)
     });
+
+        // io.to( "/#" + socketId).emit("event_name",{data:true})
+
+        //   io.to('/#' + socketId).emit("send:private", message);
+        // io.sockets.socket[socketId].emit("send:private", message);
+
+        //   io.sockets.connected[socketId].emit("send:private", message);
+    //     socket.on(`send:private${num}`, function(message){
+    //         console.log(message.otherUser);
+    //         console.log(typeof message.otherUser)
+    //              io.emit(`send:private${num}`, message);
+    //
+    //
+    // });
+    socket.on('newUser', function(user) {
+        console.log('pushing user');
+        users[user.id] = socket;
+        socket.emit('hey', user.id);
+    })
 });
 
-// io.on('disconnect', function(){
-//     socket.emit('disconnection');
-// console.log('user disconnected');
-// });
+
+
+
+
 
 
 app.post('/checkBuilding', function(req,res) {
@@ -72,6 +97,8 @@ app.get('/registerBuilding', function(req,res) {
     });
 });
 
+var users = [];
+
 app.post('/checkUser', function(req,res) {
     var requestedEmail = req.body.email;
     var requestedPassword = req.body.password;
@@ -93,6 +120,7 @@ app.post('/checkUser', function(req,res) {
 
             db.checkPassword(requestedPassword,listedPassword).then(function(doesMatch) {
                 if(doesMatch===true) {
+
                     req.session.buildingId = building_id;
                     req.session.user = {
                         id:id,
@@ -104,7 +132,11 @@ app.post('/checkUser', function(req,res) {
                         buildingSpec:buildingSpec,
                         apt_number:apt_number
                     };
-                    res.json({success: true});
+
+                    res.json({success: true,
+                    file:req.session});
+
+
                 }
 
                 else {
@@ -184,7 +216,6 @@ app.get('/getAllDetails', function(req,res) {
 app.get('/getAllUsers', function(req, res) {
     var buildingId = req.session.buildingId;
     var currentUser = req.session.user.id;
-    console.log(currentUser);
     db.getUsers(buildingId,currentUser).then(function(result) {
         res.json({
             success:true,
@@ -205,16 +236,21 @@ app.get('/getGeneralMessages/:buildingId', function(req,res) {
 })
 
 app.get('/getPrivateMessages/:whichChat', function(req,res) {
+
+
+
     var whichChat=req.params.whichChat;
-    console.log(whichChat);
-    db.getPrivateMessages(whichChat).then(function(result){
-        console.log(result.rows);
-        res.json({
+    req.session.whichChat = whichChat;
+    var temp = whichChat.split("_")
+    if(temp[0]==req.session.user.id || temp[1]==req.session.user.id) {
+
+
+    db.getPrivateMessages(whichChat).then(function(result){        res.json({
             success:true,
             file:result.rows
         })
     })
-
+    }
 })
 
 
@@ -232,7 +268,6 @@ app.post('/insertGeneralMessage', function(req,res) {
 })
 
 app.post('/insertPrivateMessage', function(req,res) {
-    console.log(req.body);
     var message = req.body.newMessage;
     var whichChat = req.body.whichChat;
     var user_id = req.session.user.id;
