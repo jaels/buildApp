@@ -41,7 +41,6 @@ var RegisterAddress = React.createClass({
                         <h3 className="existText">Your building is new here! Do you wanna create it?</h3>
                     <button className="button" onClick = {that.makeBuilding}>Yes!</button>
                         {renderSuccess()}
-
                     </div>
                 )
             }
@@ -49,8 +48,8 @@ var RegisterAddress = React.createClass({
         function renderSuccess () {
             if(creationSuccess) {
                 return (
-                    <div className="buildingExist">
-                        <h3 className="existText"> Your building in <span id="createdAddress"> { address } </span> was created!
+                    <div className="buildingDontExist">
+                        <h3 className="existText"> Great! Your building in <span id="createdAddress"> { address } </span> was created!
                             <br/>
                         Please register and tell your neighbours to join!
                         </h3>
@@ -81,13 +80,18 @@ var RegisterAddress = React.createClass({
                 <img className="logo-main" src="logo_small.png"/>
                 <img className="building-image" src="building.png"/>
 
-                <div className="loginMain">
-                    <button className="button" onClick={this.open}>Log In</button>
+                <div>
+                    <button className="button" id="login-btn" onClick={this.open}>Log In</button>
+                </div>
+                <div className="login-container">
                     {loginForm()}
                 </div>
 
             <div className="addressContainer">
+                <div>
                 <h3 id="know-your">Know your neighbours.</h3>
+                </div>
+                <div className="geo-wrapper">
                 <Geosuggest
                     placeholder="Type your address and choose from the list"
                     initialValue=""
@@ -97,6 +101,7 @@ var RegisterAddress = React.createClass({
                     onSuggestNoResults = {this.onSuggestNoResults}
                     location={new google.maps.LatLng(53.558572, 9.9278215)}
                     radius="20" />
+            </div>
                 <h4 id="noAddressResults">Please submit an address</h4>
                 <button className="button" id="submitAddress" onClick={this.saveAddress}>Submit</button>
                 {checkExist()}

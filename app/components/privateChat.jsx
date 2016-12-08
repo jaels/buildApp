@@ -9,10 +9,10 @@ var socket = io(`http://localhost:3000`);
 class privateChat extends React.Component {
     constructor(props) {
         super(props);
-console.log(this.props.details);
-var user = {
-    id:this.props.details.user.id
-}
+        console.log(this.props.details);
+        var user = {
+            id:this.props.details.user.id
+        }
         socket.emit('newUser', user);
 
 
@@ -73,6 +73,8 @@ var user = {
 
     render() {
         var that = this;
+        var address = this.props.details.user.address;
+
         var messages = that.state.messages.map(function(message) {
             return (
                 <div className="messagesContainer">
@@ -85,15 +87,23 @@ var user = {
             })
 
             return(
-                <div className="inputAndChat">
-                    <div className = "conversationsArea" ref='scrollDiv' onFocus={this.scrolling}>
-                        <div>
-                            {messages}
-                        </div>
+                <div>
+                    <div className="chatUpperStreep">
+                        <h4>{address}</h4>
+                        <button className="button" id="logOutButton" onClick={this.logOut}>Log Out</button>
                     </div>
-                    <div className="chatContainer">
-                        <textArea className = "textArea"  placeholder="Write your message" value={this.state.newMessage} onChange={this.handleChange} ></textArea>
-                        <button className="message_button" onClick={this.sendMessage}>Send</button>
+
+
+                    <div className="inputAndChat">
+                        <div className = "conversationsArea" ref='scrollDiv' onFocus={this.scrolling}>
+                            <div>
+                                {messages}
+                            </div>
+                        </div>
+                        <div className="chatContainer">
+                            <textArea className = "textArea"  placeholder="Write your message" value={this.state.newMessage} onChange={this.handleChange} ></textArea>
+                            <button className="button" onClick={this.sendMessage}>Send</button>
+                        </div>
                     </div>
                 </div>
             )
@@ -123,7 +133,7 @@ var user = {
 
             var newMessage = this.state.newMessage;
             this.setState({
-            newMessage:""   
+                newMessage:""
             })
             axios.post('insertPrivateMessage', {
                 newMessage:newMessage,
@@ -142,7 +152,7 @@ var user = {
                 newMessage.otherUser = otherUser;
                 console.log(newMessage);
                 console.log(otherUser);
-                    console.log('sending private')
+                console.log('sending private')
                 socket.emit("send:private", newMessage);
 
 
@@ -151,6 +161,13 @@ var user = {
 
         handleChange(event) {
             this.setState({newMessage: event.target.value});
+        }
+        logOut() {
+            axios.get('logOut').then(function(reponse) {
+                console.log('logged out');
+                window.location.href = "#/loggedOut";
+
+            })
         }
 
 

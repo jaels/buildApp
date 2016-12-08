@@ -12,7 +12,7 @@ class ChatNav extends React.Component {
         var that = this;
         axios.get('/getAllUsers').then(function(result) {
             that.setState({
-                users:result.data.file,
+                users:result.data.file
             })
         })
     }
@@ -28,16 +28,17 @@ class ChatNav extends React.Component {
                     }).join('_');
                     return (
                         <div>
-                            <Link to={`/connectArea/${chatUrl}`} activeClassName="active" key={user.id}> <p>{user.firstname } {user.lastname}</p></Link>
+                            <IndexLink to={`/connectArea/${chatUrl}`} activeClassName="active" key={user.id}> <p className="nav-text">{user.firstname } {user.lastname}</p></IndexLink>
                         </div>
                     )
                 })
 
         return (
             <div className="chatNav">
-                <h3> {address}</h3>
-                <IndexLink to="/connectArea" activeClassName="active">General</IndexLink>
-                    <div>
+                <img className="logo-main" src="logo_small.png"/>
+                    <div className="channelsNames">
+                <IndexLink to="/connectArea" activeClassName="active"><p className="nav-text">General</p></IndexLink>
+                <h3 className="existText">Private Messages</h3>
                         {users}
                     </div>
             </div>

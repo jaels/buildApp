@@ -32,6 +32,7 @@ class generalChat extends React.Component {
 
     render() {
         var that = this;
+        var address = this.props.details.user.address;
         var messages = that.state.messages.map(function(message) {
             return (
                 <div className="messagesContainer">
@@ -44,6 +45,12 @@ class generalChat extends React.Component {
             })
 
             return(
+                <div>
+                        <div className="chatUpperStreep">
+                            <h4>{address}</h4>
+                            <button className="button" id="logOutButton" onClick={this.logOut}>Log Out</button>
+                        </div>
+
                 <div className="inputAndChat">
                     <div className = "conversationsArea" ref='scrollDiv' onFocus={this.scrolling}>
                         <div>
@@ -52,8 +59,9 @@ class generalChat extends React.Component {
                     </div>
                     <div className="chatContainer">
                         <textArea className = "textArea"  placeholder="Write your message" value={this.state.newMessage} onChange={this.handleChange} ></textArea>
-                        <button className="message_button" onClick={this.sendMessage}>Send</button>
+                        <button className="button" onClick={this.sendMessage}>Send</button>
                     </div>
+                </div>
                 </div>
             )
         }
@@ -104,6 +112,15 @@ this.setState({messages});
         handleChange(event) {
             this.setState({newMessage: event.target.value});
         }
+
+        logOut() {
+            axios.get('logOut').then(function(reponse) {
+                console.log('logged out');
+                window.location.href = "#/loggedOut";
+
+            })
+        }
+
 
 
     }

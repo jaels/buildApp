@@ -10,13 +10,14 @@ body {
 }
 
 #know-your {
-    position: absolute;
+    position: relative;
     font-family: LeagueSpartan-Bold;
     font-size: 50px;
     color: #FFFFFF;
     letter-spacing: -0.18px;
-    margin-left: 30px;
+    margin-left: 100px;
     z-index: 1;
+    width: 100%;
 
 }
 
@@ -35,6 +36,11 @@ body {
 }
 
 
+#submitAddress {
+    /*margin-top: 5%;*/
+    width: 100px;
+    margin-right: 35%;
+}
 
 .addressContainer {
     position: absolute;
@@ -74,15 +80,23 @@ body {
 }
 
 
-
+.geo-wrapper {
+    position: relative;
+    width: 100%;
+margin-right: 35%;
+bottom: 30%;
+}
 .geosuggest__input {
+    position: relative;
     z-index: 1;
-  width: 160%;
+  width: 150%;
   height: 60px;
+  /*margin-right: 60px;*/
+  /*margin-top: 40%;*/
+
   font-weight: 400;
-  margin-top: 40%;
-  margin-right: 200px;
 font-family: ClearSans-Medium;
+
 color: #BCBCBC;
 letter-spacing: -0.06px;
 text-indent:60px;
@@ -115,8 +129,7 @@ background-repeat: no-repeat;
     left: 0;
     right: 0;
     max-height: 25em;
-    padding: 0;
-    margin-top: -1px;
+    margin-top: 2px;
     background: #fff;
     list-style: none;
     transition: max-height 0.2s, border 0.2s;
@@ -157,9 +170,6 @@ background-repeat: no-repeat;
     width: 70%;
 }
 
-.buildingExist {
-    text-align: center;
-}
 
 #createdAddress{
     color: #00BFFF;
@@ -183,6 +193,14 @@ letter-spacing: -0.05px;
 
 }
 
+#login-btn {
+    position: absolute;
+    top: 5%;
+    left: 90%;
+
+
+}
+
 .building-image {
     margin-top: 3%;
     margin-left: 10%;
@@ -194,8 +212,17 @@ letter-spacing: -0.05px;
     float: right;
 }
 
-.logOutButton {
-    float: right;
+.messageText {
+    color: #696969
+}
+
+.chatTods {
+    border-radius: 50%;
+    color:
+}
+
+#logOutButton {
+    left:76%;
 }
 
 
@@ -225,15 +252,22 @@ left: 4%;
     font-size: 14px;
 }
 
+/*.login-container {
+    width: 300px;
+}*/
 
  .loginForm {
+     position: absolute;
+     left: 69%;
+     top: 10%;
      opacity: 0.97;
      background: #E6E2FF;
      -webkit-border-radius: 30px;
 -moz-border-radius: 20px;
 border-radius: 10px;
 z-index: 5;
-width: 150%;
+width: 25%;
+
  }
 
  .loginText {
@@ -267,6 +301,10 @@ width: 150%;
     width: 90%;
     background: #E6E2FF;
     font-size: 16px;
+    font-family: ClearSans-Medium;
+    color: #120079;
+;
+
 
 }
 
@@ -283,6 +321,23 @@ width: 150%;
 
 }
 
+.buildingExist {
+    width: 100%;
+    position: relative;
+    text-align: center;
+    margin-left: 20%;
+    margin-top: 7%;
+}
+
+.buildingDontExist {
+    width:100%;
+    position: relative;
+    text-align: center;
+    /*margin-left: 20%;*/
+    margin-top: 7%;
+}
+
+
 .existText {
     font-size: 19px;
     font-family: ClearSans-Medium;
@@ -292,12 +347,29 @@ width: 150%;
 
 .chatNav {
     float: left;
-    height:85vh;
-    width: 17%;
-    background-color: #A9A9A9;
+    height:100%;
+    width: 13%;
+    background-color: #120079;
     margin-right: 1%;
+    padding-left: 2%;
 
 }
+
+.channelsNames {
+    position: relative;
+    margin-top: 80%;
+}
+
+.nav-text {
+    /*color: #FFFFFF;*/
+    font-weight: 100;
+}
+
+.active {
+    color: #AB6FB2;
+    font-weight: bold;
+}
+
 
 .textArea {
     height: 6vh;
@@ -306,10 +378,30 @@ width: 150%;
 }
 
 
+
+.chatUpperStreep {
+    background-color: #F9F9F9 ;
+    margin-bottom: 10px;
+    border-bottom: 2px px solid #E8E8E8;
+}
+
+.chat-body {
+    position:fixed;
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+    background-color: #F9F9F9;
+}
 .conversationsArea {
     position: relative;
-    height:70vh;
-    background-color: #DCDCDC;
+    height:80vh;
+    height:80vh;
+    background-color: #F9F9F9 ;
     overflow-y: scroll;
     display:flex;
 
@@ -317,16 +409,11 @@ width: 150%;
 
 .connectArea {
     display: inline;
+    font-family: ClearSans-Medium;
+    background-color: #F9F9F9;
 }
 
 .chatContainer {
     position: relative;
     display: inline-block;
-}
-
-
-
-.active {
-    color: green;
-    font-weight: bold;
 }

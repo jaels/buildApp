@@ -21,7 +21,6 @@ class ConnectArea extends React.Component {
                 details:result.data.file,
                 gotAllDetails: true
             })
-
             return;
         })
     }
@@ -34,8 +33,6 @@ class ConnectArea extends React.Component {
             if(gotAllDetails) {
                 return (
                     <div className="connectArea">
-                        <button className="logOutButton" onClick={that.logOut}>Logout</button>
-
                         <ChatNav details={details} />
                     <div>
                         {React.cloneElement(that.props.children, {details:details,
@@ -48,7 +45,7 @@ class ConnectArea extends React.Component {
         }
 
 return (
-    <div>
+    <div className="chat-body">
         {rendering()}
     </div>
 )
@@ -60,13 +57,6 @@ this.setState({
 })
 }
 
-logOut() {
-    axios.get('logOut').then(function(reponse) {
-        console.log('logged out');
-        window.location.href = "#/loggedOut";
-
-    })
-}
 
 }
 
