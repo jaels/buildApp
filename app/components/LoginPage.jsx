@@ -15,7 +15,6 @@ class LoginPage extends React.Component {
     render() {
         return (
             <div>
-                <Login/>
                 <RegisterAddress/>
             </div>
         )

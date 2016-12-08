@@ -21797,37 +21797,52 @@
 	    render: function render() {
 	        return React.createElement(
 	            'div',
-	            { className: 'RegisterUser' },
+	            null,
+	            React.createElement('img', { className: 'logo-form', src: 'logo_small.png' }),
+	            React.createElement('img', { className: 'big-n', src: 'big_n_form_1024.png' }),
 	            React.createElement(
-	                'h3',
-	                { id: 'loginHeadline' },
-	                'Please fill this form'
-	            ),
-	            React.createElement(
-	                'form',
-	                null,
+	                'div',
+	                { className: 'RegisterUser' },
 	                React.createElement(
 	                    'div',
-	                    null,
-	                    React.createElement('input', { className: 'inputField', type: 'text', placeholder: '* First Name', ref: 'firstname', required: 'require' }),
-	                    React.createElement('br', null),
-	                    React.createElement('input', { className: 'inputField', type: 'text', placeholder: '* Last Name', ref: 'lastname', required: 'require' }),
-	                    React.createElement('br', null),
-	                    React.createElement('input', { className: 'inputField', type: 'text', placeholder: '* Floor (specify just a number)', ref: 'floor', required: 'require' }),
-	                    React.createElement('br', null),
-	                    React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'Apt. number', ref: 'aptNumber' }),
-	                    React.createElement('br', null),
-	                    React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'Building specifications (front/back/left)', ref: 'buildingSpec' }),
-	                    React.createElement('br', null),
-	                    React.createElement('input', { className: 'inputField', type: 'text', placeholder: '* Email', ref: 'email', required: 'require' }),
-	                    React.createElement('br', null),
-	                    React.createElement('input', { className: 'inputField', type: 'text', placeholder: '* password', ref: 'password' }),
-	                    React.createElement('br', null)
+	                    { className: 'form-headlines' },
+	                    React.createElement(
+	                        'h1',
+	                        { className: 'register-headline', id: 'form-hedline' },
+	                        'Hello, neighbour.'
+	                    ),
+	                    React.createElement(
+	                        'p',
+	                        { className: 'existText', id: 'form-subtitle' },
+	                        'Fill in this form to join your building and chat away!'
+	                    )
 	                ),
 	                React.createElement(
-	                    'button',
-	                    { className: 'button', onClick: this.registerNew },
-	                    'Submit'
+	                    'form',
+	                    null,
+	                    React.createElement(
+	                        'div',
+	                        null,
+	                        React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'First name (required)', ref: 'firstname', required: 'require' }),
+	                        React.createElement('br', null),
+	                        React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'Last name (required)', ref: 'lastname', required: 'require' }),
+	                        React.createElement('br', null),
+	                        React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'Floor (required, please specify just a number)', ref: 'floor', required: 'require' }),
+	                        React.createElement('br', null),
+	                        React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'Apartment number (not required)', ref: 'aptNumber' }),
+	                        React.createElement('br', null),
+	                        React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'Building specifications (front/back, not required)', ref: 'buildingSpec' }),
+	                        React.createElement('br', null),
+	                        React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'Email (required)', ref: 'email', required: 'require' }),
+	                        React.createElement('br', null),
+	                        React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'Password (required)', ref: 'password' }),
+	                        React.createElement('br', null)
+	                    ),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'button', onClick: this.registerNew },
+	                        'Submit'
+	                    )
 	                )
 	            )
 	        );
@@ -28488,6 +28503,11 @@
 	                    return React.createElement(
 	                        'div',
 	                        { className: 'connectArea' },
+	                        React.createElement(
+	                            'button',
+	                            { className: 'logOutButton', onClick: that.logOut },
+	                            'Logout'
+	                        ),
 	                        React.createElement(ChatNav, { details: details }),
 	                        React.createElement(
 	                            'div',
@@ -28511,6 +28531,14 @@
 	        value: function handleNewMessage(newMessage) {
 	            this.setState({
 	                newMessage: newMessage
+	            });
+	        }
+	    }, {
+	        key: 'logOut',
+	        value: function logOut() {
+	            axios.get('logOut').then(function (reponse) {
+	                console.log('logged out');
+	                window.location.href = "#/loggedOut";
 	            });
 	        }
 	    }]);
@@ -37114,8 +37142,7 @@
 	    render: function render() {
 	        return React.createElement(
 	            'div',
-	            null,
-	            React.createElement(Logo, null),
+	            { className: 'main' },
 	            this.props.children
 	        );
 	    }
@@ -37137,12 +37164,7 @@
 	    render: function render() {
 	        return React.createElement(
 	            'div',
-	            { id: 'logoContainer' },
-	            React.createElement(
-	                'h1',
-	                { id: 'mainHeadline' },
-	                'Neighbours'
-	            ),
+	            null,
 	            React.createElement(
 	                'button',
 	                { className: 'logOutButton', onClick: this.logOut },
@@ -37201,7 +37223,6 @@
 	            return React.createElement(
 	                'div',
 	                null,
-	                React.createElement(Login, null),
 	                React.createElement(RegisterAddress, null)
 	            );
 	        }
@@ -37254,7 +37275,7 @@
 	                React.createElement(
 	                    'button',
 	                    { className: 'button', onClick: this.loginUser },
-	                    'Submit'
+	                    'Log in'
 	                )
 	            ),
 	            this.state.error ? React.createElement(
@@ -37303,17 +37324,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	var ReactDOM = __webpack_require__(32);
 	var React = __webpack_require__(1);
 
 	var _require = __webpack_require__(184),
 	    Link = _require.Link;
 
-	React.createElement(_reactGeosuggest2.default
-	// className="geosuggest"
-	, null);
+	React.createElement(_reactGeosuggest2.default, null);
 	var axios = __webpack_require__(240);
 
 	var _require2 = __webpack_require__(184),
@@ -37329,16 +37346,17 @@
 	    getInitialState: function getInitialState() {
 	        return { exists: false,
 	            doesntExist: false,
-	            creationSuccess: false
+	            creationSuccess: false,
+	            openLogin: false
 	        };
 	    },
 	    render: function render() {
-	        var _React$createElement;
-
 	        var address = this.state.address;
 	        var creationSuccess = this.state.creationSuccess;
 	        var exists = this.state.exists;
 	        var doesntExist = this.state.doesntExist;
+	        var openLogin = this.state.openLogin;
+
 
 	        var fixtures = [];
 	        var that = this;
@@ -37349,7 +37367,7 @@
 	                    { className: 'buildingExist' },
 	                    React.createElement(
 	                        'h3',
-	                        { id: 'loginHeadline' },
+	                        { className: 'existText' },
 	                        'Your building already exists here, would you like to join the group?'
 	                    ),
 	                    React.createElement(
@@ -37369,7 +37387,7 @@
 	                    { className: 'buildingExist' },
 	                    React.createElement(
 	                        'h3',
-	                        { id: 'loginHeadline' },
+	                        { className: 'existText' },
 	                        'Your building is new here! Do you wanna create it?'
 	                    ),
 	                    React.createElement(
@@ -37388,7 +37406,7 @@
 	                    { className: 'buildingExist' },
 	                    React.createElement(
 	                        'h3',
-	                        { id: 'loginHeadline' },
+	                        { className: 'existText' },
 	                        ' Your building in ',
 	                        React.createElement(
 	                            'span',
@@ -37397,7 +37415,9 @@
 	                            address,
 	                            ' '
 	                        ),
-	                        ' was created! Please register and tell your neighbours to join!'
+	                        ' was created!',
+	                        React.createElement('br', null),
+	                        'Please register and tell your neighbours to join!'
 	                    ),
 	                    React.createElement(
 	                        'button',
@@ -37411,33 +37431,84 @@
 	                );
 	            }
 	        }
+	        function loginForm() {
+	            if (openLogin) {
+	                return React.createElement(
+	                    'form',
+	                    { className: 'loginForm' },
+	                    React.createElement(
+	                        'div',
+	                        { className: 'loginBoxes' },
+	                        React.createElement(
+	                            'p',
+	                            { className: 'loginText' },
+	                            'Email'
+	                        ),
+	                        React.createElement('input', { type: 'text', ref: 'email', className: 'input-box' }),
+	                        React.createElement(
+	                            'p',
+	                            { className: 'loginText' },
+	                            'Password'
+	                        ),
+	                        React.createElement('input', { type: 'text', ref: 'password', className: 'input-box' })
+	                    ),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'button', id: 'submitLogin', onClick: that.loginUser },
+	                        'Submit'
+	                    ),
+	                    that.state.error ? React.createElement(
+	                        'h4',
+	                        { className: 'userError' },
+	                        'wrong email or password'
+	                    ) : null
+	                );
+	            }
+	        }
 	        return React.createElement(
 	            'div',
-	            { className: 'LoginRegister', id: 'registerMain' },
+	            null,
+	            React.createElement('img', { className: 'logo-main', src: 'logo_small.png' }),
+	            React.createElement('img', { className: 'building-image', src: 'building.png' }),
 	            React.createElement(
-	                'h3',
-	                { id: 'loginHeadline' },
-	                'If not - Where do you live?'
-	            ),
-	            React.createElement(_reactGeosuggest2.default, { placeholder: 'Type your address and choose from the list',
-	                initialValue: '',
-	                fixtures: fixtures,
-	                onSuggestSelect: this.onSuggestSelect,
-	                onKeyPress: this.onKeyPress,
-	                onSuggestNoResults: this.onSuggestNoResults,
-	                location: new google.maps.LatLng(53.558572, 9.9278215),
-	                radius: '20' }),
-	            React.createElement(
-	                'h4',
-	                { id: 'noAddressResults' },
-	                'Please submit an address'
+	                'div',
+	                { className: 'loginMain' },
+	                React.createElement(
+	                    'button',
+	                    { className: 'button', onClick: this.open },
+	                    'Log In'
+	                ),
+	                loginForm()
 	            ),
 	            React.createElement(
-	                'button',
-	                (_React$createElement = { className: 'button', id: 'submitAddress' }, _defineProperty(_React$createElement, 'className', 'button'), _defineProperty(_React$createElement, 'onClick', this.saveAddress), _React$createElement),
-	                'Submit'
-	            ),
-	            checkExist()
+	                'div',
+	                { className: 'addressContainer' },
+	                React.createElement(
+	                    'h3',
+	                    { id: 'know-your' },
+	                    'Know your neighbours.'
+	                ),
+	                React.createElement(_reactGeosuggest2.default, {
+	                    placeholder: 'Type your address and choose from the list',
+	                    initialValue: '',
+	                    fixtures: fixtures,
+	                    onSuggestSelect: this.onSuggestSelect,
+	                    onKeyPress: this.onKeyPress,
+	                    onSuggestNoResults: this.onSuggestNoResults,
+	                    location: new google.maps.LatLng(53.558572, 9.9278215),
+	                    radius: '20' }),
+	                React.createElement(
+	                    'h4',
+	                    { id: 'noAddressResults' },
+	                    'Please submit an address'
+	                ),
+	                React.createElement(
+	                    'button',
+	                    { className: 'button', id: 'submitAddress', onClick: this.saveAddress },
+	                    'Submit'
+	                ),
+	                checkExist()
+	            )
 	        );
 	    },
 	    onSuggestSelect: function onSuggestSelect(suggest) {
@@ -37476,6 +37547,41 @@
 	                creationSuccess: true,
 	                address: result.data.file
 	            });
+	        });
+	    },
+
+	    open: function open() {
+	        if (this.state.openLogin === false) {
+	            this.setState({
+	                openLogin: true
+	            });
+	        } else {
+	            this.setState({
+	                openLogin: false
+	            });
+	        }
+	    },
+
+	    loginUser: function loginUser() {
+	        var that = this;
+	        var email = this.refs.email.value;
+	        var password = this.refs.password.value;
+	        axios.post('/checkUser', {
+	            email: email,
+	            password: password
+	        }).then(function (res) {
+	            console.log('heyyyy');
+	            if (res.data.success === true) {
+	                var user = {
+	                    id: res.data.file.user.id
+	                };
+	                socket.emit('newUser', user);
+
+	                window.location.href = "#/connectArea";
+	            } else {
+	                console.log('blaaa');
+	                that.setState({ error: true });
+	            }
 	        });
 	    }
 

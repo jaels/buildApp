@@ -4,8 +4,7 @@ var Logo = require('./Logo.jsx');
 var Main = React.createClass({
     render: function() {
         return(
-            <div>
-            <Logo/>
+            <div className="main">
             {this.props.children}
             </div>
         )

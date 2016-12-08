@@ -7,28 +7,35 @@ var axios = require('axios');
 var RegisterUser = React.createClass({
     render: function() {
         return (
+            <div>
+                <img className="logo-form" src="logo_small.png"/>
+                    <img className="big-n" src="big_n_form_1024.png"/>
             <div className="RegisterUser">
-                <h3 id="loginHeadline">Please fill this form</h3>
+                <div className="form-headlines">
+                <h1 className="register-headline" id="form-hedline">Hello, neighbour.</h1>
+                <p className="existText" id="form-subtitle">Fill in this form to join your building and chat away!</p>
+                </div>
                 <form>
                     <div>
-                        <input className="inputField" type="text" placeholder="* First Name" ref="firstname" required="require"></input>
+                        <input className="inputField" type="text" placeholder="First name (required)" ref="firstname" required="require"></input>
                         <br/>
-                        <input className="inputField" type="text" placeholder="* Last Name" ref="lastname" required="require"></input>
+                        <input className="inputField" type="text" placeholder="Last name (required)" ref="lastname" required="require"></input>
                         <br/>
-                        <input className="inputField" type="text" placeholder="* Floor (specify just a number)" ref="floor" required="require"></input>
+                        <input className="inputField" type="text" placeholder="Floor (required, please specify just a number)" ref="floor" required="require"></input>
                         <br/>
-                        <input className="inputField" type="text" placeholder="Apt. number" ref="aptNumber"></input>
+                        <input className="inputField" type="text" placeholder="Apartment number (not required)" ref="aptNumber"></input>
                         <br/>
-                        <input className="inputField" type="text" placeholder="Building specifications (front/back/left)" ref="buildingSpec"></input>
+                        <input className="inputField" type="text" placeholder="Building specifications (front/back, not required)" ref="buildingSpec"></input>
                         <br/>
-                        <input className="inputField" type="text" placeholder="* Email" ref="email" required="require"></input>
+                        <input className="inputField" type="text" placeholder="Email (required)" ref="email" required="require"></input>
                         <br/>
-                        <input className="inputField" type="text" placeholder="* password" ref="password"></input>
+                        <input className="inputField" type="text" placeholder="Password (required)" ref="password"></input>
                         <br/>
 
                         </div>
                     <button className="button" onClick={this.registerNew}>Submit</button>
                 </form>
+            </div>
             </div>
         )
     },

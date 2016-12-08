@@ -1,6 +1,32 @@
 
 body {
-    font-family: Arial;
+    background-color: #120079;
+
+}
+
+.main {
+    background-color: #120079;
+    height: 100%;
+}
+
+#know-your {
+    position: absolute;
+    font-family: LeagueSpartan-Bold;
+    font-size: 50px;
+    color: #FFFFFF;
+    letter-spacing: -0.18px;
+    margin-left: 30px;
+    z-index: 1;
+
+}
+
+.register-headline {
+    font-family: LeagueSpartan-Bold;
+    font-size: 50px;
+    color: #FFFFFF;
+    letter-spacing: -0.18px;
+    z-index: 1;
+
 }
 
 #logoContainer {
@@ -8,21 +34,15 @@ body {
     height: 100px;
 }
 
-#mainHeadline {
-    position: relative;
-    padding-top: 20px;
-    color: #800000;
-    text-align: center;
-    font-size: 35px;
-}
 
-.LoginRegister {
-    position: relative;
-    text-align: center;
-}
 
-#submitAddress{
-    position: relative;
+.addressContainer {
+    position: absolute;
+    text-align: center;
+    width: 40%;
+    top: 15%;
+    left: 50%;
+    z-index: 0;
 }
 
 .geosuggest__suggests--hidden {
@@ -36,29 +56,61 @@ body {
     color: #fff;
 }
 
+
 .geosuggest {
-    position: relative;
-    width: 50%;
-    margin: 1em auto;
+  font-size: 1rem;
+  position: relative;
+  width: 50%;
+  margin: 1em auto;
+  text-align: left;
 }
 
+
 .geosuggest__item {
-    font-size: 16px;
+    color: #120079;
+    font-size: 18px;
     padding: .5em .65em;
     cursor: pointer;
 }
 
+
+
 .geosuggest__input {
-    font-size: 16px;
-    width: 94%;
-    border: 2px solid transparent;
-    box-shadow: 0 0 1px #3d464d;
-    padding: .5em 1em;
-    transition: border 0.2s, box-shadow 0.2s;
+    z-index: 1;
+  width: 160%;
+  height: 60px;
+  font-weight: 400;
+  margin-top: 40%;
+  margin-right: 200px;
+font-family: ClearSans-Medium;
+color: #BCBCBC;
+letter-spacing: -0.06px;
+text-indent:60px;
+  font-size: 18px;
+  color: #FFFFFF;
+  background-color: #120079;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 1px #3d464d;
+  padding: .5em 1em;
+
+  -webkit-transition: border 0.2s, box-shadow 0.2s;
+          transition: border 0.2s, box-shadow 0.2s;
+
+          /*background: url(search_icon.png) no-repeat scroll 7px 18px;
+          padding-left:30px;*/
+
+
+background-image: url(search_icon.png);
+background-position: 18px 20px;
+background-size: 40px;
+background-repeat: no-repeat;
+
 }
 
+
 .geosuggest__suggests {
-    position: absolute;
+    position: relative;
+    font-family: ClearSans-Medium;
     top: 100%;
     left: 0;
     right: 0;
@@ -66,9 +118,7 @@ body {
     padding: 0;
     margin-top: -1px;
     background: #fff;
-    border: 2px solid #267dc0;
     list-style: none;
-    z-index: 5;
     transition: max-height 0.2s, border 0.2s;
 }
 
@@ -78,11 +128,33 @@ body {
 }
 
 .inputField {
+    background-color: #120079;
     margin-bottom: 20px;
+    border: 2px solid #FFFFFF;
+    height: 20%;
+    width: 85%;
+    Padding-bottom: 10px;
+    font-family: ClearSans-Medium;
+    font-size: 16px;
+    color: #BCBCBC;
+    letter-spacing: -0.06px;
 }
 
 .RegisterUser {
+    position: absolute;
+    top: 5%;
+    left: 35%;
+    margin-top: 10%;
     text-align: center;
+
+}
+
+.big-n {
+    position: absolute;
+    left: 0%;
+    top: 7%;
+    height: 110%;
+    width: 70%;
 }
 
 .buildingExist {
@@ -90,28 +162,133 @@ body {
 }
 
 #createdAddress{
-    color: red;
+    color: #00BFFF;
 }
 
 .button {
-    position: relative;
-    text-align: center;
-    background-color: 	#FF6347;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    height:40px;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    padding-bottom: 30px:
-    cursor: pointer;
+position: relative;
+text-align: center;
+display: inline-block;
+cursor: pointer;
+width: 70px;
+background: #6956FD;
+border-radius: 17px;
+height: 37px;
+
+font-family: ClearSans-Medium;
+font-size: 14px;
+color: #FFFFFF;
+letter-spacing: -0.05px;
+
+
+}
+
+.building-image {
+    margin-top: 3%;
+    margin-left: 10%;
+    height: 60%;
+    width: 30%;
+}
+
+.message_button {
+    float: right;
+}
+
+.logOutButton {
+    float: right;
+}
+
+
+.loginMain {
+    position: absolute;
+    margin-left: 90%;
+    top: 3%;
+    z-index: 5;
+
+}
+
+.logo-main {
+    position: absolute;
+    top: 3%;
+    margin-left: 3%;
+}
+
+.logo-form {
+position: absolute;
+bottom: 90%;
+left: 4%;
 }
 
 .userError {
     color: red;
+    font-family: ClearSans-Medium;
+    font-size: 14px;
 }
+
+
+ .loginForm {
+     opacity: 0.97;
+     background: #E6E2FF;
+     -webkit-border-radius: 30px;
+-moz-border-radius: 20px;
+border-radius: 10px;
+z-index: 5;
+width: 150%;
+ }
+
+ .loginText {
+     font-family: ClearSans-Medium;
+     font-size: 14px;
+     color: #120079;
+     letter-spacing: -0.05px;
+ }
+
+/*#form-subtitle {
+    padding-top: 2px;
+}*/
+
+.form-headlines {
+    margin-bottom: 40px;
+}
+
+#form-hedline {
+    margin-bottom: 3px;
+}
+
+#requires-fields {
+    border: 1px solid #DC143C;
+}
+
+.input-box {
+    border: 1px solid #120079;
+    /*height: 59px;
+    width: 298px;*/
+    height: 60px;
+    width: 90%;
+    background: #E6E2FF;
+    font-size: 16px;
+
+}
+
+.loginBoxes {
+    margin-left:3%;
+    padding-top: 2%;
+    margin-top: 2%;
+}
+
+#submitLogin {
+    margin-top: 4%;
+    margin-left:3%;
+    margin-bottom: 2%;
+
+}
+
+.existText {
+    font-size: 19px;
+    font-family: ClearSans-Medium;
+    color: #FFFFFF;
+}
+
 
 .chatNav {
     float: left;
@@ -148,15 +325,8 @@ body {
 }
 
 
-.message_button {
-    float: right;
-}
 
 .active {
     color: green;
     font-weight: bold;
-}
-
-.logOutButton {
-    float: right;
 }

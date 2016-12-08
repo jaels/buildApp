@@ -18,7 +18,7 @@ var Login = React.createClass({
                     <div>
                         <input type="text" placeholder="password" ref="password"></input>
                     </div>
-                    <button className="button" onClick={this.loginUser}>Submit</button>
+                    <button className="button" onClick={this.loginUser}>Log in</button>
                 </form>
                 {this.state.error ? <h4 className="userError">wrong email or password</h4> : null}
             </div>
