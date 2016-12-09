@@ -6,7 +6,7 @@ var loggedOut = React.createClass({
         return(
             <div>
                 <img className="loggedOutLogo" src="logo_bigger.png"/>
-            <h1 className="know-your" id="loggedOut">Thank you for using Neighbours! till next time!</h1>
+            <h1 className="know-your" id="loggedOut">Thank you for using Neighbours! Till next time!</h1>
             </div>
         )
     },

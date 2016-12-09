@@ -52092,7 +52092,7 @@
 	            React.createElement(
 	                "h1",
 	                { className: "know-your", id: "loggedOut" },
-	                "Thank you for using Neighbours! till next time!"
+	                "Thank you for using Neighbours! Till next time!"
 	            )
 	        );
 	    }
