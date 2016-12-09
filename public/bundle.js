@@ -52,16 +52,16 @@
 	var createBuilding = __webpack_require__(265);
 	var connectArea = __webpack_require__(266);
 
-	var privateChat = __webpack_require__(271);
+	var privateChat = __webpack_require__(269);
 
-	var generalChat = __webpack_require__(324);
+	var generalChat = __webpack_require__(432);
 
-	var loggedOut = __webpack_require__(325);
+	var loggedOut = __webpack_require__(433);
 
 	var Conversations = __webpack_require__(268);
 
-	var Main = __webpack_require__(326);
-	var LoginPage = __webpack_require__(328);
+	var Main = __webpack_require__(434);
+	var LoginPage = __webpack_require__(436);
 
 	var _require = __webpack_require__(184),
 	    Route = _require.Route,
@@ -28565,6 +28565,7 @@
 	        _this.state = {
 	            users: []
 	        };
+	        _this.componentDidMount = _this.componentDidMount.bind(_this);
 
 	        var that = _this;
 	        axios.get('/getAllUsers').then(function (result) {
@@ -28576,6 +28577,15 @@
 	    }
 
 	    _createClass(ChatNav, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            socket.on('hey', function (user) {
+	                console.log('hey yoooo');
+	                console.log(user);
+	                var hey = user.id.toString();
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var that = this;
@@ -28599,7 +28609,7 @@
 	                        { className: 'usersChat' },
 	                        React.createElement(
 	                            Link,
-	                            { to: '/connectArea/' + chatUrl, activeClassName: 'active', key: user.id },
+	                            { to: '/connectArea/' + chatUrl, activeClassName: 'active', id: user.id },
 	                            ' ',
 	                            React.createElement(
 	                                'p',
@@ -28688,20 +28698,18 @@
 	module.exports = Conversations;
 
 /***/ },
-/* 269 */,
-/* 270 */,
-/* 271 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _socket = __webpack_require__(272);
+	var _socket = __webpack_require__(270);
 
 	var _socket2 = _interopRequireDefault(_socket);
 
-	var _moment = __webpack_require__(343);
+	var _moment = __webpack_require__(322);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
@@ -28934,7 +28942,7 @@
 	module.exports = privateChat;
 
 /***/ },
-/* 272 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -28942,10 +28950,10 @@
 	 * Module dependencies.
 	 */
 
-	var url = __webpack_require__(273);
-	var parser = __webpack_require__(278);
-	var Manager = __webpack_require__(289);
-	var debug = __webpack_require__(275)('socket.io-client');
+	var url = __webpack_require__(271);
+	var parser = __webpack_require__(276);
+	var Manager = __webpack_require__(287);
+	var debug = __webpack_require__(273)('socket.io-client');
 
 	/**
 	 * Module exports.
@@ -29044,12 +29052,12 @@
 	 * @api public
 	 */
 
-	exports.Manager = __webpack_require__(289);
-	exports.Socket = __webpack_require__(317);
+	exports.Manager = __webpack_require__(287);
+	exports.Socket = __webpack_require__(315);
 
 
 /***/ },
-/* 273 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -29057,8 +29065,8 @@
 	 * Module dependencies.
 	 */
 
-	var parseuri = __webpack_require__(274);
-	var debug = __webpack_require__(275)('socket.io-client:url');
+	var parseuri = __webpack_require__(272);
+	var debug = __webpack_require__(273)('socket.io-client:url');
 
 	/**
 	 * Module exports.
@@ -29131,7 +29139,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 274 */
+/* 272 */
 /***/ function(module, exports) {
 
 	/**
@@ -29176,7 +29184,7 @@
 
 
 /***/ },
-/* 275 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {
@@ -29186,7 +29194,7 @@
 	 * Expose `debug()` as the module.
 	 */
 
-	exports = module.exports = __webpack_require__(276);
+	exports = module.exports = __webpack_require__(274);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -29360,7 +29368,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 276 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -29376,7 +29384,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(277);
+	exports.humanize = __webpack_require__(275);
 
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -29566,7 +29574,7 @@
 
 
 /***/ },
-/* 277 */
+/* 275 */
 /***/ function(module, exports) {
 
 	/**
@@ -29721,7 +29729,7 @@
 
 
 /***/ },
-/* 278 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -29729,11 +29737,11 @@
 	 * Module dependencies.
 	 */
 
-	var debug = __webpack_require__(279)('socket.io-parser');
-	var json = __webpack_require__(282);
-	var Emitter = __webpack_require__(285);
-	var binary = __webpack_require__(286);
-	var isBuf = __webpack_require__(288);
+	var debug = __webpack_require__(277)('socket.io-parser');
+	var json = __webpack_require__(280);
+	var Emitter = __webpack_require__(283);
+	var binary = __webpack_require__(284);
+	var isBuf = __webpack_require__(286);
 
 	/**
 	 * Protocol version.
@@ -30131,7 +30139,7 @@
 
 
 /***/ },
-/* 279 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -30141,7 +30149,7 @@
 	 * Expose `debug()` as the module.
 	 */
 
-	exports = module.exports = __webpack_require__(280);
+	exports = module.exports = __webpack_require__(278);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -30305,7 +30313,7 @@
 
 
 /***/ },
-/* 280 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -30321,7 +30329,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(281);
+	exports.humanize = __webpack_require__(279);
 
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -30508,7 +30516,7 @@
 
 
 /***/ },
-/* 281 */
+/* 279 */
 /***/ function(module, exports) {
 
 	/**
@@ -30639,14 +30647,14 @@
 
 
 /***/ },
-/* 282 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 	;(function () {
 	  // Detect the `define` function exposed by asynchronous module loaders. The
 	  // strict `define` check is necessary for compatibility with `r.js`.
-	  var isLoader = "function" === "function" && __webpack_require__(284);
+	  var isLoader = "function" === "function" && __webpack_require__(282);
 
 	  // A set of types used to distinguish objects from primitives.
 	  var objectTypes = {
@@ -31545,10 +31553,10 @@
 	  }
 	}).call(this);
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(283)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(281)(module), (function() { return this; }())))
 
 /***/ },
-/* 283 */
+/* 281 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -31564,7 +31572,7 @@
 
 
 /***/ },
-/* 284 */
+/* 282 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -31572,7 +31580,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 285 */
+/* 283 */
 /***/ function(module, exports) {
 
 	
@@ -31742,7 +31750,7 @@
 
 
 /***/ },
-/* 286 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -31751,8 +31759,8 @@
 	 * Module requirements
 	 */
 
-	var isArray = __webpack_require__(287);
-	var isBuf = __webpack_require__(288);
+	var isArray = __webpack_require__(285);
+	var isBuf = __webpack_require__(286);
 
 	/**
 	 * Replaces every Buffer | ArrayBuffer in packet with a numbered placeholder.
@@ -31890,7 +31898,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 287 */
+/* 285 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -31899,7 +31907,7 @@
 
 
 /***/ },
-/* 288 */
+/* 286 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -31919,7 +31927,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 289 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -31927,15 +31935,15 @@
 	 * Module dependencies.
 	 */
 
-	var eio = __webpack_require__(290);
-	var Socket = __webpack_require__(317);
-	var Emitter = __webpack_require__(308);
-	var parser = __webpack_require__(278);
-	var on = __webpack_require__(319);
-	var bind = __webpack_require__(320);
-	var debug = __webpack_require__(275)('socket.io-client:manager');
-	var indexOf = __webpack_require__(315);
-	var Backoff = __webpack_require__(323);
+	var eio = __webpack_require__(288);
+	var Socket = __webpack_require__(315);
+	var Emitter = __webpack_require__(306);
+	var parser = __webpack_require__(276);
+	var on = __webpack_require__(317);
+	var bind = __webpack_require__(318);
+	var debug = __webpack_require__(273)('socket.io-client:manager');
+	var indexOf = __webpack_require__(313);
+	var Backoff = __webpack_require__(321);
 
 	/**
 	 * IE6+ hasOwnProperty
@@ -32485,19 +32493,19 @@
 
 
 /***/ },
-/* 290 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports = __webpack_require__(291);
+	module.exports = __webpack_require__(289);
 
 
 /***/ },
-/* 291 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports = __webpack_require__(292);
+	module.exports = __webpack_require__(290);
 
 	/**
 	 * Exports parser
@@ -32505,25 +32513,25 @@
 	 * @api public
 	 *
 	 */
-	module.exports.parser = __webpack_require__(299);
+	module.exports.parser = __webpack_require__(297);
 
 
 /***/ },
-/* 292 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 
-	var transports = __webpack_require__(293);
-	var Emitter = __webpack_require__(308);
-	var debug = __webpack_require__(275)('engine.io-client:socket');
-	var index = __webpack_require__(315);
-	var parser = __webpack_require__(299);
-	var parseuri = __webpack_require__(274);
-	var parsejson = __webpack_require__(316);
-	var parseqs = __webpack_require__(309);
+	var transports = __webpack_require__(291);
+	var Emitter = __webpack_require__(306);
+	var debug = __webpack_require__(273)('engine.io-client:socket');
+	var index = __webpack_require__(313);
+	var parser = __webpack_require__(297);
+	var parseuri = __webpack_require__(272);
+	var parsejson = __webpack_require__(314);
+	var parseqs = __webpack_require__(307);
 
 	/**
 	 * Module exports.
@@ -32655,9 +32663,9 @@
 	 */
 
 	Socket.Socket = Socket;
-	Socket.Transport = __webpack_require__(298);
-	Socket.transports = __webpack_require__(293);
-	Socket.parser = __webpack_require__(299);
+	Socket.Transport = __webpack_require__(296);
+	Socket.transports = __webpack_require__(291);
+	Socket.parser = __webpack_require__(297);
 
 	/**
 	 * Creates transport of the given type.
@@ -33254,17 +33262,17 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 293 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies
 	 */
 
-	var XMLHttpRequest = __webpack_require__(294);
-	var XHR = __webpack_require__(296);
-	var JSONP = __webpack_require__(312);
-	var websocket = __webpack_require__(313);
+	var XMLHttpRequest = __webpack_require__(292);
+	var XHR = __webpack_require__(294);
+	var JSONP = __webpack_require__(310);
+	var websocket = __webpack_require__(311);
 
 	/**
 	 * Export transports.
@@ -33314,12 +33322,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 294 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
-	var hasCORS = __webpack_require__(295);
+	var hasCORS = __webpack_require__(293);
 
 	module.exports = function (opts) {
 	  var xdomain = opts.xdomain;
@@ -33358,7 +33366,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 295 */
+/* 293 */
 /***/ function(module, exports) {
 
 	
@@ -33381,18 +33389,18 @@
 
 
 /***/ },
-/* 296 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module requirements.
 	 */
 
-	var XMLHttpRequest = __webpack_require__(294);
-	var Polling = __webpack_require__(297);
-	var Emitter = __webpack_require__(308);
-	var inherit = __webpack_require__(310);
-	var debug = __webpack_require__(275)('engine.io-client:polling-xhr');
+	var XMLHttpRequest = __webpack_require__(292);
+	var Polling = __webpack_require__(295);
+	var Emitter = __webpack_require__(306);
+	var inherit = __webpack_require__(308);
+	var debug = __webpack_require__(273)('engine.io-client:polling-xhr');
 
 	/**
 	 * Module exports.
@@ -33812,19 +33820,19 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 297 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 
-	var Transport = __webpack_require__(298);
-	var parseqs = __webpack_require__(309);
-	var parser = __webpack_require__(299);
-	var inherit = __webpack_require__(310);
-	var yeast = __webpack_require__(311);
-	var debug = __webpack_require__(275)('engine.io-client:polling');
+	var Transport = __webpack_require__(296);
+	var parseqs = __webpack_require__(307);
+	var parser = __webpack_require__(297);
+	var inherit = __webpack_require__(308);
+	var yeast = __webpack_require__(309);
+	var debug = __webpack_require__(273)('engine.io-client:polling');
 
 	/**
 	 * Module exports.
@@ -33837,7 +33845,7 @@
 	 */
 
 	var hasXHR2 = (function () {
-	  var XMLHttpRequest = __webpack_require__(294);
+	  var XMLHttpRequest = __webpack_require__(292);
 	  var xhr = new XMLHttpRequest({ xdomain: false });
 	  return null != xhr.responseType;
 	})();
@@ -34063,15 +34071,15 @@
 
 
 /***/ },
-/* 298 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 
-	var parser = __webpack_require__(299);
-	var Emitter = __webpack_require__(308);
+	var parser = __webpack_require__(297);
+	var Emitter = __webpack_require__(306);
 
 	/**
 	 * Module exports.
@@ -34226,22 +34234,22 @@
 
 
 /***/ },
-/* 299 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 
-	var keys = __webpack_require__(300);
-	var hasBinary = __webpack_require__(301);
-	var sliceBuffer = __webpack_require__(303);
-	var after = __webpack_require__(304);
-	var utf8 = __webpack_require__(305);
+	var keys = __webpack_require__(298);
+	var hasBinary = __webpack_require__(299);
+	var sliceBuffer = __webpack_require__(301);
+	var after = __webpack_require__(302);
+	var utf8 = __webpack_require__(303);
 
 	var base64encoder;
 	if (global && global.ArrayBuffer) {
-	  base64encoder = __webpack_require__(306);
+	  base64encoder = __webpack_require__(304);
 	}
 
 	/**
@@ -34299,7 +34307,7 @@
 	 * Create a blob api even for blob builder when vendor prefixes exist
 	 */
 
-	var Blob = __webpack_require__(307);
+	var Blob = __webpack_require__(305);
 
 	/**
 	 * Encodes a packet.
@@ -34842,7 +34850,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 300 */
+/* 298 */
 /***/ function(module, exports) {
 
 	
@@ -34867,7 +34875,7 @@
 
 
 /***/ },
-/* 301 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -34875,7 +34883,7 @@
 	 * Module requirements.
 	 */
 
-	var isArray = __webpack_require__(302);
+	var isArray = __webpack_require__(300);
 
 	/**
 	 * Module exports.
@@ -34932,7 +34940,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 302 */
+/* 300 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -34941,7 +34949,7 @@
 
 
 /***/ },
-/* 303 */
+/* 301 */
 /***/ function(module, exports) {
 
 	/**
@@ -34976,7 +34984,7 @@
 
 
 /***/ },
-/* 304 */
+/* 302 */
 /***/ function(module, exports) {
 
 	module.exports = after
@@ -35010,7 +35018,7 @@
 
 
 /***/ },
-/* 305 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/wtf8 v1.0.0 by @mathias */
@@ -35246,10 +35254,10 @@
 
 	}(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(283)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(281)(module), (function() { return this; }())))
 
 /***/ },
-/* 306 */
+/* 304 */
 /***/ function(module, exports) {
 
 	/*
@@ -35322,7 +35330,7 @@
 
 
 /***/ },
-/* 307 */
+/* 305 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -35425,7 +35433,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 308 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -35594,7 +35602,7 @@
 
 
 /***/ },
-/* 309 */
+/* 307 */
 /***/ function(module, exports) {
 
 	/**
@@ -35637,7 +35645,7 @@
 
 
 /***/ },
-/* 310 */
+/* 308 */
 /***/ function(module, exports) {
 
 	
@@ -35649,7 +35657,7 @@
 	};
 
 /***/ },
-/* 311 */
+/* 309 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -35723,7 +35731,7 @@
 
 
 /***/ },
-/* 312 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -35731,8 +35739,8 @@
 	 * Module requirements.
 	 */
 
-	var Polling = __webpack_require__(297);
-	var inherit = __webpack_require__(310);
+	var Polling = __webpack_require__(295);
+	var inherit = __webpack_require__(308);
 
 	/**
 	 * Module exports.
@@ -35961,24 +35969,24 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 313 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 
-	var Transport = __webpack_require__(298);
-	var parser = __webpack_require__(299);
-	var parseqs = __webpack_require__(309);
-	var inherit = __webpack_require__(310);
-	var yeast = __webpack_require__(311);
-	var debug = __webpack_require__(275)('engine.io-client:websocket');
+	var Transport = __webpack_require__(296);
+	var parser = __webpack_require__(297);
+	var parseqs = __webpack_require__(307);
+	var inherit = __webpack_require__(308);
+	var yeast = __webpack_require__(309);
+	var debug = __webpack_require__(273)('engine.io-client:websocket');
 	var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 	var NodeWebSocket;
 	if (typeof window === 'undefined') {
 	  try {
-	    NodeWebSocket = __webpack_require__(314);
+	    NodeWebSocket = __webpack_require__(312);
 	  } catch (e) { }
 	}
 
@@ -36253,13 +36261,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 314 */
+/* 312 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 315 */
+/* 313 */
 /***/ function(module, exports) {
 
 	
@@ -36274,7 +36282,7 @@
 	};
 
 /***/ },
-/* 316 */
+/* 314 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -36312,7 +36320,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 317 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -36320,13 +36328,13 @@
 	 * Module dependencies.
 	 */
 
-	var parser = __webpack_require__(278);
-	var Emitter = __webpack_require__(308);
-	var toArray = __webpack_require__(318);
-	var on = __webpack_require__(319);
-	var bind = __webpack_require__(320);
-	var debug = __webpack_require__(275)('socket.io-client:socket');
-	var hasBin = __webpack_require__(321);
+	var parser = __webpack_require__(276);
+	var Emitter = __webpack_require__(306);
+	var toArray = __webpack_require__(316);
+	var on = __webpack_require__(317);
+	var bind = __webpack_require__(318);
+	var debug = __webpack_require__(273)('socket.io-client:socket');
+	var hasBin = __webpack_require__(319);
 
 	/**
 	 * Module exports.
@@ -36737,7 +36745,7 @@
 
 
 /***/ },
-/* 318 */
+/* 316 */
 /***/ function(module, exports) {
 
 	module.exports = toArray
@@ -36756,7 +36764,7 @@
 
 
 /***/ },
-/* 319 */
+/* 317 */
 /***/ function(module, exports) {
 
 	
@@ -36786,7 +36794,7 @@
 
 
 /***/ },
-/* 320 */
+/* 318 */
 /***/ function(module, exports) {
 
 	/**
@@ -36815,7 +36823,7 @@
 
 
 /***/ },
-/* 321 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -36823,7 +36831,7 @@
 	 * Module requirements.
 	 */
 
-	var isArray = __webpack_require__(322);
+	var isArray = __webpack_require__(320);
 
 	/**
 	 * Module exports.
@@ -36881,7 +36889,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 322 */
+/* 320 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -36890,7 +36898,7 @@
 
 
 /***/ },
-/* 323 */
+/* 321 */
 /***/ function(module, exports) {
 
 	
@@ -36981,2388 +36989,7 @@
 
 
 /***/ },
-/* 324 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _socket = __webpack_require__(272);
-
-	var _socket2 = _interopRequireDefault(_socket);
-
-	var _moment = __webpack_require__(343);
-
-	var _moment2 = _interopRequireDefault(_moment);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(1);
-
-	var socket = (0, _socket2.default)('/');
-
-	var generalChat = function (_React$Component) {
-	    _inherits(generalChat, _React$Component);
-
-	    function generalChat(props) {
-	        _classCallCheck(this, generalChat);
-
-	        var _this = _possibleConstructorReturn(this, (generalChat.__proto__ || Object.getPrototypeOf(generalChat)).call(this, props));
-
-	        var that = _this;
-	        _this.state = {
-	            messages: []
-	        };
-	        _this.handleChange = _this.handleChange.bind(_this);
-	        _this.sendMessage = _this.sendMessage.bind(_this);
-	        _this.componentDidMount = _this.componentDidMount.bind(_this);
-	        _this.messageRecieve = _this.messageRecieve.bind(_this);
-
-	        var buildingId = _this.props.details.buildingId;
-
-	        axios.get('/getGeneralMessages/' + buildingId).then(function (result) {
-	            that.setState({
-	                messages: result.data.file
-	            });
-	        });
-	        return _this;
-	    }
-
-	    _createClass(generalChat, [{
-	        key: 'render',
-	        value: function render() {
-	            var that = this;
-	            var address = this.props.details.user.address;
-
-	            var messages = that.state.messages.map(function (message) {
-	                return React.createElement(
-	                    'div',
-	                    { className: 'messagesContainer' },
-	                    React.createElement('div', { className: 'chatCircle' }),
-	                    React.createElement(
-	                        'div',
-	                        { className: 'messageBox', id: message.id },
-	                        React.createElement(
-	                            'h4',
-	                            { className: 'messageText' },
-	                            message.message
-	                        ),
-	                        React.createElement(
-	                            'h5',
-	                            { className: 'messageName' },
-	                            message.firstname,
-	                            ' ',
-	                            message.lastname,
-	                            ' | posted  ',
-	                            (0, _moment2.default)(message.created_at).fromNow()
-	                        )
-	                    )
-	                );
-	            });
-
-	            return React.createElement(
-	                'div',
-	                null,
-	                React.createElement(
-	                    'div',
-	                    { className: 'chatUpperStreep' },
-	                    React.createElement(
-	                        'h3',
-	                        null,
-	                        '#',
-	                        address
-	                    ),
-	                    React.createElement(
-	                        'button',
-	                        { className: 'button', id: 'logOutButton', onClick: this.logOut },
-	                        'Log Out'
-	                    )
-	                ),
-	                React.createElement(
-	                    'div',
-	                    { className: 'inputAndChat' },
-	                    React.createElement(
-	                        'div',
-	                        { className: 'conversationsArea', ref: 'scrollDiv', onFocus: this.scrolling },
-	                        React.createElement(
-	                            'div',
-	                            null,
-	                            messages
-	                        )
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        { className: 'chatContainer' },
-	                        React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.newMessage, onChange: this.handleChange }),
-	                        React.createElement(
-	                            'button',
-	                            { className: 'button', id: 'send-btn', onClick: this.sendMessage },
-	                            'Send'
-	                        )
-	                    )
-	                )
-	            );
-	        }
-	    }, {
-	        key: 'componentDidUpdate',
-	        value: function componentDidUpdate() {
-	            console.log('scrolling');
-	            this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
-	        }
-	    }, {
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            socket.on('connection', this.connected);
-	            socket.on('disconnection', this.disconnected);
-	            socket.on('send:message', this.messageRecieve);
-	        }
-	    }, {
-	        key: 'connected',
-	        value: function connected() {
-	            console.log('connected!');
-	        }
-	    }, {
-	        key: 'disconnected',
-	        value: function disconnected() {
-	            console.log('disconnected!');
-	        }
-	    }, {
-	        key: 'messageRecieve',
-	        value: function messageRecieve(message) {
-	            var messages = this.state.messages;
-
-	            messages.push(message);
-	            this.setState({ messages: messages });
-	        }
-	    }, {
-	        key: 'sendMessage',
-	        value: function sendMessage(e) {
-	            var that = this;
-	            e.preventDefault();
-	            var newMessage = that.state.newMessage;
-	            if (newMessage.length > 0) {
-	                this.setState({
-	                    newMessage: ""
-	                });
-	                axios.post('insertGeneralMessage', {
-	                    newMessage: newMessage
-	                }).then(function (response) {
-	                    newMessage = response.data.file;
-	                    that.props.onNewMessage(newMessage);
-	                    console.log(that.state.messages);
-	                    socket.emit('send:message', newMessage);
-	                });
-	            }
-	        }
-	    }, {
-	        key: 'handleChange',
-	        value: function handleChange(event) {
-	            this.setState({ newMessage: event.target.value });
-	        }
-	    }, {
-	        key: 'logOut',
-	        value: function logOut() {
-	            axios.get('logOut').then(function (reponse) {
-	                console.log('logged out');
-	                window.location.href = "#/loggedOut";
-	            });
-	        }
-	    }]);
-
-	    return generalChat;
-	}(React.Component);
-
-	module.exports = generalChat;
-
-/***/ },
-/* 325 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var React = __webpack_require__(1);
-
-	var loggedOut = React.createClass({
-	    displayName: "loggedOut",
-
-	    render: function render() {
-	        return React.createElement(
-	            "div",
-	            null,
-	            React.createElement("img", { className: "loggedOutLogo", src: "logo_bigger.png" }),
-	            React.createElement(
-	                "h1",
-	                { className: "know-your", id: "loggedOut" },
-	                "Thank you for using Neighbours! till next time!"
-	            )
-	        );
-	    }
-	});
-
-	module.exports = loggedOut;
-
-/***/ },
-/* 326 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-	var Logo = __webpack_require__(327);
-
-	var Main = React.createClass({
-	    displayName: 'Main',
-
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            { className: 'main' },
-	            this.props.children
-	        );
-	    }
-	});
-
-	module.exports = Main;
-
-/***/ },
-/* 327 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var Logo = React.createClass({
-	    displayName: 'Logo',
-
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            null,
-	            React.createElement(
-	                'button',
-	                { className: 'logOutButton', onClick: this.logOut },
-	                'Logout'
-	            )
-	        );
-	    },
-	    logOut: function logOut() {
-	        axios.get('logOut').then(function (reponse) {
-	            console.log('logged out');
-	            window.location.href = "#/loggedOut";
-	        });
-	    }
-	});
-
-	module.exports = Logo;
-
-/***/ },
-/* 328 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(1);
-	var Login = __webpack_require__(329);
-	var RegisterAddress = __webpack_require__(330);
-	var axios = __webpack_require__(240);
-
-	var LoginPage = function (_React$Component) {
-	    _inherits(LoginPage, _React$Component);
-
-	    function LoginPage(props) {
-	        _classCallCheck(this, LoginPage);
-
-	        var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props));
-
-	        axios.get('getAllDetails').then(function (response) {
-	            if (response.data.success === true) {
-	                window.location.href = "#/connectArea";
-	            }
-	        });
-	        return _this;
-	    }
-
-	    _createClass(LoginPage, [{
-	        key: 'render',
-	        value: function render() {
-	            return React.createElement(
-	                'div',
-	                null,
-	                React.createElement(RegisterAddress, null)
-	            );
-	        }
-	    }]);
-
-	    return LoginPage;
-	}(React.Component);
-
-	module.exports = LoginPage;
-
-/***/ },
-/* 329 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var _require = __webpack_require__(184),
-	    Link = _require.Link;
-
-	var Login = React.createClass({
-	    displayName: 'Login',
-
-	    getInitialState: function getInitialState() {
-	        return { error: false };
-	    },
-	    render: function render() {
-	        return React.createElement(
-	            'div',
-	            { className: 'LoginRegister', id: 'loginMain' },
-	            React.createElement(
-	                'h3',
-	                { id: 'loginHeadline' },
-	                'Already a user?'
-	            ),
-	            React.createElement(
-	                'form',
-	                null,
-	                React.createElement(
-	                    'div',
-	                    null,
-	                    React.createElement('input', { type: 'text', placeholder: 'email', ref: 'email' })
-	                ),
-	                React.createElement(
-	                    'div',
-	                    null,
-	                    React.createElement('input', { type: 'text', placeholder: 'password', ref: 'password' })
-	                ),
-	                React.createElement(
-	                    'button',
-	                    { className: 'button', onClick: this.loginUser },
-	                    'Log in'
-	                )
-	            ),
-	            this.state.error ? React.createElement(
-	                'h4',
-	                { className: 'userError' },
-	                'wrong email or password'
-	            ) : null
-	        );
-	    },
-	    loginUser: function loginUser() {
-	        var that = this;
-	        var email = this.refs.email.value;
-	        var password = this.refs.password.value;
-	        axios.post('/checkUser', {
-	            email: email,
-	            password: password
-	        }).then(function (res) {
-	            console.log('heyyyy');
-	            if (res.data.success === true) {
-	                console.log('trueee');
-	                var user = {
-	                    id: res.data.file.user.id
-	                };
-	                socket.emit('newUser', user);
-
-	                window.location.href = "#/connectArea";
-	            } else {
-	                console.log('blaaa');
-	                that.setState({ error: true });
-	            }
-	        });
-	    }
-
-	});
-
-	module.exports = Login;
-
-/***/ },
-/* 330 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _reactGeosuggest = __webpack_require__(331);
-
-	var _reactGeosuggest2 = _interopRequireDefault(_reactGeosuggest);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ReactDOM = __webpack_require__(32);
-	var React = __webpack_require__(1);
-
-	var _require = __webpack_require__(184),
-	    Link = _require.Link;
-
-	React.createElement(_reactGeosuggest2.default, null);
-	var axios = __webpack_require__(240);
-
-	var _require2 = __webpack_require__(184),
-	    Route = _require2.Route,
-	    Router = _require2.Router,
-	    IndexRoute = _require2.IndexRoute,
-	    hashHistory = _require2.hashHistory,
-	    browserHistory = _require2.browserHistory;
-
-	var RegisterAddress = React.createClass({
-	    displayName: 'RegisterAddress',
-
-	    getInitialState: function getInitialState() {
-	        return { exists: false,
-	            doesntExist: false,
-	            creationSuccess: false,
-	            openLogin: false
-	        };
-	    },
-	    render: function render() {
-	        var address = this.state.address;
-	        var creationSuccess = this.state.creationSuccess;
-	        var exists = this.state.exists;
-	        var doesntExist = this.state.doesntExist;
-	        var openLogin = this.state.openLogin;
-
-
-	        var fixtures = [];
-	        var that = this;
-	        function checkExist() {
-	            if (exists) {
-	                return React.createElement(
-	                    'div',
-	                    { className: 'buildingExist' },
-	                    React.createElement(
-	                        'h3',
-	                        { className: 'existText' },
-	                        'Your building already exists here, would you like to join the group?'
-	                    ),
-	                    React.createElement(
-	                        'button',
-	                        { className: 'button' },
-	                        React.createElement(
-	                            Link,
-	                            { to: '/register' },
-	                            'Yes'
-	                        )
-	                    )
-	                );
-	            };
-	            if (doesntExist) {
-	                return React.createElement(
-	                    'div',
-	                    { className: 'buildingExist' },
-	                    React.createElement(
-	                        'h3',
-	                        { className: 'existText' },
-	                        'Your building is new here! Do you wanna create it?'
-	                    ),
-	                    React.createElement(
-	                        'button',
-	                        { className: 'button', onClick: that.makeBuilding },
-	                        'Yes!'
-	                    ),
-	                    renderSuccess()
-	                );
-	            }
-	        };
-	        function renderSuccess() {
-	            if (creationSuccess) {
-	                return React.createElement(
-	                    'div',
-	                    { className: 'buildingDontExist' },
-	                    React.createElement(
-	                        'h3',
-	                        { className: 'existText' },
-	                        ' Great! Your building in ',
-	                        React.createElement(
-	                            'span',
-	                            { id: 'createdAddress' },
-	                            ' ',
-	                            address,
-	                            ' '
-	                        ),
-	                        ' was created!',
-	                        React.createElement('br', null),
-	                        'Please register and tell your neighbours to join!'
-	                    ),
-	                    React.createElement(
-	                        'button',
-	                        { className: 'button' },
-	                        React.createElement(
-	                            Link,
-	                            { to: '/register' },
-	                            'Register'
-	                        )
-	                    )
-	                );
-	            }
-	        }
-	        function loginForm() {
-	            if (openLogin) {
-	                return React.createElement(
-	                    'form',
-	                    { className: 'loginForm' },
-	                    React.createElement(
-	                        'div',
-	                        { className: 'loginBoxes' },
-	                        React.createElement(
-	                            'p',
-	                            { className: 'loginText' },
-	                            'Email'
-	                        ),
-	                        React.createElement('input', { type: 'text', ref: 'email', className: 'input-box' }),
-	                        React.createElement(
-	                            'p',
-	                            { className: 'loginText' },
-	                            'Password'
-	                        ),
-	                        React.createElement('input', { type: 'text', ref: 'password', className: 'input-box' })
-	                    ),
-	                    React.createElement(
-	                        'button',
-	                        { className: 'button', id: 'submitLogin', onClick: that.loginUser },
-	                        'Submit'
-	                    ),
-	                    that.state.error ? React.createElement(
-	                        'h4',
-	                        { className: 'userError' },
-	                        'wrong email or password'
-	                    ) : null
-	                );
-	            }
-	        }
-	        return React.createElement(
-	            'div',
-	            null,
-	            React.createElement('img', { className: 'logo-main', src: 'logo_small.png' }),
-	            React.createElement('img', { className: 'building-image', src: 'building.png' }),
-	            React.createElement(
-	                'div',
-	                null,
-	                React.createElement(
-	                    'button',
-	                    { className: 'button', id: 'login-btn', onClick: this.open },
-	                    'Log In'
-	                )
-	            ),
-	            React.createElement(
-	                'div',
-	                { className: 'login-container' },
-	                loginForm()
-	            ),
-	            React.createElement(
-	                'div',
-	                { className: 'addressContainer' },
-	                React.createElement(
-	                    'div',
-	                    null,
-	                    React.createElement(
-	                        'h3',
-	                        { className: 'know-your' },
-	                        'Know your neighbours.'
-	                    )
-	                ),
-	                React.createElement(
-	                    'div',
-	                    { className: 'geo-wrapper' },
-	                    React.createElement(_reactGeosuggest2.default, {
-	                        placeholder: 'Type your address and choose from the list',
-	                        initialValue: '',
-	                        fixtures: fixtures,
-	                        onSuggestSelect: this.onSuggestSelect,
-	                        onKeyPress: this.onKeyPress,
-	                        onSuggestNoResults: this.onSuggestNoResults,
-	                        location: new google.maps.LatLng(53.558572, 9.9278215),
-	                        radius: '20' })
-	                ),
-	                React.createElement(
-	                    'h4',
-	                    { id: 'noAddressResults' },
-	                    'Please submit an address'
-	                ),
-	                React.createElement(
-	                    'button',
-	                    { className: 'button', id: 'submitAddress', onClick: this.saveAddress },
-	                    'Submit'
-	                ),
-	                checkExist()
-	            )
-	        );
-	    },
-	    onSuggestSelect: function onSuggestSelect(suggest) {
-	        this.setState({ suggest: suggest });
-	        document.getElementsByClassName("geosuggest__suggests-wrapper")[0].style.display = "none";
-	    },
-	    onKeyPress: function onKeyPress(event) {
-	        document.getElementsByClassName("geosuggest__suggests-wrapper")[0].style.display = "block";
-	    },
-	    saveAddress: function saveAddress(e) {
-	        e.preventDefault();
-	        var that = this;
-	        var suggest = this.state.suggest;
-	        var address = suggest.label;
-	        var placeId = suggest.placeId;
-	        axios.post('/checkBuilding', {
-	            address: address,
-	            placeId: placeId
-	        }).then(function (res) {
-	            if (res.data.success === true) {
-	                that.setState({
-	                    exists: true
-	                });
-	            } else {
-	                that.setState({
-	                    doesntExist: true
-	                });
-	            }
-	        });
-	    },
-	    makeBuilding: function makeBuilding(e) {
-	        e.preventDefault();
-	        var that = this;
-	        axios.get('/registerBuilding').then(function (result) {
-	            that.setState({
-	                creationSuccess: true,
-	                address: result.data.file
-	            });
-	        });
-	    },
-
-	    open: function open() {
-	        if (this.state.openLogin === false) {
-	            this.setState({
-	                openLogin: true
-	            });
-	        } else {
-	            this.setState({
-	                openLogin: false
-	            });
-	        }
-	    },
-
-	    loginUser: function loginUser() {
-	        var that = this;
-	        var email = this.refs.email.value;
-	        var password = this.refs.password.value;
-	        axios.post('/checkUser', {
-	            email: email,
-	            password: password
-	        }).then(function (res) {
-	            console.log('heyyyy');
-	            if (res.data.success === true) {
-	                var user = {
-	                    id: res.data.file.user.id
-	                };
-	                socket.emit('newUser', user);
-
-	                window.location.href = "#/connectArea";
-	            } else {
-	                console.log('blaaa');
-	                that.setState({ error: true });
-	            }
-	        });
-	    }
-
-	});
-
-	module.exports = RegisterAddress;
-
-/***/ },
-/* 331 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _classnames = __webpack_require__(332);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var _lodash = __webpack_require__(333);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _defaults = __webpack_require__(334);
-
-	var _defaults2 = _interopRequireDefault(_defaults);
-
-	var _propTypes = __webpack_require__(335);
-
-	var _propTypes2 = _interopRequireDefault(_propTypes);
-
-	var _filterInputAttributes = __webpack_require__(336);
-
-	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
-
-	var _input = __webpack_require__(337);
-
-	var _input2 = _interopRequireDefault(_input);
-
-	var _suggestList = __webpack_require__(341);
-
-	var _suggestList2 = _interopRequireDefault(_suggestList);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global window */
-
-	// Escapes special characters in user input for regex
-	function escapeRegExp(str) {
-	  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-	}
-
-	/**
-	 * Entry point for the Geosuggest component
-	 */
-
-	var Geosuggest = function (_React$Component) {
-	  _inherits(Geosuggest, _React$Component);
-
-	  /**
-	   * The constructor. Sets the initial state.
-	   * @param  {Object} props The properties object.
-	   */
-	  function Geosuggest(props) {
-	    _classCallCheck(this, Geosuggest);
-
-	    var _this = _possibleConstructorReturn(this, (Geosuggest.__proto__ || Object.getPrototypeOf(Geosuggest)).call(this, props));
-
-	    _this.onInputChange = function (userInput) {
-	      _this.setState({ userInput: userInput }, _this.onAfterInputChange);
-	    };
-
-	    _this.onAfterInputChange = function () {
-	      if (!_this.state.isSuggestsHidden) {
-	        _this.showSuggests();
-	      }
-	      _this.props.onChange(_this.state.userInput);
-	    };
-
-	    _this.onInputFocus = function () {
-	      _this.props.onFocus();
-	      _this.showSuggests();
-	    };
-
-	    _this.onInputBlur = function () {
-	      if (!_this.state.ignoreBlur) {
-	        _this.hideSuggests();
-	      }
-	    };
-
-	    _this.onNext = function () {
-	      return _this.activateSuggest('next');
-	    };
-
-	    _this.onPrev = function () {
-	      return _this.activateSuggest('prev');
-	    };
-
-	    _this.onSelect = function () {
-	      return _this.selectSuggest(_this.state.activeSuggest);
-	    };
-
-	    _this.onSuggestMouseDown = function () {
-	      return _this.setState({ ignoreBlur: true });
-	    };
-
-	    _this.onSuggestMouseOut = function () {
-	      return _this.setState({ ignoreBlur: false });
-	    };
-
-	    _this.onSuggestNoResults = function () {
-	      _this.props.onSuggestNoResults(_this.state.userInput);
-	    };
-
-	    _this.hideSuggests = function () {
-	      _this.props.onBlur(_this.state.userInput);
-	      var timer = setTimeout(function () {
-	        _this.setState({
-	          isSuggestsHidden: true,
-	          activeSuggest: null
-	        });
-	      }, 100);
-
-	      _this.setState({ timer: timer });
-	    };
-
-	    _this.selectSuggest = function (suggest) {
-	      if (!suggest) {
-	        suggest = {
-	          label: _this.state.userInput
-	        };
-	      }
-
-	      _this.setState({
-	        isSuggestsHidden: true,
-	        userInput: suggest.label
-	      });
-
-	      if (suggest.location) {
-	        _this.setState({ ignoreBlur: false });
-	        _this.props.onSuggestSelect(suggest);
-	        return;
-	      }
-
-	      _this.geocodeSuggest(suggest);
-	    };
-
-	    _this.state = {
-	      isSuggestsHidden: true,
-	      isLoading: false,
-	      userInput: props.initialValue,
-	      activeSuggest: null,
-	      suggests: [],
-	      timer: null
-	    };
-
-	    _this.onInputChange = _this.onInputChange.bind(_this);
-	    _this.onAfterInputChange = _this.onAfterInputChange.bind(_this);
-
-	    if (props.queryDelay) {
-	      _this.onAfterInputChange = (0, _lodash2.default)(_this.onAfterInputChange, props.queryDelay);
-	    }
-	    return _this;
-	  }
-
-	  /**
-	   * Change inputValue if prop changes
-	   * @param {Object} props The new props
-	   */
-
-
-	  _createClass(Geosuggest, [{
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(props) {
-	      if (this.props.initialValue !== props.initialValue) {
-	        this.setState({ userInput: props.initialValue });
-	      }
-	    }
-
-	    /**
-	     * Called on the client side after component is mounted.
-	     * Google api sdk object will be obtained and cached as a instance property.
-	     * Necessary objects of google api will also be determined and saved.
-	     */
-
-	  }, {
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      if (typeof window === 'undefined') {
-	        return;
-	      }
-
-	      var googleMaps = this.props.googleMaps || window.google && // eslint-disable-line no-extra-parens
-	      window.google.maps || this.googleMaps;
-
-	      /* istanbul ignore next */
-	      if (!googleMaps) {
-	        console.error( // eslint-disable-line no-console
-	        'Google map api was not found in the page.');
-	        return;
-	      }
-	      this.googleMaps = googleMaps;
-
-	      this.autocompleteService = new googleMaps.places.AutocompleteService();
-	      this.geocoder = new googleMaps.Geocoder();
-	    }
-
-	    /**
-	     * When the component will unmount
-	     */
-
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      clearTimeout(this.state.timer);
-	    }
-
-	    /**
-	     * When the input changed
-	     * @param {String} userInput The input value of the user
-	     */
-
-
-	    /**
-	     * On After the input got changed
-	     */
-
-
-	    /**
-	     * When the input gets focused
-	     */
-
-
-	    /**
-	     * When the input gets blurred
-	     */
-
-	  }, {
-	    key: 'focus',
-
-
-	    /**
-	     * Focus the input
-	     */
-	    value: function focus() {
-	      this.refs.input.focus();
-	    }
-
-	    /**
-	     * Update the value of the user input
-	     * @param {String} userInput the new value of the user input
-	     */
-
-	  }, {
-	    key: 'update',
-	    value: function update(userInput) {
-	      this.setState({ userInput: userInput });
-	      this.props.onChange(userInput);
-	    }
-
-	    /*
-	     * Clear the input and close the suggestion pane
-	     */
-
-	  }, {
-	    key: 'clear',
-	    value: function clear() {
-	      this.setState({ userInput: '' }, this.hideSuggests);
-	    }
-
-	    /**
-	     * Search for new suggests
-	     */
-
-	  }, {
-	    key: 'searchSuggests',
-	    value: function searchSuggests() {
-	      var _this2 = this;
-
-	      if (!this.state.userInput) {
-	        this.updateSuggests();
-	        return;
-	      }
-
-	      var options = {
-	        input: this.state.userInput
-	      };
-
-	      ['location', 'radius', 'bounds', 'types'].forEach(function (option) {
-	        if (_this2.props[option]) {
-	          options[option] = _this2.props[option];
-	        }
-	      });
-
-	      if (this.props.country) {
-	        options.componentRestrictions = {
-	          country: this.props.country
-	        };
-	      }
-
-	      this.setState({ isLoading: true }, function () {
-	        _this2.autocompleteService.getPlacePredictions(options, function (suggestsGoogle) {
-	          _this2.setState({ isLoading: false });
-	          _this2.updateSuggests(suggestsGoogle || [], // can be null
-	          function () {
-	            if (_this2.props.autoActivateFirstSuggest && !_this2.state.activeSuggest) {
-	              _this2.activateSuggest('next');
-	            }
-	          });
-	        });
-	      });
-	    }
-
-	    /**
-	     * Update the suggests
-	     * @param {Array} suggestsGoogle The new google suggests
-	     * @param {Function} callback Called once the state has been updated
-	     */
-
-	  }, {
-	    key: 'updateSuggests',
-	    value: function updateSuggests() {
-	      var _this3 = this;
-
-	      var suggestsGoogle = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	      var callback = arguments[1];
-
-	      var suggests = [],
-	          regex = new RegExp(escapeRegExp(this.state.userInput), 'gim'),
-	          skipSuggest = this.props.skipSuggest,
-	          maxFixtures = 10,
-	          fixturesSearched = 0,
-	          activeSuggest = null;
-
-	      this.props.fixtures.forEach(function (suggest) {
-	        if (fixturesSearched >= maxFixtures) {
-	          return;
-	        }
-
-	        if (!skipSuggest(suggest) && suggest.label.match(regex)) {
-	          fixturesSearched++;
-
-	          suggest.placeId = suggest.label;
-	          suggest.isFixture = true;
-	          suggests.push(suggest);
-	        }
-	      });
-
-	      suggestsGoogle.forEach(function (suggest) {
-	        if (!skipSuggest(suggest)) {
-	          suggests.push({
-	            label: _this3.props.getSuggestLabel(suggest),
-	            placeId: suggest.place_id,
-	            isFixture: false
-	          });
-	        }
-	      });
-
-	      activeSuggest = this.updateActiveSuggest(suggests);
-	      this.setState({ suggests: suggests, activeSuggest: activeSuggest }, callback);
-	    }
-
-	    /**
-	     * Return the new activeSuggest object after suggests have been updated
-	     * @param {Array} suggests The new list of suggests
-	     * @return {Object} The new activeSuggest
-	     **/
-
-	  }, {
-	    key: 'updateActiveSuggest',
-	    value: function updateActiveSuggest() {
-	      var suggests = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-
-	      var activeSuggest = this.state.activeSuggest;
-
-	      if (activeSuggest) {
-	        var newSuggest = suggests.find(function (listedSuggest) {
-	          return activeSuggest.placeId === listedSuggest.placeId && activeSuggest.isFixture === listedSuggest.isFixture;
-	        });
-
-	        activeSuggest = newSuggest || null;
-	      }
-
-	      return activeSuggest;
-	    }
-
-	    /**
-	     * Show the suggestions
-	     */
-
-	  }, {
-	    key: 'showSuggests',
-	    value: function showSuggests() {
-	      this.searchSuggests();
-	      this.setState({ isSuggestsHidden: false });
-	    }
-
-	    /**
-	     * Hide the suggestions
-	     */
-
-	  }, {
-	    key: 'activateSuggest',
-
-
-	    /**
-	     * Activate a new suggest
-	     * @param {String} direction The direction in which to activate new suggest
-	     */
-	    value: function activateSuggest(direction) {
-	      // eslint-disable-line complexity
-	      if (this.state.isSuggestsHidden) {
-	        this.showSuggests();
-	        return;
-	      }
-
-	      var suggestsCount = this.state.suggests.length - 1,
-	          next = direction === 'next';
-	      var newActiveSuggest = null,
-	          newIndex = 0,
-	          i = 0;
-
-	      for (i; i <= suggestsCount; i++) {
-	        if (this.state.suggests[i] === this.state.activeSuggest) {
-	          newIndex = next ? i + 1 : i - 1;
-	        }
-	      }
-
-	      if (!this.state.activeSuggest) {
-	        newIndex = next ? 0 : suggestsCount;
-	      }
-
-	      if (newIndex >= 0 && newIndex <= suggestsCount) {
-	        newActiveSuggest = this.state.suggests[newIndex];
-	      }
-
-	      this.props.onActivateSuggest(newActiveSuggest);
-
-	      this.setState({ activeSuggest: newActiveSuggest });
-	    }
-
-	    /**
-	     * When an item got selected
-	     * @param {GeosuggestItem} suggest The selected suggest item
-	     */
-
-	  }, {
-	    key: 'geocodeSuggest',
-
-
-	    /**
-	     * Geocode a suggest
-	     * @param  {Object} suggest The suggest
-	     */
-	    value: function geocodeSuggest(suggest) {
-	      var _this4 = this;
-
-	      this.geocoder.geocode(suggest.placeId && !suggest.isFixture ? { placeId: suggest.placeId } : { address: suggest.label }, function (results, status) {
-	        if (status === _this4.googleMaps.GeocoderStatus.OK) {
-	          var gmaps = results[0],
-	              location = gmaps.geometry.location;
-
-	          suggest.gmaps = gmaps;
-	          suggest.location = {
-	            lat: location.lat(),
-	            lng: location.lng()
-	          };
-	        }
-	        _this4.props.onSuggestSelect(suggest);
-	      });
-	    }
-
-	    /**
-	     * Render the view
-	     * @return {Function} The React element to render
-	     */
-
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var attributes = (0, _filterInputAttributes2.default)(this.props),
-	          classes = (0, _classnames2.default)('geosuggest', this.props.className, { 'geosuggest--loading': this.state.isLoading }),
-	          shouldRenderLabel = this.props.label && attributes.id,
-	          input = _react2.default.createElement(_input2.default, _extends({ className: this.props.inputClassName,
-	        ref: 'input',
-	        value: this.state.userInput,
-	        ignoreEnter: !this.state.isSuggestsHidden,
-	        ignoreTab: this.props.ignoreTab,
-	        style: this.props.style.input,
-	        onChange: this.onInputChange,
-	        onFocus: this.onInputFocus,
-	        onBlur: this.onInputBlur,
-	        onKeyPress: this.props.onKeyPress,
-	        onNext: this.onNext,
-	        onPrev: this.onPrev,
-	        onSelect: this.onSelect,
-	        onEscape: this.hideSuggests }, attributes)),
-	          suggestionsList = _react2.default.createElement(_suggestList2.default, { isHidden: this.state.isSuggestsHidden,
-	        style: this.props.style.suggests,
-	        suggestItemStyle: this.props.style.suggestItem,
-	        suggests: this.state.suggests,
-	        activeSuggest: this.state.activeSuggest,
-	        onSuggestNoResults: this.onSuggestNoResults,
-	        onSuggestMouseDown: this.onSuggestMouseDown,
-	        onSuggestMouseOut: this.onSuggestMouseOut,
-	        onSuggestSelect: this.selectSuggest });
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: classes },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'geosuggest__input-wrapper' },
-	          shouldRenderLabel && _react2.default.createElement(
-	            'label',
-	            { htmlFor: attributes.id },
-	            this.props.label
-	          ),
-	          input
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'geosuggest__suggests-wrapper' },
-	          suggestionsList
-	        )
-	      );
-	    }
-	  }]);
-
-	  return Geosuggest;
-	}(_react2.default.Component);
-
-	/**
-	 * Types for the properties
-	 * @type {Object}
-	 */
-
-
-	Geosuggest.propTypes = _propTypes2.default;
-
-	/**
-	 * Default values for the properties
-	 * @type {Object}
-	 */
-	Geosuggest.defaultProps = _defaults2.default;
-
-	exports.default = Geosuggest;
-
-/***/ },
-/* 332 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2016 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-
-	(function () {
-		'use strict';
-
-		var hasOwn = {}.hasOwnProperty;
-
-		function classNames () {
-			var classes = [];
-
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-
-				var argType = typeof arg;
-
-				if (argType === 'string' || argType === 'number') {
-					classes.push(arg);
-				} else if (Array.isArray(arg)) {
-					classes.push(classNames.apply(null, arg));
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				}
-			}
-
-			return classes.join(' ');
-		}
-
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	}());
-
-
-/***/ },
-/* 333 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * lodash (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modularize exports="npm" -o ./`
-	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
-	 * Released under MIT license <https://lodash.com/license>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 */
-
-	/** Used as the `TypeError` message for "Functions" methods. */
-	var FUNC_ERROR_TEXT = 'Expected a function';
-
-	/** Used as references for various `Number` constants. */
-	var NAN = 0 / 0;
-
-	/** `Object#toString` result references. */
-	var symbolTag = '[object Symbol]';
-
-	/** Used to match leading and trailing whitespace. */
-	var reTrim = /^\s+|\s+$/g;
-
-	/** Used to detect bad signed hexadecimal string values. */
-	var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
-
-	/** Used to detect binary string values. */
-	var reIsBinary = /^0b[01]+$/i;
-
-	/** Used to detect octal string values. */
-	var reIsOctal = /^0o[0-7]+$/i;
-
-	/** Built-in method references without a dependency on `root`. */
-	var freeParseInt = parseInt;
-
-	/** Detect free variable `global` from Node.js. */
-	var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
-
-	/** Detect free variable `self`. */
-	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-	/** Used as a reference to the global object. */
-	var root = freeGlobal || freeSelf || Function('return this')();
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/**
-	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objectToString = objectProto.toString;
-
-	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeMax = Math.max,
-	    nativeMin = Math.min;
-
-	/**
-	 * Gets the timestamp of the number of milliseconds that have elapsed since
-	 * the Unix epoch (1 January 1970 00:00:00 UTC).
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 2.4.0
-	 * @category Date
-	 * @returns {number} Returns the timestamp.
-	 * @example
-	 *
-	 * _.defer(function(stamp) {
-	 *   console.log(_.now() - stamp);
-	 * }, _.now());
-	 * // => Logs the number of milliseconds it took for the deferred invocation.
-	 */
-	var now = function() {
-	  return root.Date.now();
-	};
-
-	/**
-	 * Creates a debounced function that delays invoking `func` until after `wait`
-	 * milliseconds have elapsed since the last time the debounced function was
-	 * invoked. The debounced function comes with a `cancel` method to cancel
-	 * delayed `func` invocations and a `flush` method to immediately invoke them.
-	 * Provide `options` to indicate whether `func` should be invoked on the
-	 * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
-	 * with the last arguments provided to the debounced function. Subsequent
-	 * calls to the debounced function return the result of the last `func`
-	 * invocation.
-	 *
-	 * **Note:** If `leading` and `trailing` options are `true`, `func` is
-	 * invoked on the trailing edge of the timeout only if the debounced function
-	 * is invoked more than once during the `wait` timeout.
-	 *
-	 * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
-	 * until to the next tick, similar to `setTimeout` with a timeout of `0`.
-	 *
-	 * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
-	 * for details over the differences between `_.debounce` and `_.throttle`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Function
-	 * @param {Function} func The function to debounce.
-	 * @param {number} [wait=0] The number of milliseconds to delay.
-	 * @param {Object} [options={}] The options object.
-	 * @param {boolean} [options.leading=false]
-	 *  Specify invoking on the leading edge of the timeout.
-	 * @param {number} [options.maxWait]
-	 *  The maximum time `func` is allowed to be delayed before it's invoked.
-	 * @param {boolean} [options.trailing=true]
-	 *  Specify invoking on the trailing edge of the timeout.
-	 * @returns {Function} Returns the new debounced function.
-	 * @example
-	 *
-	 * // Avoid costly calculations while the window size is in flux.
-	 * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
-	 *
-	 * // Invoke `sendMail` when clicked, debouncing subsequent calls.
-	 * jQuery(element).on('click', _.debounce(sendMail, 300, {
-	 *   'leading': true,
-	 *   'trailing': false
-	 * }));
-	 *
-	 * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
-	 * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
-	 * var source = new EventSource('/stream');
-	 * jQuery(source).on('message', debounced);
-	 *
-	 * // Cancel the trailing debounced invocation.
-	 * jQuery(window).on('popstate', debounced.cancel);
-	 */
-	function debounce(func, wait, options) {
-	  var lastArgs,
-	      lastThis,
-	      maxWait,
-	      result,
-	      timerId,
-	      lastCallTime,
-	      lastInvokeTime = 0,
-	      leading = false,
-	      maxing = false,
-	      trailing = true;
-
-	  if (typeof func != 'function') {
-	    throw new TypeError(FUNC_ERROR_TEXT);
-	  }
-	  wait = toNumber(wait) || 0;
-	  if (isObject(options)) {
-	    leading = !!options.leading;
-	    maxing = 'maxWait' in options;
-	    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
-	    trailing = 'trailing' in options ? !!options.trailing : trailing;
-	  }
-
-	  function invokeFunc(time) {
-	    var args = lastArgs,
-	        thisArg = lastThis;
-
-	    lastArgs = lastThis = undefined;
-	    lastInvokeTime = time;
-	    result = func.apply(thisArg, args);
-	    return result;
-	  }
-
-	  function leadingEdge(time) {
-	    // Reset any `maxWait` timer.
-	    lastInvokeTime = time;
-	    // Start the timer for the trailing edge.
-	    timerId = setTimeout(timerExpired, wait);
-	    // Invoke the leading edge.
-	    return leading ? invokeFunc(time) : result;
-	  }
-
-	  function remainingWait(time) {
-	    var timeSinceLastCall = time - lastCallTime,
-	        timeSinceLastInvoke = time - lastInvokeTime,
-	        result = wait - timeSinceLastCall;
-
-	    return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
-	  }
-
-	  function shouldInvoke(time) {
-	    var timeSinceLastCall = time - lastCallTime,
-	        timeSinceLastInvoke = time - lastInvokeTime;
-
-	    // Either this is the first call, activity has stopped and we're at the
-	    // trailing edge, the system time has gone backwards and we're treating
-	    // it as the trailing edge, or we've hit the `maxWait` limit.
-	    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
-	      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
-	  }
-
-	  function timerExpired() {
-	    var time = now();
-	    if (shouldInvoke(time)) {
-	      return trailingEdge(time);
-	    }
-	    // Restart the timer.
-	    timerId = setTimeout(timerExpired, remainingWait(time));
-	  }
-
-	  function trailingEdge(time) {
-	    timerId = undefined;
-
-	    // Only invoke if we have `lastArgs` which means `func` has been
-	    // debounced at least once.
-	    if (trailing && lastArgs) {
-	      return invokeFunc(time);
-	    }
-	    lastArgs = lastThis = undefined;
-	    return result;
-	  }
-
-	  function cancel() {
-	    if (timerId !== undefined) {
-	      clearTimeout(timerId);
-	    }
-	    lastInvokeTime = 0;
-	    lastArgs = lastCallTime = lastThis = timerId = undefined;
-	  }
-
-	  function flush() {
-	    return timerId === undefined ? result : trailingEdge(now());
-	  }
-
-	  function debounced() {
-	    var time = now(),
-	        isInvoking = shouldInvoke(time);
-
-	    lastArgs = arguments;
-	    lastThis = this;
-	    lastCallTime = time;
-
-	    if (isInvoking) {
-	      if (timerId === undefined) {
-	        return leadingEdge(lastCallTime);
-	      }
-	      if (maxing) {
-	        // Handle invocations in a tight loop.
-	        timerId = setTimeout(timerExpired, wait);
-	        return invokeFunc(lastCallTime);
-	      }
-	    }
-	    if (timerId === undefined) {
-	      timerId = setTimeout(timerExpired, wait);
-	    }
-	    return result;
-	  }
-	  debounced.cancel = cancel;
-	  debounced.flush = flush;
-	  return debounced;
-	}
-
-	/**
-	 * Checks if `value` is the
-	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
-	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
-	 * @example
-	 *
-	 * _.isObject({});
-	 * // => true
-	 *
-	 * _.isObject([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObject(_.noop);
-	 * // => true
-	 *
-	 * _.isObject(null);
-	 * // => false
-	 */
-	function isObject(value) {
-	  var type = typeof value;
-	  return !!value && (type == 'object' || type == 'function');
-	}
-
-	/**
-	 * Checks if `value` is object-like. A value is object-like if it's not `null`
-	 * and has a `typeof` result of "object".
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 * @example
-	 *
-	 * _.isObjectLike({});
-	 * // => true
-	 *
-	 * _.isObjectLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObjectLike(_.noop);
-	 * // => false
-	 *
-	 * _.isObjectLike(null);
-	 * // => false
-	 */
-	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
-	}
-
-	/**
-	 * Checks if `value` is classified as a `Symbol` primitive or object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
-	 * @example
-	 *
-	 * _.isSymbol(Symbol.iterator);
-	 * // => true
-	 *
-	 * _.isSymbol('abc');
-	 * // => false
-	 */
-	function isSymbol(value) {
-	  return typeof value == 'symbol' ||
-	    (isObjectLike(value) && objectToString.call(value) == symbolTag);
-	}
-
-	/**
-	 * Converts `value` to a number.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to process.
-	 * @returns {number} Returns the number.
-	 * @example
-	 *
-	 * _.toNumber(3.2);
-	 * // => 3.2
-	 *
-	 * _.toNumber(Number.MIN_VALUE);
-	 * // => 5e-324
-	 *
-	 * _.toNumber(Infinity);
-	 * // => Infinity
-	 *
-	 * _.toNumber('3.2');
-	 * // => 3.2
-	 */
-	function toNumber(value) {
-	  if (typeof value == 'number') {
-	    return value;
-	  }
-	  if (isSymbol(value)) {
-	    return NAN;
-	  }
-	  if (isObject(value)) {
-	    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-	    value = isObject(other) ? (other + '') : other;
-	  }
-	  if (typeof value != 'string') {
-	    return value === 0 ? value : +value;
-	  }
-	  value = value.replace(reTrim, '');
-	  var isBinary = reIsBinary.test(value);
-	  return (isBinary || reIsOctal.test(value))
-	    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
-	    : (reIsBadHex.test(value) ? NAN : +value);
-	}
-
-	module.exports = debounce;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 334 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	/* istanbul ignore next */
-	/**
-	 * Default values
-	 */
-	exports.default = {
-	  fixtures: [],
-	  initialValue: '',
-	  placeholder: 'Search places',
-	  disabled: false,
-	  className: '',
-	  inputClassName: '',
-	  location: null,
-	  radius: null,
-	  bounds: null,
-	  country: null,
-	  types: null,
-	  queryDelay: 250,
-	  googleMaps: null,
-	  onActivateSuggest: function onActivateSuggest() {},
-	  onSuggestSelect: function onSuggestSelect() {},
-	  onSuggestNoResults: function onSuggestNoResults() {},
-	  onFocus: function onFocus() {},
-	  onBlur: function onBlur() {},
-	  onChange: function onChange() {},
-	  skipSuggest: function skipSuggest() {},
-	  getSuggestLabel: function getSuggestLabel(suggest) {
-	    return suggest.description;
-	  },
-	  autoActivateFirstSuggest: false,
-	  style: {
-	    'input': {},
-	    'suggests': {},
-	    'suggestItem': {}
-	  },
-	  ignoreTab: false
-	};
-
-/***/ },
-/* 335 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Default values
-	 */
-	exports.default = {
-	  fixtures: _react2.default.PropTypes.array,
-	  initialValue: _react2.default.PropTypes.string,
-	  placeholder: _react2.default.PropTypes.string,
-	  disabled: _react2.default.PropTypes.bool,
-	  className: _react2.default.PropTypes.string,
-	  inputClassName: _react2.default.PropTypes.string,
-	  location: _react2.default.PropTypes.object,
-	  radius: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.number]),
-	  bounds: _react2.default.PropTypes.object,
-	  country: _react2.default.PropTypes.string,
-	  types: _react2.default.PropTypes.array,
-	  queryDelay: _react2.default.PropTypes.number,
-	  googleMaps: _react2.default.PropTypes.object,
-	  onSuggestSelect: _react2.default.PropTypes.func,
-	  onFocus: _react2.default.PropTypes.func,
-	  onBlur: _react2.default.PropTypes.func,
-	  onChange: _react2.default.PropTypes.func,
-	  onKeyPress: _react2.default.PropTypes.func,
-	  skipSuggest: _react2.default.PropTypes.func,
-	  getSuggestLabel: _react2.default.PropTypes.func,
-	  autoActivateFirstSuggest: _react2.default.PropTypes.bool,
-	  style: _react2.default.PropTypes.shape({
-	    input: _react2.default.PropTypes.object,
-	    suggests: _react2.default.PropTypes.object,
-	    suggestItem: _react2.default.PropTypes.object
-	  }),
-	  ignoreTab: _react2.default.PropTypes.bool,
-	  label: _react2.default.PropTypes.string
-	};
-
-/***/ },
-/* 336 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports.default = function (props) {
-	  var attributes = {};
-
-	  allowedAttributes.forEach(function (allowedAttribute) {
-	    if (props[allowedAttribute]) {
-	      attributes[allowedAttribute] = props[allowedAttribute];
-	    }
-	  });
-
-	  return attributes;
-	};
-
-	/**
-	 * Attributes allowed on input elements
-	 */
-	var allowedAttributes = ['autoFocus', 'disabled', 'form', 'formAction', 'formEncType', 'formMethod', 'formNoValidate', 'formTarget', 'height', 'id', 'inputMode', 'maxLength', 'name', 'onClick', 'onContextMenu', 'onCopy', 'onCut', 'onDoubleClick', 'onMouseDown', 'onMouseEnter', 'onMouseLeave', 'onMouseMove', 'onMouseOut', 'onMouseOver', 'onMouseUp', 'onPaste', 'pattern', 'placeholder', 'readOnly', 'required', 'size', 'spellCheck', 'tabIndex'];
-
-	/**
-	 * Filter the properties for only allowed input properties
-	 * @param  {Object} props The properties to filter
-	 * @return {Object} The filtered, allowed properties
-	 */
-
-/***/ },
-/* 337 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactAddonsShallowCompare = __webpack_require__(338);
-
-	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
-
-	var _classnames = __webpack_require__(332);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var _filterInputAttributes = __webpack_require__(336);
-
-	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // eslint-disable-line no-unused-vars
-
-
-	/**
-	 * The input field
-	 * @param {Object} props The component's props
-	 * @return {JSX} The icon component.
-	 */
-	var Input = function (_React$Component) {
-	  _inherits(Input, _React$Component);
-
-	  function Input() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
-	    _classCallCheck(this, Input);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Input.__proto__ || Object.getPrototypeOf(Input)).call.apply(_ref, [this].concat(args))), _this), _this.onChange = function () {
-	      _this.props.onChange(_this.refs.input.value);
-	    }, _this.onFocus = function () {
-	      _this.props.onFocus();
-	    }, _this.onBlur = function () {
-	      _this.props.onBlur();
-	    }, _this.onKeyPress = function (event) {
-	      _this.props.onKeyPress(event);
-	    }, _this.onInputKeyDown = function (event) {
-	      // eslint-disable-line complexity
-	      switch (event.which) {
-	        case 40:
-	          // DOWN
-	          event.preventDefault();
-	          _this.props.onNext();
-	          break;
-	        case 38:
-	          // UP
-	          event.preventDefault();
-	          _this.props.onPrev();
-	          break;
-	        case 13:
-	          // ENTER
-	          if (_this.props.ignoreEnter) {
-	            event.preventDefault();
-	          }
-
-	          _this.props.onSelect();
-	          break;
-	        case 9:
-	          // TAB
-	          if (!_this.props.ignoreTab) {
-	            _this.props.onSelect();
-	          }
-	          break;
-	        case 27:
-	          // ESC
-	          _this.props.onEscape();
-	          break;
-	        /* istanbul ignore next */
-	        default:
-	          break;
-	      }
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  _createClass(Input, [{
-	    key: 'shouldComponentUpdate',
-
-	    /**
-	     * Whether or not the component should update
-	     * @param {Object} nextProps The new properties
-	     * @param {Object} nextState The new state
-	     * @return {Boolean} Update or not?
-	     */
-	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
-	    }
-
-	    /**
-	     * When the input got changed
-	     */
-
-
-	    /**
-	     * When the input got focused
-	     */
-
-
-	    /**
-	     * When the input loses focus
-	     */
-
-
-	    /**
-	     * When a key gets pressed in the input
-	     * @param  {Event} event The keypress event
-	     */
-
-
-	    /**
-	     * When a key gets pressed in the input
-	     * @param  {Event} event The keydown event
-	     */
-
-	  }, {
-	    key: 'focus',
-
-
-	    /**
-	     * Focus the input
-	     */
-	    value: function focus() {
-	      this.refs.input.focus();
-	    }
-
-	    /**
-	     * Render the view
-	     * @return {Function} The React element to render
-	     */
-
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var attributes = (0, _filterInputAttributes2.default)(this.props),
-	          classes = (0, _classnames2.default)('geosuggest__input', this.props.className);
-
-	      return _react2.default.createElement('input', _extends({ className: classes,
-	        ref: 'input',
-	        type: 'text',
-	        autoComplete: 'off'
-	      }, attributes, {
-	        value: this.props.value,
-	        style: this.props.style,
-	        onKeyDown: this.onInputKeyDown,
-	        onChange: this.onChange,
-	        onKeyPress: this.onKeyPress,
-	        onFocus: this.onFocus,
-	        onBlur: this.onBlur }));
-	    }
-	  }]);
-
-	  return Input;
-	}(_react2.default.Component);
-
-	/**
-	 * Default values for the properties
-	 * @type {Object}
-	 */
-
-
-	Input.defaultProps = {
-	  className: '',
-	  value: '',
-	  ignoreTab: false,
-	  onKeyDown: function onKeyDown() {},
-	  onKeyPress: function onKeyPress() {}
-	};
-
-	exports.default = Input;
-
-/***/ },
-/* 338 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(339);
-
-/***/ },
-/* 339 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 */
-
-	'use strict';
-
-	var shallowEqual = __webpack_require__(340);
-
-	/**
-	 * Does a shallow comparison for props and state.
-	 * See ReactComponentWithPureRenderMixin
-	 * See also https://facebook.github.io/react/docs/shallow-compare.html
-	 */
-	function shallowCompare(instance, nextProps, nextState) {
-	  return !shallowEqual(instance.props, nextProps) || !shallowEqual(instance.state, nextState);
-	}
-
-	module.exports = shallowCompare;
-
-/***/ },
-/* 340 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @typechecks
-	 * 
-	 */
-
-	/*eslint-disable no-self-compare */
-
-	'use strict';
-
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-	/**
-	 * inlined Object.is polyfill to avoid requiring consumers ship their own
-	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-	 */
-	function is(x, y) {
-	  // SameValue algorithm
-	  if (x === y) {
-	    // Steps 1-5, 7-10
-	    // Steps 6.b-6.e: +0 != -0
-	    // Added the nonzero y check to make Flow happy, but it is redundant
-	    return x !== 0 || y !== 0 || 1 / x === 1 / y;
-	  } else {
-	    // Step 6.a: NaN == NaN
-	    return x !== x && y !== y;
-	  }
-	}
-
-	/**
-	 * Performs equality by iterating through keys on an object and returning false
-	 * when any key has values which are not strictly equal between the arguments.
-	 * Returns true when the values of all keys are strictly equal.
-	 */
-	function shallowEqual(objA, objB) {
-	  if (is(objA, objB)) {
-	    return true;
-	  }
-
-	  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
-	    return false;
-	  }
-
-	  var keysA = Object.keys(objA);
-	  var keysB = Object.keys(objB);
-
-	  if (keysA.length !== keysB.length) {
-	    return false;
-	  }
-
-	  // Test for A's keys different from B.
-	  for (var i = 0; i < keysA.length; i++) {
-	    if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
-	      return false;
-	    }
-	  }
-
-	  return true;
-	}
-
-	module.exports = shallowEqual;
-
-/***/ },
-/* 341 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactAddonsShallowCompare = __webpack_require__(338);
-
-	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
-
-	var _classnames = __webpack_require__(332);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var _suggestItem = __webpack_require__(342);
-
-	var _suggestItem2 = _interopRequireDefault(_suggestItem);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // eslint-disable-line no-unused-vars
-
-
-	/**
-	 * The list with suggestions. Either from an API or provided as fixture
-	 * @param {Object} props The component's props
-	 * @return {JSX} The icon component.
-	 */
-	var SuggestList = function (_React$Component) {
-	  _inherits(SuggestList, _React$Component);
-
-	  function SuggestList() {
-	    _classCallCheck(this, SuggestList);
-
-	    return _possibleConstructorReturn(this, (SuggestList.__proto__ || Object.getPrototypeOf(SuggestList)).apply(this, arguments));
-	  }
-
-	  _createClass(SuggestList, [{
-	    key: 'shouldComponentUpdate',
-
-	    /**
-	     * Whether or not the component should update
-	     * @param {Object} nextProps The new properties
-	     * @param {Object} nextState The new state
-	     * @return {Boolean} Update or not?
-	     */
-	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
-	    }
-
-	    /**
-	     * Whether or not it is hidden
-	     * @return {Boolean} Hidden or not?
-	     */
-
-	  }, {
-	    key: 'isHidden',
-	    value: function isHidden() {
-	      return this.props.isHidden || this.props.suggests.length === 0;
-	    }
-
-	    /**
-	     * There are new properties available for the list
-	     * @param {Object} nextProps The new properties
-	     */
-
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      if (nextProps.suggests !== this.props.suggests) {
-	        if (nextProps.suggests.length === 0) {
-	          this.props.onSuggestNoResults();
-	        }
-	      }
-	    }
-
-	    /**
-	     * Render the view
-	     * @return {Function} The React element to render
-	     */
-
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var classes = (0, _classnames2.default)('geosuggest__suggests', { 'geosuggest__suggests--hidden': this.isHidden() });
-
-	      return _react2.default.createElement(
-	        'ul',
-	        { className: classes, style: this.props.style },
-	        this.props.suggests.map(function (suggest) {
-	          var isActive = _this2.props.activeSuggest && suggest.placeId === _this2.props.activeSuggest.placeId;
-
-	          return _react2.default.createElement(_suggestItem2.default, { key: suggest.placeId,
-	            className: suggest.className,
-	            suggest: suggest,
-	            style: _this2.props.suggestItemStyle,
-	            isActive: isActive,
-	            onMouseDown: _this2.props.onSuggestMouseDown,
-	            onMouseOut: _this2.props.onSuggestMouseOut,
-	            onSelect: _this2.props.onSuggestSelect });
-	        })
-	      );
-	    }
-	  }]);
-
-	  return SuggestList;
-	}(_react2.default.Component);
-
-	/**
-	 * Default values for the properties
-	 * @type {Object}
-	 */
-
-
-	exports.default = SuggestList;
-	SuggestList.defaultProps = {
-	  isHidden: true,
-	  suggests: []
-	};
-
-/***/ },
-/* 342 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactAddonsShallowCompare = __webpack_require__(338);
-
-	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
-
-	var _classnames = __webpack_require__(332);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	 * A single Geosuggest item in the list
-	 * @param {Object} props The component's props
-	 * @return {JSX} The icon component.
-	 */
-	var SuggestItem = function (_React$Component) {
-	  _inherits(SuggestItem, _React$Component);
-
-	  function SuggestItem() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
-	    _classCallCheck(this, SuggestItem);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SuggestItem.__proto__ || Object.getPrototypeOf(SuggestItem)).call.apply(_ref, [this].concat(args))), _this), _this.onClick = function (event) {
-	      event.preventDefault();
-	      _this.props.onSelect(_this.props.suggest);
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  _createClass(SuggestItem, [{
-	    key: 'shouldComponentUpdate',
-
-	    /**
-	     * Whether or not the component should update
-	     * @param {Object} nextProps The new properties
-	     * @param {Object} nextState The new state
-	     * @return {Boolean} Update or not?
-	     */
-	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
-	    }
-
-	    /**
-	     * When the suggest item got clicked
-	     * @param {Event} event The click event
-	     */
-
-	  }, {
-	    key: 'render',
-
-
-	    /**
-	     * Render the view
-	     * @return {Function} The React element to render
-	     */
-	    value: function render() {
-	      var classes = (0, _classnames2.default)('geosuggest__item', this.props.className, { 'geosuggest__item--active': this.props.isActive });
-
-	      return _react2.default.createElement(
-	        'li',
-	        { className: classes,
-	          style: this.props.style,
-	          onMouseDown: this.props.onMouseDown,
-	          onMouseOut: this.props.onMouseOut,
-	          onClick: this.onClick },
-	        this.props.suggest.label
-	      );
-	    }
-	  }]);
-
-	  return SuggestItem;
-	}(_react2.default.Component);
-
-	/**
-	 * Default values for the properties
-	 * @type {Object}
-	 */
-
-
-	exports.default = SuggestItem;
-	SuggestItem.defaultProps = {
-	  isActive: false,
-	  className: '',
-	  suggest: {}
-	};
-
-/***/ },
-/* 343 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {//! moment.js
@@ -41179,7 +38806,7 @@
 	            module && module.exports) {
 	        try {
 	            oldLocale = globalLocale._abbr;
-	            __webpack_require__(344)("./" + name);
+	            __webpack_require__(323)("./" + name);
 	            // because defineLocale currently also sets the global locale, we
 	            // want to undo that for lazy loaded locales
 	            getSetGlobalLocale(oldLocale);
@@ -43667,229 +41294,229 @@
 
 	})));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(283)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(281)(module)))
 
 /***/ },
-/* 344 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./af": 345,
-		"./af.js": 345,
-		"./ar": 346,
-		"./ar-dz": 347,
-		"./ar-dz.js": 347,
-		"./ar-ly": 348,
-		"./ar-ly.js": 348,
-		"./ar-ma": 349,
-		"./ar-ma.js": 349,
-		"./ar-sa": 350,
-		"./ar-sa.js": 350,
-		"./ar-tn": 351,
-		"./ar-tn.js": 351,
-		"./ar.js": 346,
-		"./az": 352,
-		"./az.js": 352,
-		"./be": 353,
-		"./be.js": 353,
-		"./bg": 354,
-		"./bg.js": 354,
-		"./bn": 356,
-		"./bn.js": 356,
-		"./bo": 357,
-		"./bo.js": 357,
-		"./br": 358,
-		"./br.js": 358,
-		"./bs": 359,
-		"./bs.js": 359,
-		"./ca": 360,
-		"./ca.js": 360,
-		"./cs": 361,
-		"./cs.js": 361,
-		"./cv": 362,
-		"./cv.js": 362,
-		"./cy": 363,
-		"./cy.js": 363,
-		"./da": 364,
-		"./da.js": 364,
-		"./de": 365,
-		"./de-at": 366,
-		"./de-at.js": 366,
-		"./de.js": 365,
-		"./dv": 367,
-		"./dv.js": 367,
-		"./el": 368,
-		"./el.js": 368,
-		"./en-au": 369,
-		"./en-au.js": 369,
-		"./en-ca": 370,
-		"./en-ca.js": 370,
-		"./en-gb": 371,
-		"./en-gb.js": 371,
-		"./en-ie": 372,
-		"./en-ie.js": 372,
-		"./en-nz": 373,
-		"./en-nz.js": 373,
-		"./eo": 374,
-		"./eo.js": 374,
-		"./es": 375,
-		"./es-do": 376,
-		"./es-do.js": 376,
-		"./es.js": 375,
-		"./et": 377,
-		"./et.js": 377,
-		"./eu": 378,
-		"./eu.js": 378,
-		"./fa": 379,
-		"./fa.js": 379,
-		"./fi": 380,
-		"./fi.js": 380,
-		"./fo": 381,
-		"./fo.js": 381,
-		"./fr": 382,
-		"./fr-ca": 383,
-		"./fr-ca.js": 383,
-		"./fr-ch": 384,
-		"./fr-ch.js": 384,
-		"./fr.js": 382,
-		"./fy": 385,
-		"./fy.js": 385,
-		"./gd": 386,
-		"./gd.js": 386,
-		"./gl": 387,
-		"./gl.js": 387,
-		"./he": 388,
-		"./he.js": 388,
-		"./hi": 389,
-		"./hi.js": 389,
-		"./hr": 390,
-		"./hr.js": 390,
-		"./hu": 391,
-		"./hu.js": 391,
-		"./hy-am": 392,
-		"./hy-am.js": 392,
-		"./id": 393,
-		"./id.js": 393,
-		"./is": 394,
-		"./is.js": 394,
-		"./it": 395,
-		"./it.js": 395,
-		"./ja": 396,
-		"./ja.js": 396,
-		"./jv": 397,
-		"./jv.js": 397,
-		"./ka": 398,
-		"./ka.js": 398,
-		"./kk": 399,
-		"./kk.js": 399,
-		"./km": 400,
-		"./km.js": 400,
-		"./ko": 401,
-		"./ko.js": 401,
-		"./ky": 402,
-		"./ky.js": 402,
-		"./lb": 403,
-		"./lb.js": 403,
-		"./lo": 404,
-		"./lo.js": 404,
-		"./lt": 405,
-		"./lt.js": 405,
-		"./lv": 406,
-		"./lv.js": 406,
-		"./me": 407,
-		"./me.js": 407,
-		"./mi": 408,
-		"./mi.js": 408,
-		"./mk": 409,
-		"./mk.js": 409,
-		"./ml": 410,
-		"./ml.js": 410,
-		"./mr": 411,
-		"./mr.js": 411,
-		"./ms": 412,
-		"./ms-my": 413,
-		"./ms-my.js": 413,
-		"./ms.js": 412,
-		"./my": 414,
-		"./my.js": 414,
-		"./nb": 415,
-		"./nb.js": 415,
-		"./ne": 416,
-		"./ne.js": 416,
-		"./nl": 417,
-		"./nl-be": 418,
-		"./nl-be.js": 418,
-		"./nl.js": 417,
-		"./nn": 419,
-		"./nn.js": 419,
-		"./pa-in": 420,
-		"./pa-in.js": 420,
-		"./pl": 421,
-		"./pl.js": 421,
-		"./pt": 422,
-		"./pt-br": 423,
-		"./pt-br.js": 423,
-		"./pt.js": 422,
-		"./ro": 424,
-		"./ro.js": 424,
-		"./ru": 425,
-		"./ru.js": 425,
-		"./se": 426,
-		"./se.js": 426,
-		"./si": 427,
-		"./si.js": 427,
-		"./sk": 428,
-		"./sk.js": 428,
-		"./sl": 429,
-		"./sl.js": 429,
-		"./sq": 430,
-		"./sq.js": 430,
-		"./sr": 431,
-		"./sr-cyrl": 432,
-		"./sr-cyrl.js": 432,
-		"./sr.js": 431,
-		"./ss": 433,
-		"./ss.js": 433,
-		"./sv": 434,
-		"./sv.js": 434,
-		"./sw": 435,
-		"./sw.js": 435,
-		"./ta": 436,
-		"./ta.js": 436,
-		"./te": 437,
-		"./te.js": 437,
-		"./tet": 438,
-		"./tet.js": 438,
-		"./th": 439,
-		"./th.js": 439,
-		"./tl-ph": 440,
-		"./tl-ph.js": 440,
-		"./tlh": 441,
-		"./tlh.js": 441,
-		"./tr": 442,
-		"./tr.js": 442,
-		"./tzl": 443,
-		"./tzl.js": 443,
-		"./tzm": 444,
-		"./tzm-latn": 445,
-		"./tzm-latn.js": 445,
-		"./tzm.js": 444,
-		"./uk": 446,
-		"./uk.js": 446,
-		"./uz": 447,
-		"./uz.js": 447,
-		"./vi": 448,
-		"./vi.js": 448,
-		"./x-pseudo": 449,
-		"./x-pseudo.js": 449,
-		"./yo": 450,
-		"./yo.js": 450,
-		"./zh-cn": 451,
-		"./zh-cn.js": 451,
-		"./zh-hk": 452,
-		"./zh-hk.js": 452,
-		"./zh-tw": 453,
-		"./zh-tw.js": 453
+		"./af": 324,
+		"./af.js": 324,
+		"./ar": 325,
+		"./ar-dz": 326,
+		"./ar-dz.js": 326,
+		"./ar-ly": 327,
+		"./ar-ly.js": 327,
+		"./ar-ma": 328,
+		"./ar-ma.js": 328,
+		"./ar-sa": 329,
+		"./ar-sa.js": 329,
+		"./ar-tn": 330,
+		"./ar-tn.js": 330,
+		"./ar.js": 325,
+		"./az": 331,
+		"./az.js": 331,
+		"./be": 332,
+		"./be.js": 332,
+		"./bg": 333,
+		"./bg.js": 333,
+		"./bn": 334,
+		"./bn.js": 334,
+		"./bo": 335,
+		"./bo.js": 335,
+		"./br": 336,
+		"./br.js": 336,
+		"./bs": 337,
+		"./bs.js": 337,
+		"./ca": 338,
+		"./ca.js": 338,
+		"./cs": 339,
+		"./cs.js": 339,
+		"./cv": 340,
+		"./cv.js": 340,
+		"./cy": 341,
+		"./cy.js": 341,
+		"./da": 342,
+		"./da.js": 342,
+		"./de": 343,
+		"./de-at": 344,
+		"./de-at.js": 344,
+		"./de.js": 343,
+		"./dv": 345,
+		"./dv.js": 345,
+		"./el": 346,
+		"./el.js": 346,
+		"./en-au": 347,
+		"./en-au.js": 347,
+		"./en-ca": 348,
+		"./en-ca.js": 348,
+		"./en-gb": 349,
+		"./en-gb.js": 349,
+		"./en-ie": 350,
+		"./en-ie.js": 350,
+		"./en-nz": 351,
+		"./en-nz.js": 351,
+		"./eo": 352,
+		"./eo.js": 352,
+		"./es": 353,
+		"./es-do": 354,
+		"./es-do.js": 354,
+		"./es.js": 353,
+		"./et": 355,
+		"./et.js": 355,
+		"./eu": 356,
+		"./eu.js": 356,
+		"./fa": 357,
+		"./fa.js": 357,
+		"./fi": 358,
+		"./fi.js": 358,
+		"./fo": 359,
+		"./fo.js": 359,
+		"./fr": 360,
+		"./fr-ca": 361,
+		"./fr-ca.js": 361,
+		"./fr-ch": 362,
+		"./fr-ch.js": 362,
+		"./fr.js": 360,
+		"./fy": 363,
+		"./fy.js": 363,
+		"./gd": 364,
+		"./gd.js": 364,
+		"./gl": 365,
+		"./gl.js": 365,
+		"./he": 366,
+		"./he.js": 366,
+		"./hi": 367,
+		"./hi.js": 367,
+		"./hr": 368,
+		"./hr.js": 368,
+		"./hu": 369,
+		"./hu.js": 369,
+		"./hy-am": 370,
+		"./hy-am.js": 370,
+		"./id": 371,
+		"./id.js": 371,
+		"./is": 372,
+		"./is.js": 372,
+		"./it": 373,
+		"./it.js": 373,
+		"./ja": 374,
+		"./ja.js": 374,
+		"./jv": 375,
+		"./jv.js": 375,
+		"./ka": 376,
+		"./ka.js": 376,
+		"./kk": 377,
+		"./kk.js": 377,
+		"./km": 378,
+		"./km.js": 378,
+		"./ko": 379,
+		"./ko.js": 379,
+		"./ky": 380,
+		"./ky.js": 380,
+		"./lb": 381,
+		"./lb.js": 381,
+		"./lo": 382,
+		"./lo.js": 382,
+		"./lt": 383,
+		"./lt.js": 383,
+		"./lv": 384,
+		"./lv.js": 384,
+		"./me": 385,
+		"./me.js": 385,
+		"./mi": 386,
+		"./mi.js": 386,
+		"./mk": 387,
+		"./mk.js": 387,
+		"./ml": 388,
+		"./ml.js": 388,
+		"./mr": 389,
+		"./mr.js": 389,
+		"./ms": 390,
+		"./ms-my": 391,
+		"./ms-my.js": 391,
+		"./ms.js": 390,
+		"./my": 392,
+		"./my.js": 392,
+		"./nb": 393,
+		"./nb.js": 393,
+		"./ne": 394,
+		"./ne.js": 394,
+		"./nl": 395,
+		"./nl-be": 396,
+		"./nl-be.js": 396,
+		"./nl.js": 395,
+		"./nn": 397,
+		"./nn.js": 397,
+		"./pa-in": 398,
+		"./pa-in.js": 398,
+		"./pl": 399,
+		"./pl.js": 399,
+		"./pt": 400,
+		"./pt-br": 401,
+		"./pt-br.js": 401,
+		"./pt.js": 400,
+		"./ro": 402,
+		"./ro.js": 402,
+		"./ru": 403,
+		"./ru.js": 403,
+		"./se": 404,
+		"./se.js": 404,
+		"./si": 405,
+		"./si.js": 405,
+		"./sk": 406,
+		"./sk.js": 406,
+		"./sl": 407,
+		"./sl.js": 407,
+		"./sq": 408,
+		"./sq.js": 408,
+		"./sr": 409,
+		"./sr-cyrl": 410,
+		"./sr-cyrl.js": 410,
+		"./sr.js": 409,
+		"./ss": 411,
+		"./ss.js": 411,
+		"./sv": 412,
+		"./sv.js": 412,
+		"./sw": 413,
+		"./sw.js": 413,
+		"./ta": 414,
+		"./ta.js": 414,
+		"./te": 415,
+		"./te.js": 415,
+		"./tet": 416,
+		"./tet.js": 416,
+		"./th": 417,
+		"./th.js": 417,
+		"./tl-ph": 418,
+		"./tl-ph.js": 418,
+		"./tlh": 419,
+		"./tlh.js": 419,
+		"./tr": 420,
+		"./tr.js": 420,
+		"./tzl": 421,
+		"./tzl.js": 421,
+		"./tzm": 422,
+		"./tzm-latn": 423,
+		"./tzm-latn.js": 423,
+		"./tzm.js": 422,
+		"./uk": 424,
+		"./uk.js": 424,
+		"./uz": 425,
+		"./uz.js": 425,
+		"./vi": 426,
+		"./vi.js": 426,
+		"./x-pseudo": 427,
+		"./x-pseudo.js": 427,
+		"./yo": 428,
+		"./yo.js": 428,
+		"./zh-cn": 429,
+		"./zh-cn.js": 429,
+		"./zh-hk": 430,
+		"./zh-hk.js": 430,
+		"./zh-tw": 431,
+		"./zh-tw.js": 431
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -43902,11 +41529,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 344;
+	webpackContext.id = 323;
 
 
 /***/ },
-/* 345 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -43914,7 +41541,7 @@
 	//! author : Werner Mollentze : https://github.com/wernerm
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -43984,7 +41611,7 @@
 
 
 /***/ },
-/* 346 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -43994,7 +41621,7 @@
 	//! author : forabi https://github.com/forabi
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -44131,7 +41758,7 @@
 
 
 /***/ },
-/* 347 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -44139,7 +41766,7 @@
 	//! author : Noureddine LOUAHEDJ : https://github.com/noureddineme
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -44195,7 +41822,7 @@
 
 
 /***/ },
-/* 348 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -44203,7 +41830,7 @@
 	//! author : Ali Hmer: https://github.com/kikoanis
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -44326,7 +41953,7 @@
 
 
 /***/ },
-/* 349 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -44335,7 +41962,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -44391,7 +42018,7 @@
 
 
 /***/ },
-/* 350 */
+/* 329 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -44399,7 +42026,7 @@
 	//! author : Suhail Alkowaileet : https://github.com/xsoh
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -44501,7 +42128,7 @@
 
 
 /***/ },
-/* 351 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -44509,7 +42136,7 @@
 	//! author : Nader Toukabri : https://github.com/naderio
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -44565,7 +42192,7 @@
 
 
 /***/ },
-/* 352 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -44573,7 +42200,7 @@
 	//! author : topchiyev : https://github.com/topchiyev
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -44675,7 +42302,7 @@
 
 
 /***/ },
-/* 353 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -44685,7 +42312,7 @@
 	//! Author : Menelion Elensúle : https://github.com/Oire
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -44814,7 +42441,7 @@
 
 
 /***/ },
-/* 354 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -44822,7 +42449,7 @@
 	//! author : Krasen Borisov : https://github.com/kraz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -44909,8 +42536,7 @@
 
 
 /***/ },
-/* 355 */,
-/* 356 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -44918,7 +42544,7 @@
 	//! author : Kaushik Gandhi : https://github.com/kaushikgandhi
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -45034,7 +42660,7 @@
 
 
 /***/ },
-/* 357 */
+/* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -45042,7 +42668,7 @@
 	//! author : Thupten N. Chakrishar : https://github.com/vajradog
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -45158,7 +42784,7 @@
 
 
 /***/ },
-/* 358 */
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -45166,7 +42792,7 @@
 	//! author : Jean-Baptiste Le Duigou : https://github.com/jbleduigou
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -45271,7 +42897,7 @@
 
 
 /***/ },
-/* 359 */
+/* 337 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -45280,7 +42906,7 @@
 	//! based on (hr) translation by Bojan Marković
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -45419,7 +43045,7 @@
 
 
 /***/ },
-/* 360 */
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -45427,7 +43053,7 @@
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -45505,7 +43131,7 @@
 
 
 /***/ },
-/* 361 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -45513,7 +43139,7 @@
 	//! author : petrbela : https://github.com/petrbela
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -45682,7 +43308,7 @@
 
 
 /***/ },
-/* 362 */
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -45690,7 +43316,7 @@
 	//! author : Anatoly Mironov : https://github.com/mirontoli
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -45750,7 +43376,7 @@
 
 
 /***/ },
-/* 363 */
+/* 341 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -45759,7 +43385,7 @@
 	//! author : https://github.com/ryangreaves
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -45836,7 +43462,7 @@
 
 
 /***/ },
-/* 364 */
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -45844,7 +43470,7 @@
 	//! author : Ulrik Nielsen : https://github.com/mrbase
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -45901,7 +43527,7 @@
 
 
 /***/ },
-/* 365 */
+/* 343 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -45911,7 +43537,7 @@
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -45984,7 +43610,7 @@
 
 
 /***/ },
-/* 366 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -45995,7 +43621,7 @@
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46068,7 +43694,7 @@
 
 
 /***/ },
-/* 367 */
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46076,7 +43702,7 @@
 	//! author : Jawish Hameed : https://github.com/jawish
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46173,7 +43799,7 @@
 
 
 /***/ },
-/* 368 */
+/* 346 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46181,7 +43807,7 @@
 	//! author : Aggelos Karalias : https://github.com/mehiel
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46276,7 +43902,7 @@
 
 
 /***/ },
-/* 369 */
+/* 347 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46284,7 +43910,7 @@
 	//! author : Jared Morse : https://github.com/jarcoal
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46348,7 +43974,7 @@
 
 
 /***/ },
-/* 370 */
+/* 348 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46356,7 +43982,7 @@
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46416,7 +44042,7 @@
 
 
 /***/ },
-/* 371 */
+/* 349 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46424,7 +44050,7 @@
 	//! author : Chris Gedrim : https://github.com/chrisgedrim
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46488,7 +44114,7 @@
 
 
 /***/ },
-/* 372 */
+/* 350 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46496,7 +44122,7 @@
 	//! author : Chris Cartlidge : https://github.com/chriscartlidge
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46560,7 +44186,7 @@
 
 
 /***/ },
-/* 373 */
+/* 351 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46568,7 +44194,7 @@
 	//! author : Luke McGregor : https://github.com/lukemcgregor
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46632,7 +44258,7 @@
 
 
 /***/ },
-/* 374 */
+/* 352 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46642,7 +44268,7 @@
 	//!          Se ne, bonvolu korekti kaj avizi min por ke mi povas lerni!
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46710,7 +44336,7 @@
 
 
 /***/ },
-/* 375 */
+/* 353 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46718,7 +44344,7 @@
 	//! author : Julio Napurí : https://github.com/julionc
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46796,14 +44422,14 @@
 
 
 /***/ },
-/* 376 */
+/* 354 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
 	//! locale : Spanish (Dominican Republic) [es-do]
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46881,7 +44507,7 @@
 
 
 /***/ },
-/* 377 */
+/* 355 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46890,7 +44516,7 @@
 	//! improvements : Illimar Tambek : https://github.com/ragulka
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -46966,7 +44592,7 @@
 
 
 /***/ },
-/* 378 */
+/* 356 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -46974,7 +44600,7 @@
 	//! author : Eneko Illarramendi : https://github.com/eillarra
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47037,7 +44663,7 @@
 
 
 /***/ },
-/* 379 */
+/* 357 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47045,7 +44671,7 @@
 	//! author : Ebrahim Byagowi : https://github.com/ebraminio
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47149,7 +44775,7 @@
 
 
 /***/ },
-/* 380 */
+/* 358 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47157,7 +44783,7 @@
 	//! author : Tarmo Aidantausta : https://github.com/bleadof
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47261,7 +44887,7 @@
 
 
 /***/ },
-/* 381 */
+/* 359 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47269,7 +44895,7 @@
 	//! author : Ragnar Johannesen : https://github.com/ragnar123
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47326,7 +44952,7 @@
 
 
 /***/ },
-/* 382 */
+/* 360 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47334,7 +44960,7 @@
 	//! author : John Fischer : https://github.com/jfroffice
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47395,7 +45021,7 @@
 
 
 /***/ },
-/* 383 */
+/* 361 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47403,7 +45029,7 @@
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47460,7 +45086,7 @@
 
 
 /***/ },
-/* 384 */
+/* 362 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47468,7 +45094,7 @@
 	//! author : Gaspard Bucher : https://github.com/gaspard
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47529,7 +45155,7 @@
 
 
 /***/ },
-/* 385 */
+/* 363 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47537,7 +45163,7 @@
 	//! author : Robin van der Vliet : https://github.com/robin0van0der0v
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47607,7 +45233,7 @@
 
 
 /***/ },
-/* 386 */
+/* 364 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47615,7 +45241,7 @@
 	//! author : Jon Ashdown : https://github.com/jonashdown
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47688,7 +45314,7 @@
 
 
 /***/ },
-/* 387 */
+/* 365 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47696,7 +45322,7 @@
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47770,7 +45396,7 @@
 
 
 /***/ },
-/* 388 */
+/* 366 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47780,7 +45406,7 @@
 	//! author : Tal Ater : https://github.com/TalAter
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -47874,7 +45500,7 @@
 
 
 /***/ },
-/* 389 */
+/* 367 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -47882,7 +45508,7 @@
 	//! author : Mayank Singhal : https://github.com/mayanksinghal
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -48003,7 +45629,7 @@
 
 
 /***/ },
-/* 390 */
+/* 368 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -48011,7 +45637,7 @@
 	//! author : Bojan Marković : https://github.com/bmarkovic
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -48153,7 +45779,7 @@
 
 
 /***/ },
-/* 391 */
+/* 369 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -48161,7 +45787,7 @@
 	//! author : Adam Brunner : https://github.com/adambrunner
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -48267,7 +45893,7 @@
 
 
 /***/ },
-/* 392 */
+/* 370 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -48275,7 +45901,7 @@
 	//! author : Armendarabyan : https://github.com/armendarabyan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -48367,7 +45993,7 @@
 
 
 /***/ },
-/* 393 */
+/* 371 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -48376,7 +46002,7 @@
 	//! reference: http://id.wikisource.org/wiki/Pedoman_Umum_Ejaan_Bahasa_Indonesia_yang_Disempurnakan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -48455,7 +46081,7 @@
 
 
 /***/ },
-/* 394 */
+/* 372 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -48463,7 +46089,7 @@
 	//! author : Hinrik Örn Sigurðsson : https://github.com/hinrik
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -48587,7 +46213,7 @@
 
 
 /***/ },
-/* 395 */
+/* 373 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -48596,7 +46222,7 @@
 	//! author: Mattia Larentis: https://github.com/nostalgiaz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -48662,7 +46288,7 @@
 
 
 /***/ },
-/* 396 */
+/* 374 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -48670,7 +46296,7 @@
 	//! author : LI Long : https://github.com/baryon
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -48743,7 +46369,7 @@
 
 
 /***/ },
-/* 397 */
+/* 375 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -48752,7 +46378,7 @@
 	//! reference: http://jv.wikipedia.org/wiki/Basa_Jawa
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -48831,7 +46457,7 @@
 
 
 /***/ },
-/* 398 */
+/* 376 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -48839,7 +46465,7 @@
 	//! author : Irakli Janiashvili : https://github.com/irakli-janiashvili
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -48925,7 +46551,7 @@
 
 
 /***/ },
-/* 399 */
+/* 377 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -48933,7 +46559,7 @@
 	//! authors : Nurlan Rakhimzhanov : https://github.com/nurlan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49017,7 +46643,7 @@
 
 
 /***/ },
-/* 400 */
+/* 378 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49025,7 +46651,7 @@
 	//! author : Kruy Vanna : https://github.com/kruyvanna
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49080,7 +46706,7 @@
 
 
 /***/ },
-/* 401 */
+/* 379 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49089,7 +46715,7 @@
 	//! author : Jeeeyul Lee <jeeeyul@gmail.com>
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49150,7 +46776,7 @@
 
 
 /***/ },
-/* 402 */
+/* 380 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49158,7 +46784,7 @@
 	//! author : Chyngyz Arystan uulu : https://github.com/chyngyz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49243,7 +46869,7 @@
 
 
 /***/ },
-/* 403 */
+/* 381 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49252,7 +46878,7 @@
 	//! author : David Raison : https://github.com/kwisatz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49385,7 +47011,7 @@
 
 
 /***/ },
-/* 404 */
+/* 382 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49393,7 +47019,7 @@
 	//! author : Ryan Hart : https://github.com/ryanhart2
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49460,7 +47086,7 @@
 
 
 /***/ },
-/* 405 */
+/* 383 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49468,7 +47094,7 @@
 	//! author : Mindaugas Mozūras : https://github.com/mmozuras
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49582,7 +47208,7 @@
 
 
 /***/ },
-/* 406 */
+/* 384 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49591,7 +47217,7 @@
 	//! author : Jānis Elmeris : https://github.com/JanisE
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49684,7 +47310,7 @@
 
 
 /***/ },
-/* 407 */
+/* 385 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49692,7 +47318,7 @@
 	//! author : Miodrag Nikač <miodrag@restartit.me> : https://github.com/miodragnikac
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49800,7 +47426,7 @@
 
 
 /***/ },
-/* 408 */
+/* 386 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49808,7 +47434,7 @@
 	//! author : John Corrigan <robbiecloset@gmail.com> : https://github.com/johnideal
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49869,7 +47495,7 @@
 
 
 /***/ },
-/* 409 */
+/* 387 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49877,7 +47503,7 @@
 	//! author : Borislav Mickov : https://github.com/B0k0
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -49964,7 +47590,7 @@
 
 
 /***/ },
-/* 410 */
+/* 388 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -49972,7 +47598,7 @@
 	//! author : Floyd Pink : https://github.com/floydpink
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -50050,7 +47676,7 @@
 
 
 /***/ },
-/* 411 */
+/* 389 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -50059,7 +47685,7 @@
 	//! author : Vivek Athalye : https://github.com/vnathalye
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -50214,7 +47840,7 @@
 
 
 /***/ },
-/* 412 */
+/* 390 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -50222,7 +47848,7 @@
 	//! author : Weldan Jamili : https://github.com/weldan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -50301,7 +47927,7 @@
 
 
 /***/ },
-/* 413 */
+/* 391 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -50310,7 +47936,7 @@
 	//! author : Weldan Jamili : https://github.com/weldan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -50389,7 +48015,7 @@
 
 
 /***/ },
-/* 414 */
+/* 392 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -50399,7 +48025,7 @@
 	//! author : Tin Aung Lin : https://github.com/thanyawzinmin
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -50490,7 +48116,7 @@
 
 
 /***/ },
-/* 415 */
+/* 393 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -50499,7 +48125,7 @@
 	//!           Sigurd Gartmann : https://github.com/sigurdga
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -50558,7 +48184,7 @@
 
 
 /***/ },
-/* 416 */
+/* 394 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -50566,7 +48192,7 @@
 	//! author : suvash : https://github.com/suvash
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -50686,7 +48312,7 @@
 
 
 /***/ },
-/* 417 */
+/* 395 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -50695,7 +48321,7 @@
 	//! author : Jacob Middag : https://github.com/middagj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -50777,7 +48403,7 @@
 
 
 /***/ },
-/* 418 */
+/* 396 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -50786,7 +48412,7 @@
 	//! author : Jacob Middag : https://github.com/middagj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -50868,7 +48494,7 @@
 
 
 /***/ },
-/* 419 */
+/* 397 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -50876,7 +48502,7 @@
 	//! author : https://github.com/mechuwind
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -50933,7 +48559,7 @@
 
 
 /***/ },
-/* 420 */
+/* 398 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -50941,7 +48567,7 @@
 	//! author : Harpreet Singh : https://github.com/harpreetkhalsagtbit
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -51062,7 +48688,7 @@
 
 
 /***/ },
-/* 421 */
+/* 399 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -51070,7 +48696,7 @@
 	//! author : Rafal Hirsz : https://github.com/evoL
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -51172,7 +48798,7 @@
 
 
 /***/ },
-/* 422 */
+/* 400 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -51180,7 +48806,7 @@
 	//! author : Jefferson : https://github.com/jalex79
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -51242,7 +48868,7 @@
 
 
 /***/ },
-/* 423 */
+/* 401 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -51250,7 +48876,7 @@
 	//! author : Caio Ribeiro Pereira : https://github.com/caio-ribeiro-pereira
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -51308,7 +48934,7 @@
 
 
 /***/ },
-/* 424 */
+/* 402 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -51317,7 +48943,7 @@
 	//! author : Valentin Agachi : https://github.com/avaly
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -51388,7 +49014,7 @@
 
 
 /***/ },
-/* 425 */
+/* 403 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -51398,7 +49024,7 @@
 	//! author : Коренберг Марк : https://github.com/socketpair
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -51576,7 +49202,7 @@
 
 
 /***/ },
-/* 426 */
+/* 404 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -51584,7 +49210,7 @@
 	//! authors : Bård Rolstad Henriksen : https://github.com/karamell
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -51642,7 +49268,7 @@
 
 
 /***/ },
-/* 427 */
+/* 405 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -51650,7 +49276,7 @@
 	//! author : Sampath Sitinamaluwa : https://github.com/sampathsris
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -51718,7 +49344,7 @@
 
 
 /***/ },
-/* 428 */
+/* 406 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -51727,7 +49353,7 @@
 	//! based on work of petrbela : https://github.com/petrbela
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -51873,7 +49499,7 @@
 
 
 /***/ },
-/* 429 */
+/* 407 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -51881,7 +49507,7 @@
 	//! author : Robert Sedovšek : https://github.com/sedovsek
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52040,7 +49666,7 @@
 
 
 /***/ },
-/* 430 */
+/* 408 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52050,7 +49676,7 @@
 	//! author : Oerd Cukalla : https://github.com/oerd
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52115,7 +49741,7 @@
 
 
 /***/ },
-/* 431 */
+/* 409 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52123,7 +49749,7 @@
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52230,7 +49856,7 @@
 
 
 /***/ },
-/* 432 */
+/* 410 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52238,7 +49864,7 @@
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52345,7 +49971,7 @@
 
 
 /***/ },
-/* 433 */
+/* 411 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52353,7 +49979,7 @@
 	//! author : Nicolai Davies<mail@nicolai.io> : https://github.com/nicolaidavies
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52439,7 +50065,7 @@
 
 
 /***/ },
-/* 434 */
+/* 412 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52447,7 +50073,7 @@
 	//! author : Jens Alm : https://github.com/ulmus
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52513,7 +50139,7 @@
 
 
 /***/ },
-/* 435 */
+/* 413 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52521,7 +50147,7 @@
 	//! author : Fahad Kassim : https://github.com/fadsel
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52577,7 +50203,7 @@
 
 
 /***/ },
-/* 436 */
+/* 414 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52585,7 +50211,7 @@
 	//! author : Arjunkumar Krishnamoorthy : https://github.com/tk120404
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52712,7 +50338,7 @@
 
 
 /***/ },
-/* 437 */
+/* 415 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52720,7 +50346,7 @@
 	//! author : Krishna Chaitanya Thota : https://github.com/kcthota
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52806,7 +50432,7 @@
 
 
 /***/ },
-/* 438 */
+/* 416 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52815,7 +50441,7 @@
 	//! author : Onorio De J. Afonso : https://github.com/marobo
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52879,7 +50505,7 @@
 
 
 /***/ },
-/* 439 */
+/* 417 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52887,7 +50513,7 @@
 	//! author : Kridsada Thanabulpong : https://github.com/sirn
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -52951,7 +50577,7 @@
 
 
 /***/ },
-/* 440 */
+/* 418 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -52959,7 +50585,7 @@
 	//! author : Dan Hagman : https://github.com/hagmandan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53018,7 +50644,7 @@
 
 
 /***/ },
-/* 441 */
+/* 419 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53026,7 +50652,7 @@
 	//! author : Dominika Kruk : https://github.com/amaranthrose
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53143,7 +50769,7 @@
 
 
 /***/ },
-/* 442 */
+/* 420 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53152,7 +50778,7 @@
 	//!           Burak Yiğit Kaya: https://github.com/BYK
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53238,7 +50864,7 @@
 
 
 /***/ },
-/* 443 */
+/* 421 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53247,7 +50873,7 @@
 	//! author : Iustì Canun
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53334,7 +50960,7 @@
 
 
 /***/ },
-/* 444 */
+/* 422 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53342,7 +50968,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53397,7 +51023,7 @@
 
 
 /***/ },
-/* 445 */
+/* 423 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53405,7 +51031,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53460,7 +51086,7 @@
 
 
 /***/ },
-/* 446 */
+/* 424 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53469,7 +51095,7 @@
 	//! Author : Menelion Elensúle : https://github.com/Oire
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53611,7 +51237,7 @@
 
 
 /***/ },
-/* 447 */
+/* 425 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53619,7 +51245,7 @@
 	//! author : Sardor Muminov : https://github.com/muminoff
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53674,7 +51300,7 @@
 
 
 /***/ },
-/* 448 */
+/* 426 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53682,7 +51308,7 @@
 	//! author : Bang Nguyen : https://github.com/bangnk
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53758,7 +51384,7 @@
 
 
 /***/ },
-/* 449 */
+/* 427 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53766,7 +51392,7 @@
 	//! author : Andrew Hood : https://github.com/andrewhood125
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53831,7 +51457,7 @@
 
 
 /***/ },
-/* 450 */
+/* 428 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53839,7 +51465,7 @@
 	//! author : Atolagbe Abisoye : https://github.com/andela-batolagbe
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -53896,7 +51522,7 @@
 
 
 /***/ },
-/* 451 */
+/* 429 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -53905,7 +51531,7 @@
 	//! author : Zeno Zeng : https://github.com/zenozeng
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -54028,7 +51654,7 @@
 
 
 /***/ },
-/* 452 */
+/* 430 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -54038,7 +51664,7 @@
 	//! author : Konstantin : https://github.com/skfd
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -54138,7 +51764,7 @@
 
 
 /***/ },
-/* 453 */
+/* 431 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -54147,7 +51773,7 @@
 	//! author : Chris Lam : https://github.com/hehachris
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(343)) :
+	    true ? factory(__webpack_require__(322)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -54245,6 +51871,2387 @@
 
 	})));
 
+
+/***/ },
+/* 432 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _socket = __webpack_require__(270);
+
+	var _socket2 = _interopRequireDefault(_socket);
+
+	var _moment = __webpack_require__(322);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(1);
+
+	var socket = (0, _socket2.default)('/');
+
+	var generalChat = function (_React$Component) {
+	    _inherits(generalChat, _React$Component);
+
+	    function generalChat(props) {
+	        _classCallCheck(this, generalChat);
+
+	        var _this = _possibleConstructorReturn(this, (generalChat.__proto__ || Object.getPrototypeOf(generalChat)).call(this, props));
+
+	        var that = _this;
+	        _this.state = {
+	            messages: []
+	        };
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        _this.sendMessage = _this.sendMessage.bind(_this);
+	        _this.componentDidMount = _this.componentDidMount.bind(_this);
+	        _this.messageRecieve = _this.messageRecieve.bind(_this);
+
+	        var buildingId = _this.props.details.buildingId;
+
+	        axios.get('/getGeneralMessages/' + buildingId).then(function (result) {
+	            that.setState({
+	                messages: result.data.file
+	            });
+	        });
+	        return _this;
+	    }
+
+	    _createClass(generalChat, [{
+	        key: 'render',
+	        value: function render() {
+	            var that = this;
+	            var address = this.props.details.user.address;
+
+	            var messages = that.state.messages.map(function (message) {
+	                return React.createElement(
+	                    'div',
+	                    { className: 'messagesContainer' },
+	                    React.createElement('div', { className: 'chatCircle' }),
+	                    React.createElement(
+	                        'div',
+	                        { className: 'messageBox', id: message.id },
+	                        React.createElement(
+	                            'h4',
+	                            { className: 'messageText' },
+	                            message.message
+	                        ),
+	                        React.createElement(
+	                            'h5',
+	                            { className: 'messageName' },
+	                            message.firstname,
+	                            ' ',
+	                            message.lastname,
+	                            ' | posted  ',
+	                            (0, _moment2.default)(message.created_at).fromNow()
+	                        )
+	                    )
+	                );
+	            });
+
+	            return React.createElement(
+	                'div',
+	                null,
+	                React.createElement(
+	                    'div',
+	                    { className: 'chatUpperStreep' },
+	                    React.createElement(
+	                        'h3',
+	                        null,
+	                        '#',
+	                        address
+	                    ),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'button', id: 'logOutButton', onClick: this.logOut },
+	                        'Log Out'
+	                    )
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'inputAndChat' },
+	                    React.createElement(
+	                        'div',
+	                        { className: 'conversationsArea', ref: 'scrollDiv', onFocus: this.scrolling },
+	                        React.createElement(
+	                            'div',
+	                            null,
+	                            messages
+	                        )
+	                    ),
+	                    React.createElement(
+	                        'div',
+	                        { className: 'chatContainer' },
+	                        React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.newMessage, onChange: this.handleChange }),
+	                        React.createElement(
+	                            'button',
+	                            { className: 'button', id: 'send-btn', onClick: this.sendMessage },
+	                            'Send'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            console.log('scrolling');
+	            this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            socket.on('connection', this.connected);
+	            socket.on('disconnection', this.disconnected);
+	            socket.on('send:message', this.messageRecieve);
+	        }
+	    }, {
+	        key: 'connected',
+	        value: function connected() {
+	            console.log('connected!');
+	        }
+	    }, {
+	        key: 'disconnected',
+	        value: function disconnected() {
+	            console.log('disconnected!');
+	        }
+	    }, {
+	        key: 'messageRecieve',
+	        value: function messageRecieve(message) {
+	            var messages = this.state.messages;
+
+	            messages.push(message);
+	            this.setState({ messages: messages });
+	        }
+	    }, {
+	        key: 'sendMessage',
+	        value: function sendMessage(e) {
+	            var that = this;
+	            e.preventDefault();
+	            var newMessage = that.state.newMessage;
+	            if (newMessage.length > 0) {
+	                this.setState({
+	                    newMessage: ""
+	                });
+	                axios.post('insertGeneralMessage', {
+	                    newMessage: newMessage
+	                }).then(function (response) {
+	                    newMessage = response.data.file;
+	                    that.props.onNewMessage(newMessage);
+	                    console.log(that.state.messages);
+	                    socket.emit('send:message', newMessage);
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(event) {
+	            this.setState({ newMessage: event.target.value });
+	        }
+	    }, {
+	        key: 'logOut',
+	        value: function logOut() {
+	            axios.get('logOut').then(function (reponse) {
+	                console.log('logged out');
+	                window.location.href = "#/loggedOut";
+	            });
+	        }
+	    }]);
+
+	    return generalChat;
+	}(React.Component);
+
+	module.exports = generalChat;
+
+/***/ },
+/* 433 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(1);
+
+	var loggedOut = React.createClass({
+	    displayName: "loggedOut",
+
+	    render: function render() {
+	        return React.createElement(
+	            "div",
+	            null,
+	            React.createElement("img", { className: "loggedOutLogo", src: "logo_bigger.png" }),
+	            React.createElement(
+	                "h1",
+	                { className: "know-your", id: "loggedOut" },
+	                "Thank you for using Neighbours! till next time!"
+	            )
+	        );
+	    }
+	});
+
+	module.exports = loggedOut;
+
+/***/ },
+/* 434 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var Logo = __webpack_require__(435);
+
+	var Main = React.createClass({
+	    displayName: 'Main',
+
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            { className: 'main' },
+	            this.props.children
+	        );
+	    }
+	});
+
+	module.exports = Main;
+
+/***/ },
+/* 435 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Logo = React.createClass({
+	    displayName: 'Logo',
+
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                'button',
+	                { className: 'logOutButton', onClick: this.logOut },
+	                'Logout'
+	            )
+	        );
+	    },
+	    logOut: function logOut() {
+	        axios.get('logOut').then(function (reponse) {
+	            console.log('logged out');
+	            window.location.href = "#/loggedOut";
+	        });
+	    }
+	});
+
+	module.exports = Logo;
+
+/***/ },
+/* 436 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(1);
+	var Login = __webpack_require__(437);
+	var RegisterAddress = __webpack_require__(438);
+	var axios = __webpack_require__(240);
+
+	var LoginPage = function (_React$Component) {
+	    _inherits(LoginPage, _React$Component);
+
+	    function LoginPage(props) {
+	        _classCallCheck(this, LoginPage);
+
+	        var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props));
+
+	        axios.get('getAllDetails').then(function (response) {
+	            if (response.data.success === true) {
+	                window.location.href = "#/connectArea";
+	            }
+	        });
+	        return _this;
+	    }
+
+	    _createClass(LoginPage, [{
+	        key: 'render',
+	        value: function render() {
+	            return React.createElement(
+	                'div',
+	                null,
+	                React.createElement(RegisterAddress, null)
+	            );
+	        }
+	    }]);
+
+	    return LoginPage;
+	}(React.Component);
+
+	module.exports = LoginPage;
+
+/***/ },
+/* 437 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var _require = __webpack_require__(184),
+	    Link = _require.Link;
+
+	var Login = React.createClass({
+	    displayName: 'Login',
+
+	    getInitialState: function getInitialState() {
+	        return { error: false };
+	    },
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            { className: 'LoginRegister', id: 'loginMain' },
+	            React.createElement(
+	                'h3',
+	                { id: 'loginHeadline' },
+	                'Already a user?'
+	            ),
+	            React.createElement(
+	                'form',
+	                null,
+	                React.createElement(
+	                    'div',
+	                    null,
+	                    React.createElement('input', { type: 'text', placeholder: 'email', ref: 'email' })
+	                ),
+	                React.createElement(
+	                    'div',
+	                    null,
+	                    React.createElement('input', { type: 'text', placeholder: 'password', ref: 'password' })
+	                ),
+	                React.createElement(
+	                    'button',
+	                    { className: 'button', onClick: this.loginUser },
+	                    'Log in'
+	                )
+	            ),
+	            this.state.error ? React.createElement(
+	                'h4',
+	                { className: 'userError' },
+	                'wrong email or password'
+	            ) : null
+	        );
+	    },
+	    loginUser: function loginUser() {
+	        var that = this;
+	        var email = this.refs.email.value;
+	        var password = this.refs.password.value;
+	        axios.post('/checkUser', {
+	            email: email,
+	            password: password
+	        }).then(function (res) {
+	            console.log('heyyyy');
+	            if (res.data.success === true) {
+	                console.log('trueee');
+	                var user = {
+	                    id: res.data.file.user.id
+	                };
+	                socket.emit('newUser', user);
+
+	                window.location.href = "#/connectArea";
+	            } else {
+	                console.log('blaaa');
+	                that.setState({ error: true });
+	            }
+	        });
+	    }
+
+	});
+
+	module.exports = Login;
+
+/***/ },
+/* 438 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _reactGeosuggest = __webpack_require__(439);
+
+	var _reactGeosuggest2 = _interopRequireDefault(_reactGeosuggest);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ReactDOM = __webpack_require__(32);
+	var React = __webpack_require__(1);
+
+	var _require = __webpack_require__(184),
+	    Link = _require.Link;
+
+	React.createElement(_reactGeosuggest2.default, null);
+	var axios = __webpack_require__(240);
+
+	var _require2 = __webpack_require__(184),
+	    Route = _require2.Route,
+	    Router = _require2.Router,
+	    IndexRoute = _require2.IndexRoute,
+	    hashHistory = _require2.hashHistory,
+	    browserHistory = _require2.browserHistory;
+
+	var RegisterAddress = React.createClass({
+	    displayName: 'RegisterAddress',
+
+	    getInitialState: function getInitialState() {
+	        return { exists: false,
+	            doesntExist: false,
+	            creationSuccess: false,
+	            openLogin: false
+	        };
+	    },
+	    render: function render() {
+	        var address = this.state.address;
+	        var creationSuccess = this.state.creationSuccess;
+	        var exists = this.state.exists;
+	        var doesntExist = this.state.doesntExist;
+	        var openLogin = this.state.openLogin;
+
+
+	        var fixtures = [];
+	        var that = this;
+	        function checkExist() {
+	            if (exists) {
+	                return React.createElement(
+	                    'div',
+	                    { className: 'buildingExist' },
+	                    React.createElement(
+	                        'h3',
+	                        { className: 'existText' },
+	                        'Your building already exists here, would you like to join the group?'
+	                    ),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'button' },
+	                        React.createElement(
+	                            Link,
+	                            { to: '/register' },
+	                            'Yes'
+	                        )
+	                    )
+	                );
+	            };
+	            if (doesntExist) {
+	                return React.createElement(
+	                    'div',
+	                    { className: 'buildingExist' },
+	                    React.createElement(
+	                        'h3',
+	                        { className: 'existText' },
+	                        'Your building is new here! Do you wanna create it?'
+	                    ),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'button', onClick: that.makeBuilding },
+	                        'Yes!'
+	                    ),
+	                    renderSuccess()
+	                );
+	            }
+	        };
+	        function renderSuccess() {
+	            if (creationSuccess) {
+	                return React.createElement(
+	                    'div',
+	                    { className: 'buildingDontExist' },
+	                    React.createElement(
+	                        'h3',
+	                        { className: 'existText' },
+	                        ' Great! Your building in ',
+	                        React.createElement(
+	                            'span',
+	                            { id: 'createdAddress' },
+	                            ' ',
+	                            address,
+	                            ' '
+	                        ),
+	                        ' was created!',
+	                        React.createElement('br', null),
+	                        'Please register and tell your neighbours to join!'
+	                    ),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'button' },
+	                        React.createElement(
+	                            Link,
+	                            { to: '/register' },
+	                            'Register'
+	                        )
+	                    )
+	                );
+	            }
+	        }
+	        function loginForm() {
+	            if (openLogin) {
+	                return React.createElement(
+	                    'form',
+	                    { className: 'loginForm' },
+	                    React.createElement(
+	                        'div',
+	                        { className: 'loginBoxes' },
+	                        React.createElement(
+	                            'p',
+	                            { className: 'loginText' },
+	                            'Email'
+	                        ),
+	                        React.createElement('input', { type: 'text', ref: 'email', className: 'input-box' }),
+	                        React.createElement(
+	                            'p',
+	                            { className: 'loginText' },
+	                            'Password'
+	                        ),
+	                        React.createElement('input', { type: 'text', ref: 'password', className: 'input-box' })
+	                    ),
+	                    React.createElement(
+	                        'button',
+	                        { className: 'button', id: 'submitLogin', onClick: that.loginUser },
+	                        'Submit'
+	                    ),
+	                    that.state.error ? React.createElement(
+	                        'h4',
+	                        { className: 'userError' },
+	                        'wrong email or password'
+	                    ) : null
+	                );
+	            }
+	        }
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement('img', { className: 'logo-main', src: 'logo_small.png' }),
+	            React.createElement('img', { className: 'building-image', src: 'building.png' }),
+	            React.createElement(
+	                'div',
+	                null,
+	                React.createElement(
+	                    'button',
+	                    { className: 'button', id: 'login-btn', onClick: this.open },
+	                    'Log In'
+	                )
+	            ),
+	            React.createElement(
+	                'div',
+	                { className: 'login-container' },
+	                loginForm()
+	            ),
+	            React.createElement(
+	                'div',
+	                { className: 'addressContainer' },
+	                React.createElement(
+	                    'div',
+	                    null,
+	                    React.createElement(
+	                        'h3',
+	                        { className: 'know-your' },
+	                        'Know your neighbours.'
+	                    )
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'geo-wrapper' },
+	                    React.createElement(_reactGeosuggest2.default, {
+	                        placeholder: 'Type your address and choose from the list',
+	                        initialValue: '',
+	                        fixtures: fixtures,
+	                        onSuggestSelect: this.onSuggestSelect,
+	                        onKeyPress: this.onKeyPress,
+	                        onSuggestNoResults: this.onSuggestNoResults,
+	                        location: new google.maps.LatLng(53.558572, 9.9278215),
+	                        radius: '20' })
+	                ),
+	                React.createElement(
+	                    'h4',
+	                    { id: 'noAddressResults' },
+	                    'Please submit an address'
+	                ),
+	                React.createElement(
+	                    'button',
+	                    { className: 'button', id: 'submitAddress', onClick: this.saveAddress },
+	                    'Submit'
+	                ),
+	                checkExist()
+	            )
+	        );
+	    },
+	    onSuggestSelect: function onSuggestSelect(suggest) {
+	        this.setState({ suggest: suggest });
+	        document.getElementsByClassName("geosuggest__suggests-wrapper")[0].style.display = "none";
+	    },
+	    onKeyPress: function onKeyPress(event) {
+	        document.getElementsByClassName("geosuggest__suggests-wrapper")[0].style.display = "block";
+	    },
+	    saveAddress: function saveAddress(e) {
+	        e.preventDefault();
+	        var that = this;
+	        var suggest = this.state.suggest;
+	        var address = suggest.label;
+	        var placeId = suggest.placeId;
+	        axios.post('/checkBuilding', {
+	            address: address,
+	            placeId: placeId
+	        }).then(function (res) {
+	            if (res.data.success === true) {
+	                that.setState({
+	                    exists: true
+	                });
+	            } else {
+	                that.setState({
+	                    doesntExist: true
+	                });
+	            }
+	        });
+	    },
+	    makeBuilding: function makeBuilding(e) {
+	        e.preventDefault();
+	        var that = this;
+	        axios.get('/registerBuilding').then(function (result) {
+	            that.setState({
+	                creationSuccess: true,
+	                address: result.data.file
+	            });
+	        });
+	    },
+
+	    open: function open() {
+	        if (this.state.openLogin === false) {
+	            this.setState({
+	                openLogin: true
+	            });
+	        } else {
+	            this.setState({
+	                openLogin: false
+	            });
+	        }
+	    },
+
+	    loginUser: function loginUser() {
+	        var that = this;
+	        var email = this.refs.email.value;
+	        var password = this.refs.password.value;
+	        axios.post('/checkUser', {
+	            email: email,
+	            password: password
+	        }).then(function (res) {
+	            console.log('heyyyy');
+	            if (res.data.success === true) {
+	                var user = {
+	                    id: res.data.file.user.id
+	                };
+	                socket.emit('newUser', user);
+
+	                window.location.href = "#/connectArea";
+	            } else {
+	                console.log('blaaa');
+	                that.setState({ error: true });
+	            }
+	        });
+	    }
+
+	});
+
+	module.exports = RegisterAddress;
+
+/***/ },
+/* 439 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(440);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _lodash = __webpack_require__(441);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _defaults = __webpack_require__(442);
+
+	var _defaults2 = _interopRequireDefault(_defaults);
+
+	var _propTypes = __webpack_require__(443);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _filterInputAttributes = __webpack_require__(444);
+
+	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
+
+	var _input = __webpack_require__(445);
+
+	var _input2 = _interopRequireDefault(_input);
+
+	var _suggestList = __webpack_require__(449);
+
+	var _suggestList2 = _interopRequireDefault(_suggestList);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global window */
+
+	// Escapes special characters in user input for regex
+	function escapeRegExp(str) {
+	  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+	}
+
+	/**
+	 * Entry point for the Geosuggest component
+	 */
+
+	var Geosuggest = function (_React$Component) {
+	  _inherits(Geosuggest, _React$Component);
+
+	  /**
+	   * The constructor. Sets the initial state.
+	   * @param  {Object} props The properties object.
+	   */
+	  function Geosuggest(props) {
+	    _classCallCheck(this, Geosuggest);
+
+	    var _this = _possibleConstructorReturn(this, (Geosuggest.__proto__ || Object.getPrototypeOf(Geosuggest)).call(this, props));
+
+	    _this.onInputChange = function (userInput) {
+	      _this.setState({ userInput: userInput }, _this.onAfterInputChange);
+	    };
+
+	    _this.onAfterInputChange = function () {
+	      if (!_this.state.isSuggestsHidden) {
+	        _this.showSuggests();
+	      }
+	      _this.props.onChange(_this.state.userInput);
+	    };
+
+	    _this.onInputFocus = function () {
+	      _this.props.onFocus();
+	      _this.showSuggests();
+	    };
+
+	    _this.onInputBlur = function () {
+	      if (!_this.state.ignoreBlur) {
+	        _this.hideSuggests();
+	      }
+	    };
+
+	    _this.onNext = function () {
+	      return _this.activateSuggest('next');
+	    };
+
+	    _this.onPrev = function () {
+	      return _this.activateSuggest('prev');
+	    };
+
+	    _this.onSelect = function () {
+	      return _this.selectSuggest(_this.state.activeSuggest);
+	    };
+
+	    _this.onSuggestMouseDown = function () {
+	      return _this.setState({ ignoreBlur: true });
+	    };
+
+	    _this.onSuggestMouseOut = function () {
+	      return _this.setState({ ignoreBlur: false });
+	    };
+
+	    _this.onSuggestNoResults = function () {
+	      _this.props.onSuggestNoResults(_this.state.userInput);
+	    };
+
+	    _this.hideSuggests = function () {
+	      _this.props.onBlur(_this.state.userInput);
+	      var timer = setTimeout(function () {
+	        _this.setState({
+	          isSuggestsHidden: true,
+	          activeSuggest: null
+	        });
+	      }, 100);
+
+	      _this.setState({ timer: timer });
+	    };
+
+	    _this.selectSuggest = function (suggest) {
+	      if (!suggest) {
+	        suggest = {
+	          label: _this.state.userInput
+	        };
+	      }
+
+	      _this.setState({
+	        isSuggestsHidden: true,
+	        userInput: suggest.label
+	      });
+
+	      if (suggest.location) {
+	        _this.setState({ ignoreBlur: false });
+	        _this.props.onSuggestSelect(suggest);
+	        return;
+	      }
+
+	      _this.geocodeSuggest(suggest);
+	    };
+
+	    _this.state = {
+	      isSuggestsHidden: true,
+	      isLoading: false,
+	      userInput: props.initialValue,
+	      activeSuggest: null,
+	      suggests: [],
+	      timer: null
+	    };
+
+	    _this.onInputChange = _this.onInputChange.bind(_this);
+	    _this.onAfterInputChange = _this.onAfterInputChange.bind(_this);
+
+	    if (props.queryDelay) {
+	      _this.onAfterInputChange = (0, _lodash2.default)(_this.onAfterInputChange, props.queryDelay);
+	    }
+	    return _this;
+	  }
+
+	  /**
+	   * Change inputValue if prop changes
+	   * @param {Object} props The new props
+	   */
+
+
+	  _createClass(Geosuggest, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(props) {
+	      if (this.props.initialValue !== props.initialValue) {
+	        this.setState({ userInput: props.initialValue });
+	      }
+	    }
+
+	    /**
+	     * Called on the client side after component is mounted.
+	     * Google api sdk object will be obtained and cached as a instance property.
+	     * Necessary objects of google api will also be determined and saved.
+	     */
+
+	  }, {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      if (typeof window === 'undefined') {
+	        return;
+	      }
+
+	      var googleMaps = this.props.googleMaps || window.google && // eslint-disable-line no-extra-parens
+	      window.google.maps || this.googleMaps;
+
+	      /* istanbul ignore next */
+	      if (!googleMaps) {
+	        console.error( // eslint-disable-line no-console
+	        'Google map api was not found in the page.');
+	        return;
+	      }
+	      this.googleMaps = googleMaps;
+
+	      this.autocompleteService = new googleMaps.places.AutocompleteService();
+	      this.geocoder = new googleMaps.Geocoder();
+	    }
+
+	    /**
+	     * When the component will unmount
+	     */
+
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      clearTimeout(this.state.timer);
+	    }
+
+	    /**
+	     * When the input changed
+	     * @param {String} userInput The input value of the user
+	     */
+
+
+	    /**
+	     * On After the input got changed
+	     */
+
+
+	    /**
+	     * When the input gets focused
+	     */
+
+
+	    /**
+	     * When the input gets blurred
+	     */
+
+	  }, {
+	    key: 'focus',
+
+
+	    /**
+	     * Focus the input
+	     */
+	    value: function focus() {
+	      this.refs.input.focus();
+	    }
+
+	    /**
+	     * Update the value of the user input
+	     * @param {String} userInput the new value of the user input
+	     */
+
+	  }, {
+	    key: 'update',
+	    value: function update(userInput) {
+	      this.setState({ userInput: userInput });
+	      this.props.onChange(userInput);
+	    }
+
+	    /*
+	     * Clear the input and close the suggestion pane
+	     */
+
+	  }, {
+	    key: 'clear',
+	    value: function clear() {
+	      this.setState({ userInput: '' }, this.hideSuggests);
+	    }
+
+	    /**
+	     * Search for new suggests
+	     */
+
+	  }, {
+	    key: 'searchSuggests',
+	    value: function searchSuggests() {
+	      var _this2 = this;
+
+	      if (!this.state.userInput) {
+	        this.updateSuggests();
+	        return;
+	      }
+
+	      var options = {
+	        input: this.state.userInput
+	      };
+
+	      ['location', 'radius', 'bounds', 'types'].forEach(function (option) {
+	        if (_this2.props[option]) {
+	          options[option] = _this2.props[option];
+	        }
+	      });
+
+	      if (this.props.country) {
+	        options.componentRestrictions = {
+	          country: this.props.country
+	        };
+	      }
+
+	      this.setState({ isLoading: true }, function () {
+	        _this2.autocompleteService.getPlacePredictions(options, function (suggestsGoogle) {
+	          _this2.setState({ isLoading: false });
+	          _this2.updateSuggests(suggestsGoogle || [], // can be null
+	          function () {
+	            if (_this2.props.autoActivateFirstSuggest && !_this2.state.activeSuggest) {
+	              _this2.activateSuggest('next');
+	            }
+	          });
+	        });
+	      });
+	    }
+
+	    /**
+	     * Update the suggests
+	     * @param {Array} suggestsGoogle The new google suggests
+	     * @param {Function} callback Called once the state has been updated
+	     */
+
+	  }, {
+	    key: 'updateSuggests',
+	    value: function updateSuggests() {
+	      var _this3 = this;
+
+	      var suggestsGoogle = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	      var callback = arguments[1];
+
+	      var suggests = [],
+	          regex = new RegExp(escapeRegExp(this.state.userInput), 'gim'),
+	          skipSuggest = this.props.skipSuggest,
+	          maxFixtures = 10,
+	          fixturesSearched = 0,
+	          activeSuggest = null;
+
+	      this.props.fixtures.forEach(function (suggest) {
+	        if (fixturesSearched >= maxFixtures) {
+	          return;
+	        }
+
+	        if (!skipSuggest(suggest) && suggest.label.match(regex)) {
+	          fixturesSearched++;
+
+	          suggest.placeId = suggest.label;
+	          suggest.isFixture = true;
+	          suggests.push(suggest);
+	        }
+	      });
+
+	      suggestsGoogle.forEach(function (suggest) {
+	        if (!skipSuggest(suggest)) {
+	          suggests.push({
+	            label: _this3.props.getSuggestLabel(suggest),
+	            placeId: suggest.place_id,
+	            isFixture: false
+	          });
+	        }
+	      });
+
+	      activeSuggest = this.updateActiveSuggest(suggests);
+	      this.setState({ suggests: suggests, activeSuggest: activeSuggest }, callback);
+	    }
+
+	    /**
+	     * Return the new activeSuggest object after suggests have been updated
+	     * @param {Array} suggests The new list of suggests
+	     * @return {Object} The new activeSuggest
+	     **/
+
+	  }, {
+	    key: 'updateActiveSuggest',
+	    value: function updateActiveSuggest() {
+	      var suggests = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+
+	      var activeSuggest = this.state.activeSuggest;
+
+	      if (activeSuggest) {
+	        var newSuggest = suggests.find(function (listedSuggest) {
+	          return activeSuggest.placeId === listedSuggest.placeId && activeSuggest.isFixture === listedSuggest.isFixture;
+	        });
+
+	        activeSuggest = newSuggest || null;
+	      }
+
+	      return activeSuggest;
+	    }
+
+	    /**
+	     * Show the suggestions
+	     */
+
+	  }, {
+	    key: 'showSuggests',
+	    value: function showSuggests() {
+	      this.searchSuggests();
+	      this.setState({ isSuggestsHidden: false });
+	    }
+
+	    /**
+	     * Hide the suggestions
+	     */
+
+	  }, {
+	    key: 'activateSuggest',
+
+
+	    /**
+	     * Activate a new suggest
+	     * @param {String} direction The direction in which to activate new suggest
+	     */
+	    value: function activateSuggest(direction) {
+	      // eslint-disable-line complexity
+	      if (this.state.isSuggestsHidden) {
+	        this.showSuggests();
+	        return;
+	      }
+
+	      var suggestsCount = this.state.suggests.length - 1,
+	          next = direction === 'next';
+	      var newActiveSuggest = null,
+	          newIndex = 0,
+	          i = 0;
+
+	      for (i; i <= suggestsCount; i++) {
+	        if (this.state.suggests[i] === this.state.activeSuggest) {
+	          newIndex = next ? i + 1 : i - 1;
+	        }
+	      }
+
+	      if (!this.state.activeSuggest) {
+	        newIndex = next ? 0 : suggestsCount;
+	      }
+
+	      if (newIndex >= 0 && newIndex <= suggestsCount) {
+	        newActiveSuggest = this.state.suggests[newIndex];
+	      }
+
+	      this.props.onActivateSuggest(newActiveSuggest);
+
+	      this.setState({ activeSuggest: newActiveSuggest });
+	    }
+
+	    /**
+	     * When an item got selected
+	     * @param {GeosuggestItem} suggest The selected suggest item
+	     */
+
+	  }, {
+	    key: 'geocodeSuggest',
+
+
+	    /**
+	     * Geocode a suggest
+	     * @param  {Object} suggest The suggest
+	     */
+	    value: function geocodeSuggest(suggest) {
+	      var _this4 = this;
+
+	      this.geocoder.geocode(suggest.placeId && !suggest.isFixture ? { placeId: suggest.placeId } : { address: suggest.label }, function (results, status) {
+	        if (status === _this4.googleMaps.GeocoderStatus.OK) {
+	          var gmaps = results[0],
+	              location = gmaps.geometry.location;
+
+	          suggest.gmaps = gmaps;
+	          suggest.location = {
+	            lat: location.lat(),
+	            lng: location.lng()
+	          };
+	        }
+	        _this4.props.onSuggestSelect(suggest);
+	      });
+	    }
+
+	    /**
+	     * Render the view
+	     * @return {Function} The React element to render
+	     */
+
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var attributes = (0, _filterInputAttributes2.default)(this.props),
+	          classes = (0, _classnames2.default)('geosuggest', this.props.className, { 'geosuggest--loading': this.state.isLoading }),
+	          shouldRenderLabel = this.props.label && attributes.id,
+	          input = _react2.default.createElement(_input2.default, _extends({ className: this.props.inputClassName,
+	        ref: 'input',
+	        value: this.state.userInput,
+	        ignoreEnter: !this.state.isSuggestsHidden,
+	        ignoreTab: this.props.ignoreTab,
+	        style: this.props.style.input,
+	        onChange: this.onInputChange,
+	        onFocus: this.onInputFocus,
+	        onBlur: this.onInputBlur,
+	        onKeyPress: this.props.onKeyPress,
+	        onNext: this.onNext,
+	        onPrev: this.onPrev,
+	        onSelect: this.onSelect,
+	        onEscape: this.hideSuggests }, attributes)),
+	          suggestionsList = _react2.default.createElement(_suggestList2.default, { isHidden: this.state.isSuggestsHidden,
+	        style: this.props.style.suggests,
+	        suggestItemStyle: this.props.style.suggestItem,
+	        suggests: this.state.suggests,
+	        activeSuggest: this.state.activeSuggest,
+	        onSuggestNoResults: this.onSuggestNoResults,
+	        onSuggestMouseDown: this.onSuggestMouseDown,
+	        onSuggestMouseOut: this.onSuggestMouseOut,
+	        onSuggestSelect: this.selectSuggest });
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: classes },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'geosuggest__input-wrapper' },
+	          shouldRenderLabel && _react2.default.createElement(
+	            'label',
+	            { htmlFor: attributes.id },
+	            this.props.label
+	          ),
+	          input
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'geosuggest__suggests-wrapper' },
+	          suggestionsList
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Geosuggest;
+	}(_react2.default.Component);
+
+	/**
+	 * Types for the properties
+	 * @type {Object}
+	 */
+
+
+	Geosuggest.propTypes = _propTypes2.default;
+
+	/**
+	 * Default values for the properties
+	 * @type {Object}
+	 */
+	Geosuggest.defaultProps = _defaults2.default;
+
+	exports.default = Geosuggest;
+
+/***/ },
+/* 440 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ },
+/* 441 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/**
+	 * lodash (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modularize exports="npm" -o ./`
+	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Released under MIT license <https://lodash.com/license>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 */
+
+	/** Used as the `TypeError` message for "Functions" methods. */
+	var FUNC_ERROR_TEXT = 'Expected a function';
+
+	/** Used as references for various `Number` constants. */
+	var NAN = 0 / 0;
+
+	/** `Object#toString` result references. */
+	var symbolTag = '[object Symbol]';
+
+	/** Used to match leading and trailing whitespace. */
+	var reTrim = /^\s+|\s+$/g;
+
+	/** Used to detect bad signed hexadecimal string values. */
+	var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+	/** Used to detect binary string values. */
+	var reIsBinary = /^0b[01]+$/i;
+
+	/** Used to detect octal string values. */
+	var reIsOctal = /^0o[0-7]+$/i;
+
+	/** Built-in method references without a dependency on `root`. */
+	var freeParseInt = parseInt;
+
+	/** Detect free variable `global` from Node.js. */
+	var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+	/** Detect free variable `self`. */
+	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+	/** Used as a reference to the global object. */
+	var root = freeGlobal || freeSelf || Function('return this')();
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objectToString = objectProto.toString;
+
+	/* Built-in method references for those with the same name as other `lodash` methods. */
+	var nativeMax = Math.max,
+	    nativeMin = Math.min;
+
+	/**
+	 * Gets the timestamp of the number of milliseconds that have elapsed since
+	 * the Unix epoch (1 January 1970 00:00:00 UTC).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 2.4.0
+	 * @category Date
+	 * @returns {number} Returns the timestamp.
+	 * @example
+	 *
+	 * _.defer(function(stamp) {
+	 *   console.log(_.now() - stamp);
+	 * }, _.now());
+	 * // => Logs the number of milliseconds it took for the deferred invocation.
+	 */
+	var now = function() {
+	  return root.Date.now();
+	};
+
+	/**
+	 * Creates a debounced function that delays invoking `func` until after `wait`
+	 * milliseconds have elapsed since the last time the debounced function was
+	 * invoked. The debounced function comes with a `cancel` method to cancel
+	 * delayed `func` invocations and a `flush` method to immediately invoke them.
+	 * Provide `options` to indicate whether `func` should be invoked on the
+	 * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
+	 * with the last arguments provided to the debounced function. Subsequent
+	 * calls to the debounced function return the result of the last `func`
+	 * invocation.
+	 *
+	 * **Note:** If `leading` and `trailing` options are `true`, `func` is
+	 * invoked on the trailing edge of the timeout only if the debounced function
+	 * is invoked more than once during the `wait` timeout.
+	 *
+	 * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+	 * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+	 *
+	 * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+	 * for details over the differences between `_.debounce` and `_.throttle`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Function
+	 * @param {Function} func The function to debounce.
+	 * @param {number} [wait=0] The number of milliseconds to delay.
+	 * @param {Object} [options={}] The options object.
+	 * @param {boolean} [options.leading=false]
+	 *  Specify invoking on the leading edge of the timeout.
+	 * @param {number} [options.maxWait]
+	 *  The maximum time `func` is allowed to be delayed before it's invoked.
+	 * @param {boolean} [options.trailing=true]
+	 *  Specify invoking on the trailing edge of the timeout.
+	 * @returns {Function} Returns the new debounced function.
+	 * @example
+	 *
+	 * // Avoid costly calculations while the window size is in flux.
+	 * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+	 *
+	 * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+	 * jQuery(element).on('click', _.debounce(sendMail, 300, {
+	 *   'leading': true,
+	 *   'trailing': false
+	 * }));
+	 *
+	 * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+	 * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+	 * var source = new EventSource('/stream');
+	 * jQuery(source).on('message', debounced);
+	 *
+	 * // Cancel the trailing debounced invocation.
+	 * jQuery(window).on('popstate', debounced.cancel);
+	 */
+	function debounce(func, wait, options) {
+	  var lastArgs,
+	      lastThis,
+	      maxWait,
+	      result,
+	      timerId,
+	      lastCallTime,
+	      lastInvokeTime = 0,
+	      leading = false,
+	      maxing = false,
+	      trailing = true;
+
+	  if (typeof func != 'function') {
+	    throw new TypeError(FUNC_ERROR_TEXT);
+	  }
+	  wait = toNumber(wait) || 0;
+	  if (isObject(options)) {
+	    leading = !!options.leading;
+	    maxing = 'maxWait' in options;
+	    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+	    trailing = 'trailing' in options ? !!options.trailing : trailing;
+	  }
+
+	  function invokeFunc(time) {
+	    var args = lastArgs,
+	        thisArg = lastThis;
+
+	    lastArgs = lastThis = undefined;
+	    lastInvokeTime = time;
+	    result = func.apply(thisArg, args);
+	    return result;
+	  }
+
+	  function leadingEdge(time) {
+	    // Reset any `maxWait` timer.
+	    lastInvokeTime = time;
+	    // Start the timer for the trailing edge.
+	    timerId = setTimeout(timerExpired, wait);
+	    // Invoke the leading edge.
+	    return leading ? invokeFunc(time) : result;
+	  }
+
+	  function remainingWait(time) {
+	    var timeSinceLastCall = time - lastCallTime,
+	        timeSinceLastInvoke = time - lastInvokeTime,
+	        result = wait - timeSinceLastCall;
+
+	    return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
+	  }
+
+	  function shouldInvoke(time) {
+	    var timeSinceLastCall = time - lastCallTime,
+	        timeSinceLastInvoke = time - lastInvokeTime;
+
+	    // Either this is the first call, activity has stopped and we're at the
+	    // trailing edge, the system time has gone backwards and we're treating
+	    // it as the trailing edge, or we've hit the `maxWait` limit.
+	    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
+	      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+	  }
+
+	  function timerExpired() {
+	    var time = now();
+	    if (shouldInvoke(time)) {
+	      return trailingEdge(time);
+	    }
+	    // Restart the timer.
+	    timerId = setTimeout(timerExpired, remainingWait(time));
+	  }
+
+	  function trailingEdge(time) {
+	    timerId = undefined;
+
+	    // Only invoke if we have `lastArgs` which means `func` has been
+	    // debounced at least once.
+	    if (trailing && lastArgs) {
+	      return invokeFunc(time);
+	    }
+	    lastArgs = lastThis = undefined;
+	    return result;
+	  }
+
+	  function cancel() {
+	    if (timerId !== undefined) {
+	      clearTimeout(timerId);
+	    }
+	    lastInvokeTime = 0;
+	    lastArgs = lastCallTime = lastThis = timerId = undefined;
+	  }
+
+	  function flush() {
+	    return timerId === undefined ? result : trailingEdge(now());
+	  }
+
+	  function debounced() {
+	    var time = now(),
+	        isInvoking = shouldInvoke(time);
+
+	    lastArgs = arguments;
+	    lastThis = this;
+	    lastCallTime = time;
+
+	    if (isInvoking) {
+	      if (timerId === undefined) {
+	        return leadingEdge(lastCallTime);
+	      }
+	      if (maxing) {
+	        // Handle invocations in a tight loop.
+	        timerId = setTimeout(timerExpired, wait);
+	        return invokeFunc(lastCallTime);
+	      }
+	    }
+	    if (timerId === undefined) {
+	      timerId = setTimeout(timerExpired, wait);
+	    }
+	    return result;
+	  }
+	  debounced.cancel = cancel;
+	  debounced.flush = flush;
+	  return debounced;
+	}
+
+	/**
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(_.noop);
+	 * // => true
+	 *
+	 * _.isObject(null);
+	 * // => false
+	 */
+	function isObject(value) {
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Symbol` primitive or object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+	 * @example
+	 *
+	 * _.isSymbol(Symbol.iterator);
+	 * // => true
+	 *
+	 * _.isSymbol('abc');
+	 * // => false
+	 */
+	function isSymbol(value) {
+	  return typeof value == 'symbol' ||
+	    (isObjectLike(value) && objectToString.call(value) == symbolTag);
+	}
+
+	/**
+	 * Converts `value` to a number.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to process.
+	 * @returns {number} Returns the number.
+	 * @example
+	 *
+	 * _.toNumber(3.2);
+	 * // => 3.2
+	 *
+	 * _.toNumber(Number.MIN_VALUE);
+	 * // => 5e-324
+	 *
+	 * _.toNumber(Infinity);
+	 * // => Infinity
+	 *
+	 * _.toNumber('3.2');
+	 * // => 3.2
+	 */
+	function toNumber(value) {
+	  if (typeof value == 'number') {
+	    return value;
+	  }
+	  if (isSymbol(value)) {
+	    return NAN;
+	  }
+	  if (isObject(value)) {
+	    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+	    value = isObject(other) ? (other + '') : other;
+	  }
+	  if (typeof value != 'string') {
+	    return value === 0 ? value : +value;
+	  }
+	  value = value.replace(reTrim, '');
+	  var isBinary = reIsBinary.test(value);
+	  return (isBinary || reIsOctal.test(value))
+	    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+	    : (reIsBadHex.test(value) ? NAN : +value);
+	}
+
+	module.exports = debounce;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 442 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/* istanbul ignore next */
+	/**
+	 * Default values
+	 */
+	exports.default = {
+	  fixtures: [],
+	  initialValue: '',
+	  placeholder: 'Search places',
+	  disabled: false,
+	  className: '',
+	  inputClassName: '',
+	  location: null,
+	  radius: null,
+	  bounds: null,
+	  country: null,
+	  types: null,
+	  queryDelay: 250,
+	  googleMaps: null,
+	  onActivateSuggest: function onActivateSuggest() {},
+	  onSuggestSelect: function onSuggestSelect() {},
+	  onSuggestNoResults: function onSuggestNoResults() {},
+	  onFocus: function onFocus() {},
+	  onBlur: function onBlur() {},
+	  onChange: function onChange() {},
+	  skipSuggest: function skipSuggest() {},
+	  getSuggestLabel: function getSuggestLabel(suggest) {
+	    return suggest.description;
+	  },
+	  autoActivateFirstSuggest: false,
+	  style: {
+	    'input': {},
+	    'suggests': {},
+	    'suggestItem': {}
+	  },
+	  ignoreTab: false
+	};
+
+/***/ },
+/* 443 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Default values
+	 */
+	exports.default = {
+	  fixtures: _react2.default.PropTypes.array,
+	  initialValue: _react2.default.PropTypes.string,
+	  placeholder: _react2.default.PropTypes.string,
+	  disabled: _react2.default.PropTypes.bool,
+	  className: _react2.default.PropTypes.string,
+	  inputClassName: _react2.default.PropTypes.string,
+	  location: _react2.default.PropTypes.object,
+	  radius: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.number]),
+	  bounds: _react2.default.PropTypes.object,
+	  country: _react2.default.PropTypes.string,
+	  types: _react2.default.PropTypes.array,
+	  queryDelay: _react2.default.PropTypes.number,
+	  googleMaps: _react2.default.PropTypes.object,
+	  onSuggestSelect: _react2.default.PropTypes.func,
+	  onFocus: _react2.default.PropTypes.func,
+	  onBlur: _react2.default.PropTypes.func,
+	  onChange: _react2.default.PropTypes.func,
+	  onKeyPress: _react2.default.PropTypes.func,
+	  skipSuggest: _react2.default.PropTypes.func,
+	  getSuggestLabel: _react2.default.PropTypes.func,
+	  autoActivateFirstSuggest: _react2.default.PropTypes.bool,
+	  style: _react2.default.PropTypes.shape({
+	    input: _react2.default.PropTypes.object,
+	    suggests: _react2.default.PropTypes.object,
+	    suggestItem: _react2.default.PropTypes.object
+	  }),
+	  ignoreTab: _react2.default.PropTypes.bool,
+	  label: _react2.default.PropTypes.string
+	};
+
+/***/ },
+/* 444 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports.default = function (props) {
+	  var attributes = {};
+
+	  allowedAttributes.forEach(function (allowedAttribute) {
+	    if (props[allowedAttribute]) {
+	      attributes[allowedAttribute] = props[allowedAttribute];
+	    }
+	  });
+
+	  return attributes;
+	};
+
+	/**
+	 * Attributes allowed on input elements
+	 */
+	var allowedAttributes = ['autoFocus', 'disabled', 'form', 'formAction', 'formEncType', 'formMethod', 'formNoValidate', 'formTarget', 'height', 'id', 'inputMode', 'maxLength', 'name', 'onClick', 'onContextMenu', 'onCopy', 'onCut', 'onDoubleClick', 'onMouseDown', 'onMouseEnter', 'onMouseLeave', 'onMouseMove', 'onMouseOut', 'onMouseOver', 'onMouseUp', 'onPaste', 'pattern', 'placeholder', 'readOnly', 'required', 'size', 'spellCheck', 'tabIndex'];
+
+	/**
+	 * Filter the properties for only allowed input properties
+	 * @param  {Object} props The properties to filter
+	 * @return {Object} The filtered, allowed properties
+	 */
+
+/***/ },
+/* 445 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsShallowCompare = __webpack_require__(446);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
+	var _classnames = __webpack_require__(440);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _filterInputAttributes = __webpack_require__(444);
+
+	var _filterInputAttributes2 = _interopRequireDefault(_filterInputAttributes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // eslint-disable-line no-unused-vars
+
+
+	/**
+	 * The input field
+	 * @param {Object} props The component's props
+	 * @return {JSX} The icon component.
+	 */
+	var Input = function (_React$Component) {
+	  _inherits(Input, _React$Component);
+
+	  function Input() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, Input);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Input.__proto__ || Object.getPrototypeOf(Input)).call.apply(_ref, [this].concat(args))), _this), _this.onChange = function () {
+	      _this.props.onChange(_this.refs.input.value);
+	    }, _this.onFocus = function () {
+	      _this.props.onFocus();
+	    }, _this.onBlur = function () {
+	      _this.props.onBlur();
+	    }, _this.onKeyPress = function (event) {
+	      _this.props.onKeyPress(event);
+	    }, _this.onInputKeyDown = function (event) {
+	      // eslint-disable-line complexity
+	      switch (event.which) {
+	        case 40:
+	          // DOWN
+	          event.preventDefault();
+	          _this.props.onNext();
+	          break;
+	        case 38:
+	          // UP
+	          event.preventDefault();
+	          _this.props.onPrev();
+	          break;
+	        case 13:
+	          // ENTER
+	          if (_this.props.ignoreEnter) {
+	            event.preventDefault();
+	          }
+
+	          _this.props.onSelect();
+	          break;
+	        case 9:
+	          // TAB
+	          if (!_this.props.ignoreTab) {
+	            _this.props.onSelect();
+	          }
+	          break;
+	        case 27:
+	          // ESC
+	          _this.props.onEscape();
+	          break;
+	        /* istanbul ignore next */
+	        default:
+	          break;
+	      }
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(Input, [{
+	    key: 'shouldComponentUpdate',
+
+	    /**
+	     * Whether or not the component should update
+	     * @param {Object} nextProps The new properties
+	     * @param {Object} nextState The new state
+	     * @return {Boolean} Update or not?
+	     */
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+	    }
+
+	    /**
+	     * When the input got changed
+	     */
+
+
+	    /**
+	     * When the input got focused
+	     */
+
+
+	    /**
+	     * When the input loses focus
+	     */
+
+
+	    /**
+	     * When a key gets pressed in the input
+	     * @param  {Event} event The keypress event
+	     */
+
+
+	    /**
+	     * When a key gets pressed in the input
+	     * @param  {Event} event The keydown event
+	     */
+
+	  }, {
+	    key: 'focus',
+
+
+	    /**
+	     * Focus the input
+	     */
+	    value: function focus() {
+	      this.refs.input.focus();
+	    }
+
+	    /**
+	     * Render the view
+	     * @return {Function} The React element to render
+	     */
+
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var attributes = (0, _filterInputAttributes2.default)(this.props),
+	          classes = (0, _classnames2.default)('geosuggest__input', this.props.className);
+
+	      return _react2.default.createElement('input', _extends({ className: classes,
+	        ref: 'input',
+	        type: 'text',
+	        autoComplete: 'off'
+	      }, attributes, {
+	        value: this.props.value,
+	        style: this.props.style,
+	        onKeyDown: this.onInputKeyDown,
+	        onChange: this.onChange,
+	        onKeyPress: this.onKeyPress,
+	        onFocus: this.onFocus,
+	        onBlur: this.onBlur }));
+	    }
+	  }]);
+
+	  return Input;
+	}(_react2.default.Component);
+
+	/**
+	 * Default values for the properties
+	 * @type {Object}
+	 */
+
+
+	Input.defaultProps = {
+	  className: '',
+	  value: '',
+	  ignoreTab: false,
+	  onKeyDown: function onKeyDown() {},
+	  onKeyPress: function onKeyPress() {}
+	};
+
+	exports.default = Input;
+
+/***/ },
+/* 446 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(447);
+
+/***/ },
+/* 447 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	'use strict';
+
+	var shallowEqual = __webpack_require__(448);
+
+	/**
+	 * Does a shallow comparison for props and state.
+	 * See ReactComponentWithPureRenderMixin
+	 * See also https://facebook.github.io/react/docs/shallow-compare.html
+	 */
+	function shallowCompare(instance, nextProps, nextState) {
+	  return !shallowEqual(instance.props, nextProps) || !shallowEqual(instance.state, nextState);
+	}
+
+	module.exports = shallowCompare;
+
+/***/ },
+/* 448 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @typechecks
+	 * 
+	 */
+
+	/*eslint-disable no-self-compare */
+
+	'use strict';
+
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+	/**
+	 * inlined Object.is polyfill to avoid requiring consumers ship their own
+	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+	 */
+	function is(x, y) {
+	  // SameValue algorithm
+	  if (x === y) {
+	    // Steps 1-5, 7-10
+	    // Steps 6.b-6.e: +0 != -0
+	    // Added the nonzero y check to make Flow happy, but it is redundant
+	    return x !== 0 || y !== 0 || 1 / x === 1 / y;
+	  } else {
+	    // Step 6.a: NaN == NaN
+	    return x !== x && y !== y;
+	  }
+	}
+
+	/**
+	 * Performs equality by iterating through keys on an object and returning false
+	 * when any key has values which are not strictly equal between the arguments.
+	 * Returns true when the values of all keys are strictly equal.
+	 */
+	function shallowEqual(objA, objB) {
+	  if (is(objA, objB)) {
+	    return true;
+	  }
+
+	  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+	    return false;
+	  }
+
+	  var keysA = Object.keys(objA);
+	  var keysB = Object.keys(objB);
+
+	  if (keysA.length !== keysB.length) {
+	    return false;
+	  }
+
+	  // Test for A's keys different from B.
+	  for (var i = 0; i < keysA.length; i++) {
+	    if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+	      return false;
+	    }
+	  }
+
+	  return true;
+	}
+
+	module.exports = shallowEqual;
+
+/***/ },
+/* 449 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsShallowCompare = __webpack_require__(446);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
+	var _classnames = __webpack_require__(440);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _suggestItem = __webpack_require__(450);
+
+	var _suggestItem2 = _interopRequireDefault(_suggestItem);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // eslint-disable-line no-unused-vars
+
+
+	/**
+	 * The list with suggestions. Either from an API or provided as fixture
+	 * @param {Object} props The component's props
+	 * @return {JSX} The icon component.
+	 */
+	var SuggestList = function (_React$Component) {
+	  _inherits(SuggestList, _React$Component);
+
+	  function SuggestList() {
+	    _classCallCheck(this, SuggestList);
+
+	    return _possibleConstructorReturn(this, (SuggestList.__proto__ || Object.getPrototypeOf(SuggestList)).apply(this, arguments));
+	  }
+
+	  _createClass(SuggestList, [{
+	    key: 'shouldComponentUpdate',
+
+	    /**
+	     * Whether or not the component should update
+	     * @param {Object} nextProps The new properties
+	     * @param {Object} nextState The new state
+	     * @return {Boolean} Update or not?
+	     */
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+	    }
+
+	    /**
+	     * Whether or not it is hidden
+	     * @return {Boolean} Hidden or not?
+	     */
+
+	  }, {
+	    key: 'isHidden',
+	    value: function isHidden() {
+	      return this.props.isHidden || this.props.suggests.length === 0;
+	    }
+
+	    /**
+	     * There are new properties available for the list
+	     * @param {Object} nextProps The new properties
+	     */
+
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.suggests !== this.props.suggests) {
+	        if (nextProps.suggests.length === 0) {
+	          this.props.onSuggestNoResults();
+	        }
+	      }
+	    }
+
+	    /**
+	     * Render the view
+	     * @return {Function} The React element to render
+	     */
+
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var classes = (0, _classnames2.default)('geosuggest__suggests', { 'geosuggest__suggests--hidden': this.isHidden() });
+
+	      return _react2.default.createElement(
+	        'ul',
+	        { className: classes, style: this.props.style },
+	        this.props.suggests.map(function (suggest) {
+	          var isActive = _this2.props.activeSuggest && suggest.placeId === _this2.props.activeSuggest.placeId;
+
+	          return _react2.default.createElement(_suggestItem2.default, { key: suggest.placeId,
+	            className: suggest.className,
+	            suggest: suggest,
+	            style: _this2.props.suggestItemStyle,
+	            isActive: isActive,
+	            onMouseDown: _this2.props.onSuggestMouseDown,
+	            onMouseOut: _this2.props.onSuggestMouseOut,
+	            onSelect: _this2.props.onSuggestSelect });
+	        })
+	      );
+	    }
+	  }]);
+
+	  return SuggestList;
+	}(_react2.default.Component);
+
+	/**
+	 * Default values for the properties
+	 * @type {Object}
+	 */
+
+
+	exports.default = SuggestList;
+	SuggestList.defaultProps = {
+	  isHidden: true,
+	  suggests: []
+	};
+
+/***/ },
+/* 450 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsShallowCompare = __webpack_require__(446);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
+	var _classnames = __webpack_require__(440);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * A single Geosuggest item in the list
+	 * @param {Object} props The component's props
+	 * @return {JSX} The icon component.
+	 */
+	var SuggestItem = function (_React$Component) {
+	  _inherits(SuggestItem, _React$Component);
+
+	  function SuggestItem() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, SuggestItem);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SuggestItem.__proto__ || Object.getPrototypeOf(SuggestItem)).call.apply(_ref, [this].concat(args))), _this), _this.onClick = function (event) {
+	      event.preventDefault();
+	      _this.props.onSelect(_this.props.suggest);
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(SuggestItem, [{
+	    key: 'shouldComponentUpdate',
+
+	    /**
+	     * Whether or not the component should update
+	     * @param {Object} nextProps The new properties
+	     * @param {Object} nextState The new state
+	     * @return {Boolean} Update or not?
+	     */
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+	    }
+
+	    /**
+	     * When the suggest item got clicked
+	     * @param {Event} event The click event
+	     */
+
+	  }, {
+	    key: 'render',
+
+
+	    /**
+	     * Render the view
+	     * @return {Function} The React element to render
+	     */
+	    value: function render() {
+	      var classes = (0, _classnames2.default)('geosuggest__item', this.props.className, { 'geosuggest__item--active': this.props.isActive });
+
+	      return _react2.default.createElement(
+	        'li',
+	        { className: classes,
+	          style: this.props.style,
+	          onMouseDown: this.props.onMouseDown,
+	          onMouseOut: this.props.onMouseOut,
+	          onClick: this.onClick },
+	        this.props.suggest.label
+	      );
+	    }
+	  }]);
+
+	  return SuggestItem;
+	}(_react2.default.Component);
+
+	/**
+	 * Default values for the properties
+	 * @type {Object}
+	 */
+
+
+	exports.default = SuggestItem;
+	SuggestItem.defaultProps = {
+	  isActive: false,
+	  className: '',
+	  suggest: {}
+	};
 
 /***/ }
 /******/ ]);

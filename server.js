@@ -45,9 +45,10 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('newUser', function(user) {
+        console.log('user conncted' + user.id)
         console.log('pushing user');
         users[user.id] = socket;
-        socket.emit('hey', user.id);
+        socket.emit('hey', user);
     })
 });
 

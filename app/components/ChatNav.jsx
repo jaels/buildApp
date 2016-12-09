@@ -8,6 +8,7 @@ class ChatNav extends React.Component {
         this.state = {
             users: []
         }
+        this.componentDidMount = this.componentDidMount.bind(this);
 
         var that = this;
         axios.get('/getAllUsers').then(function(result) {
@@ -16,6 +17,13 @@ class ChatNav extends React.Component {
             })
         })
     }
+    componentDidMount() {
+        socket.on('hey', function(user) {
+            console.log('hey yoooo')
+            console.log(user);
+            var hey = user.id.toString();
+        });
+}
     render() {
         var that = this;
         var { gotAllUsers, users } = this.state;
@@ -30,7 +38,7 @@ class ChatNav extends React.Component {
                         <div>
                             <div className="usersCircle"></div>
                             <div className="usersChat">
-                            <Link to={`/connectArea/${chatUrl}`} activeClassName="active" key={user.id}> <p className="nav-text">{user.firstname } {user.lastname}</p></Link>
+                            <Link to={`/connectArea/${chatUrl}`} activeClassName="active" id={user.id}> <p className="nav-text">{user.firstname } {user.lastname}</p></Link>
                             </div>
                         </div>
                     )
