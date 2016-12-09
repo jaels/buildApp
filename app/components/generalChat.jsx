@@ -1,6 +1,6 @@
 var React = require('react');
 import io from 'socket.io-client';
-var socket = io(`http://localhost:3000`);
+var socket = io(`/`);
 import Moment from 'moment';
 
 

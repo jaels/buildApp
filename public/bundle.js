@@ -28715,7 +28715,7 @@
 
 	var React = __webpack_require__(1);
 
-	var socket = (0, _socket2.default)('http://localhost:3000');
+	var socket = (0, _socket2.default)('/');
 
 	var privateChat = function (_React$Component) {
 	    _inherits(privateChat, _React$Component);
@@ -37007,7 +37007,7 @@
 
 	var React = __webpack_require__(1);
 
-	var socket = (0, _socket2.default)('http://localhost:3000');
+	var socket = (0, _socket2.default)('/');
 
 	var generalChat = function (_React$Component) {
 	    _inherits(generalChat, _React$Component);
