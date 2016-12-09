@@ -37195,10 +37195,11 @@
 	        return React.createElement(
 	            "div",
 	            null,
+	            React.createElement("img", { className: "loggedOutLogo", src: "logo_bigger.png" }),
 	            React.createElement(
 	                "h1",
-	                { id: "mainHeadline" },
-	                "Thank you for using Neighbours! till next time!!!"
+	                { className: "know-your", id: "loggedOut" },
+	                "Thank you for using Neighbours! till next time!"
 	            )
 	        );
 	    }
@@ -37374,6 +37375,7 @@
 	        }).then(function (res) {
 	            console.log('heyyyy');
 	            if (res.data.success === true) {
+	                console.log('trueee');
 	                var user = {
 	                    id: res.data.file.user.id
 	                };
@@ -37571,7 +37573,7 @@
 	                    null,
 	                    React.createElement(
 	                        'h3',
-	                        { id: 'know-your' },
+	                        { className: 'know-your' },
 	                        'Know your neighbours.'
 	                    )
 	                ),

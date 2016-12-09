@@ -89,7 +89,7 @@ var RegisterAddress = React.createClass({
 
             <div className="addressContainer">
                 <div>
-                <h3 id="know-your">Know your neighbours.</h3>
+                <h3 className="know-your">Know your neighbours.</h3>
                 </div>
                 <div className="geo-wrapper">
                 <Geosuggest

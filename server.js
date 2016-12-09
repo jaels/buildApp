@@ -40,7 +40,7 @@ io.sockets.on('connection', function(socket){
                 console.log('yessss')
                 var sockett=users[message.otherUser];
                 if(sockett) {
-                    sockett.emit("send:private", message)                    
+                    sockett.emit("send:private", message)
                 }
     });
 
@@ -275,10 +275,8 @@ app.get('/logout', function(req, res) {
     res.json({success: true});
 });
 
+ http.listen(process.env.PORT || 3000);
 
-http.listen(3000, function() {
-    console.log('listening');
-});
 
 
 

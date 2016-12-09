@@ -34,6 +34,7 @@ var Login = React.createClass({
         }).then(function(res) {
             console.log('heyyyy');
             if(res.data.success===true) {
+                console.log('trueee')
                 var user = {
                     id:res.data.file.user.id
                 }
