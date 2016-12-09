@@ -199,12 +199,6 @@ letter-spacing: -0.05px;
     left: 90%;
 }
 
-#send-btn {
-    position: relative;
-    bottom: 32px;
-    height: 50px;
-    font-size: 16px;
-}
 
 .building-image {
     margin-top: 3%;
@@ -218,6 +212,8 @@ letter-spacing: -0.05px;
 }
 
 .messageText {
+    position: relative;
+    line-height: 100%;
 
 }
 .messageName {
@@ -447,10 +443,19 @@ width: 25%;
     position: relative;
     margin-top: 30%;
 }
+.chatContainer {
+    position: relative;
+    display: inline-block;
+    width: 70%;
+}
 
 .textArea {
+    position: relative;
+
+    display: inline-block;
     height: 5vh;
-    width: 120vh;
+    /*width: 120vh;*/
+    width:90%;
     font-size: 18px;
     margin-bottom: 10px;
     /*webkit-border-radius: 30px;*/
@@ -460,6 +465,14 @@ border: 4px solid #E8E8E8;
 
 }
 
+#send-btn {
+    position: relative;
+    display: inline-block;
+    height: 100%;
+    bottom: 45px;
+    margin-left: 92%;
+    font-size: 16px;
+}
 
 
 .chatUpperStreep {
@@ -496,10 +509,6 @@ border: 4px solid #E8E8E8;
     background-color: #F9F9F9;
 }
 
-.chatContainer {
-    position: relative;
-    display: inline-block;
-}
 
 
 .spinner {
