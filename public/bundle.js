@@ -28827,7 +28827,7 @@
 	                    'div',
 	                    { className: 'chatUpperStreep' },
 	                    React.createElement(
-	                        'h2',
+	                        'h3',
 	                        null,
 	                        '#',
 	                        address
@@ -37075,7 +37075,7 @@
 	                    'div',
 	                    { className: 'chatUpperStreep' },
 	                    React.createElement(
-	                        'h2',
+	                        'h3',
 	                        null,
 	                        '#',
 	                        address

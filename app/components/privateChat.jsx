@@ -92,7 +92,7 @@ class privateChat extends React.Component {
             return(
                 <div>
                     <div className="chatUpperStreep">
-                        <h2>#{address}</h2>
+                        <h3>#{address}</h3>
                         <button className="button" id="logOutButton" onClick={this.logOut}>Log Out</button>
                     </div>
 

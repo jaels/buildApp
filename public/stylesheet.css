@@ -12,10 +12,10 @@ body {
 .know-your {
     position: relative;
     font-family: LeagueSpartan-Bold;
-    font-size: 50px;
+    font-size: 45px;
     color: #FFFFFF;
     letter-spacing: -0.18px;
-    margin-left: 100px;
+    margin-left: 80px;
     z-index: 1;
     width: 100%;
 
@@ -37,9 +37,9 @@ body {
 
 
 #submitAddress {
-    /*margin-top: 5%;*/
-    width: 100px;
-    margin-right: 35%;
+    margin-top: 2%;
+    width: 90px;
+    margin-right: 32%;
 }
 
 .addressContainer {
@@ -89,13 +89,13 @@ bottom: 30%;
 .geosuggest__input {
     position: relative;
     z-index: 1;
-  width: 150%;
-  height: 60px;
+  width: 160%;
+  height: 50px;
   /*margin-right: 60px;*/
   /*margin-top: 40%;*/
 
   font-weight: 400;
-font-family: ClearSans-Medium;
+font-family: ClearSans-Light;
 
 color: #BCBCBC;
 letter-spacing: -0.06px;
@@ -125,6 +125,7 @@ background-repeat: no-repeat;
 .geosuggest__suggests {
     position: relative;
     font-family: ClearSans-Medium;
+    width: 140%;
     top: 100%;
     left: 0;
     right: 0;
@@ -155,8 +156,8 @@ background-repeat: no-repeat;
 
 .RegisterUser {
     position: absolute;
-    top: 5%;
-    left: 35%;
+    top: 1%;
+    left: 32%;
     margin-top: 10%;
     text-align: center;
 
@@ -200,9 +201,9 @@ letter-spacing: -0.05px;
 
 #send-btn {
     position: relative;
-    bottom: 25px;
-    height: 60px;
-    font-size: 18px;
+    bottom: 32px;
+    height: 50px;
+    font-size: 16px;
 }
 
 .building-image {
@@ -217,19 +218,20 @@ letter-spacing: -0.05px;
 }
 
 .messageText {
+
 }
 .messageName {
     color: #696969;
     font-size: 16px;
-
 }
 
-/*.messagesContainer {
-    display: inline-block;;
-}*/
 
 .messageBox {
-    display: inline-block;;
+    position: relative;
+    display: inline-block;
+    line-height: 0.5em;
+    bottom: 5px;
+
 
 }
 
@@ -295,8 +297,8 @@ letter-spacing: -0.05px;
 }
 
 .logo-form {
-position: absolute;
-bottom: 90%;
+position: relative;
+margin-top: 1%;
 left: 4%;
 }
 
@@ -391,7 +393,7 @@ width: 25%;
 
 .existText {
     font-size: 19px;
-    font-family: ClearSans-Medium;
+    font-family: ClearSans-Light;
     color: #FFFFFF;
 }
 
@@ -408,13 +410,13 @@ width: 25%;
 
 
 .nav-text {
-    font-size: 19px;
+    font-size: 17px;
     /*color: #FFFFFF;*/
     font-weight: 100;
 }
 
 .invite-text {
-    font-size: 19px;
+    font-size: 16px;
     color: #FFFFFF;
     font-weight: 50;
     font-family: ClearSans-Light;
@@ -426,7 +428,7 @@ width: 25%;
 }
 
 #generalChat {
-    font-size: 21px;
+    font-size: 19px;
     font-family: ClearSans-Medium;
     text-decoration: none;
     /*color: #FFFFFF;*/
@@ -438,7 +440,7 @@ width: 25%;
 
 #youChat {
     position: relative;
-    bottom: 40px;
+    bottom: 30px;
 }
 
 .channelsNames {
@@ -450,7 +452,7 @@ width: 25%;
     height: 5vh;
     width: 120vh;
     font-size: 18px;
-    margin-top: 20px;
+    margin-bottom: 10px;
     /*webkit-border-radius: 30px;*/
 /*-moz-border-radius: 20px;*/
 border-radius: 5px;
