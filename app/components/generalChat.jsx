@@ -101,7 +101,8 @@ this.setState({messages});
         sendMessage(e) {
             var that =this;
             e.preventDefault();
-            var newMessage = this.state.newMessage;
+            var newMessage = that.state.newMessage;
+            if(newMessage.length>0) {
             this.setState({
             newMessage:""
             })
@@ -114,6 +115,7 @@ this.setState({messages});
                 socket.emit('send:message', newMessage);
 
             })
+        }
         }
 
         handleChange(event) {

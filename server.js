@@ -136,6 +136,7 @@ app.post('/checkUser', function(req,res) {
 })
 
 app.post('/registerUser', function(req, res) {
+    console.log('registeringgg');
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
     var floor = req.body.floor;
@@ -224,8 +225,6 @@ app.get('/getGeneralMessages/:buildingId', function(req,res) {
 })
 
 app.get('/getPrivateMessages/:whichChat', function(req,res) {
-
-
 
     var whichChat=req.params.whichChat;
     req.session.whichChat = whichChat;

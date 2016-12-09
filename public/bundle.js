@@ -28738,10 +28738,6 @@
 	            messages: [],
 	            whichChat: whichChat
 	        };
-	        _this.setState({
-	            messages: [],
-	            whichChat: whichChat
-	        });
 
 	        _this.handleChange = _this.handleChange.bind(_this);
 	        _this.sendMessage = _this.sendMessage.bind(_this);
@@ -28890,29 +28886,32 @@
 	            var that = this;
 	            e.preventDefault();
 
-	            var newMessage = this.state.newMessage;
-	            this.setState({
-	                newMessage: ""
-	            });
-	            axios.post('insertPrivateMessage', {
-	                newMessage: newMessage,
-	                whichChat: that.state.whichChat
-	            }).then(function (response) {
-	                newMessage = response.data.file;
-	                that.props.onNewMessage(newMessage);
-	                var arr = that.state.whichChat.split('_');
-	                var thisUser = that.props.details.user.id;
-	                if (thisUser == arr[0]) {
-	                    var otherUser = arr[1];
-	                } else {
-	                    var otherUser = arr[0];
-	                }
-	                newMessage.otherUser = otherUser;
-	                console.log(newMessage);
-	                console.log(otherUser);
-	                console.log('sending private');
-	                socket.emit("send:private", newMessage);
-	            });
+	            var newMessage = that.state.newMessage;
+	            if (newMessage.length > 0) {
+
+	                this.setState({
+	                    newMessage: ""
+	                });
+	                axios.post('insertPrivateMessage', {
+	                    newMessage: newMessage,
+	                    whichChat: that.state.whichChat
+	                }).then(function (response) {
+	                    newMessage = response.data.file;
+	                    that.props.onNewMessage(newMessage);
+	                    var arr = that.state.whichChat.split('_');
+	                    var thisUser = that.props.details.user.id;
+	                    if (thisUser == arr[0]) {
+	                        var otherUser = arr[1];
+	                    } else {
+	                        var otherUser = arr[0];
+	                    }
+	                    newMessage.otherUser = otherUser;
+	                    console.log(newMessage);
+	                    console.log(otherUser);
+	                    console.log('sending private');
+	                    socket.emit("send:private", newMessage);
+	                });
+	            }
 	        }
 	    }, {
 	        key: 'handleChange',
@@ -37147,18 +37146,20 @@
 	        value: function sendMessage(e) {
 	            var that = this;
 	            e.preventDefault();
-	            var newMessage = this.state.newMessage;
-	            this.setState({
-	                newMessage: ""
-	            });
-	            axios.post('insertGeneralMessage', {
-	                newMessage: newMessage
-	            }).then(function (response) {
-	                newMessage = response.data.file;
-	                that.props.onNewMessage(newMessage);
-	                console.log(that.state.messages);
-	                socket.emit('send:message', newMessage);
-	            });
+	            var newMessage = that.state.newMessage;
+	            if (newMessage.length > 0) {
+	                this.setState({
+	                    newMessage: ""
+	                });
+	                axios.post('insertGeneralMessage', {
+	                    newMessage: newMessage
+	                }).then(function (response) {
+	                    newMessage = response.data.file;
+	                    that.props.onNewMessage(newMessage);
+	                    console.log(that.state.messages);
+	                    socket.emit('send:message', newMessage);
+	                });
+	            }
 	        }
 	    }, {
 	        key: 'handleChange',
