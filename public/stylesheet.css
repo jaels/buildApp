@@ -190,15 +190,19 @@ font-size: 14px;
 color: #FFFFFF;
 letter-spacing: -0.05px;
 
-
 }
 
 #login-btn {
     position: absolute;
     top: 5%;
     left: 90%;
+}
 
-
+#send-btn {
+    position: relative;
+    bottom: 25px;
+    height: 60px;
+    font-size: 18px;
 }
 
 .building-image {
@@ -213,8 +217,46 @@ letter-spacing: -0.05px;
 }
 
 .messageText {
-    color: #696969
 }
+.messageName {
+    color: #696969;
+    font-size: 16px;
+
+}
+
+/*.messagesContainer {
+    display: inline-block;;
+}*/
+
+.messageBox {
+    display: inline-block;;
+
+}
+
+.usersChat {
+    display: inline-block;
+}
+
+.usersCircle {
+    display: inline-block;
+    margin-right: 15px;
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+    /*background-color: #009933;*/
+    border: 3px solid #009933;
+
+}
+
+.chatCircle {
+    display: inline-block;
+    margin-right: 15px;
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+    background-color: #ffcc00;
+}
+
 
 .chatTods {
     border-radius: 50%;
@@ -222,7 +264,13 @@ letter-spacing: -0.05px;
 }
 
 #logOutButton {
-    left:76%;
+    position: relative;
+    float: right;
+    bottom: 80%;
+    right: 3%;
+    color: #6956FD;
+    background-color: #F9F9F9;
+    border: 1px solid #6956FD;
 }
 
 
@@ -238,6 +286,12 @@ letter-spacing: -0.05px;
     position: absolute;
     top: 3%;
     margin-left: 3%;
+}
+
+#logoChat {
+    position: relative;
+    left: 25%;
+    margin-top: 10%;
 }
 
 .logo-form {
@@ -303,9 +357,6 @@ width: 25%;
     font-size: 16px;
     font-family: ClearSans-Medium;
     color: #120079;
-;
-
-
 }
 
 .loginBoxes {
@@ -355,34 +406,65 @@ width: 25%;
 
 }
 
-.channelsNames {
-    position: relative;
-    margin-top: 80%;
-}
 
 .nav-text {
+    font-size: 19px;
     /*color: #FFFFFF;*/
     font-weight: 100;
 }
 
+.invite-text {
+    font-size: 19px;
+    color: #FFFFFF;
+    font-weight: 50;
+    font-family: ClearSans-Light;
+    margin-top: 40px;
+}
+
+#invite {
+    margin-top: 40%;
+}
+
+#generalChat {
+    font-size: 21px;
+    font-family: ClearSans-Medium;
+    text-decoration: none;
+    /*color: #FFFFFF;*/
+}
 .active {
-    color: #AB6FB2;
+    color: #FFFFFF;
     font-weight: bold;
 }
 
+#youChat {
+    position: relative;
+    bottom: 40px;
+}
+
+.channelsNames {
+    position: relative;
+    margin-top: 30%;
+}
 
 .textArea {
-    height: 6vh;
+    height: 5vh;
     width: 120vh;
     font-size: 18px;
+    margin-top: 20px;
+    /*webkit-border-radius: 30px;*/
+/*-moz-border-radius: 20px;*/
+border-radius: 5px;
+border: 4px solid #E8E8E8;
+
 }
 
 
 
 .chatUpperStreep {
-    background-color: #F9F9F9 ;
-    margin-bottom: 10px;
-    border-bottom: 2px px solid #E8E8E8;
+    background-color: #F9F9F9;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #E8E8E8;
+    height: 60px;
 }
 
 .chat-body {
@@ -416,4 +498,11 @@ width: 25%;
 .chatContainer {
     position: relative;
     display: inline-block;
+}
+
+
+.spinner {
+  margin: 100px auto 0;
+  width: 70px;
+  text-align: center;
 }

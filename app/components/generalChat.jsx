@@ -1,6 +1,7 @@
 var React = require('react');
 import io from 'socket.io-client';
 var socket = io(`http://localhost:3000`);
+import Moment from 'moment';
 
 
 
@@ -33,21 +34,27 @@ class generalChat extends React.Component {
     render() {
         var that = this;
         var address = this.props.details.user.address;
+
         var messages = that.state.messages.map(function(message) {
             return (
+
                 <div className="messagesContainer">
-                    <div id={message.id}>
+                    <div className="chatCircle"></div>
+                    <div className="messageBox" id={message.id}>
                         <h4 className="messageText">{message.message}</h4>
-                        <h5 className="messgageName">{message.firstname} {message.lastname}</h5>  posted on {message.created_at}
+                        <h5 className="messageName">{message.firstname} {message.lastname} | posted  {Moment(message.created_at).fromNow()}
+                        </h5>
                         </div>
                     </div>
                 )
             })
 
+
+
             return(
                 <div>
                         <div className="chatUpperStreep">
-                            <h4>{address}</h4>
+                            <h2>#{address}</h2>
                             <button className="button" id="logOutButton" onClick={this.logOut}>Log Out</button>
                         </div>
 
@@ -59,7 +66,7 @@ class generalChat extends React.Component {
                     </div>
                     <div className="chatContainer">
                         <textArea className = "textArea"  placeholder="Write your message" value={this.state.newMessage} onChange={this.handleChange} ></textArea>
-                        <button className="button" onClick={this.sendMessage}>Send</button>
+                        <button className="button" id="send-btn" onClick={this.sendMessage}>Send</button>
                     </div>
                 </div>
                 </div>

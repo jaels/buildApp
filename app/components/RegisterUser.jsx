@@ -50,8 +50,8 @@ var RegisterUser = React.createClass({
         var password = this.refs.password.value;
         console.log([firstname, lastname, floor, aptNumber, buildingSpec, email, password]);
         axios.post('/registerUser', {
-            firstname: firstname,
-            lastname: lastname,
+            firstname: firstname.toUpperCase(),
+            lastname: lastname.toUpperCase(),
             floor: floor,
             aptNumber: aptNumber,
             buildingSpec: buildingSpec,

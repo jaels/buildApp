@@ -28,18 +28,23 @@ class ChatNav extends React.Component {
                     }).join('_');
                     return (
                         <div>
-                            <IndexLink to={`/connectArea/${chatUrl}`} activeClassName="active" key={user.id}> <p className="nav-text">{user.firstname } {user.lastname}</p></IndexLink>
+                            <div className="usersCircle"></div>
+                            <div className="usersChat">
+                            <Link to={`/connectArea/${chatUrl}`} activeClassName="active" key={user.id}> <p className="nav-text">{user.firstname } {user.lastname}</p></Link>
+                            </div>
                         </div>
                     )
                 })
 
         return (
             <div className="chatNav">
-                <img className="logo-main" src="logo_small.png"/>
+                <img className="logo-main" id="logoChat" src="logo_small.png"/>
                     <div className="channelsNames">
-                <IndexLink to="/connectArea" activeClassName="active"><p className="nav-text">General</p></IndexLink>
-                <h3 className="existText">Private Messages</h3>
+                        <p className="invite-text" id="youChat">#{this.props.details.user.firstname } {this.props.details.user.lastname} (you)</p>
+                <IndexLink to="/connectArea" activeClassName="active"><p className="nav-text" id="generalChat">GENERAL</p></IndexLink>
+                <h3 className="invite-text">Send a private message:</h3>
                         {users}
+                        <h3 className="invite-text" id="invite">+ invite your neighbours</h3>
                     </div>
             </div>
         )
