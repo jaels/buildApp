@@ -1,6 +1,5 @@
 var React = require('react');
 import io from 'socket.io-client';
-var socket = io(`/`);
 import Moment from 'moment';
 
 
@@ -100,7 +99,7 @@ class privateChat extends React.Component {
                         </div>
                     </div>
                     <div className="chatContainer">
-                        <textArea className = "textArea"  placeholder="Write your message" value={this.state.newMessage} onChange={this.handleChange} ></textArea>
+                        <textArea className="textArea"  placeholder="Write your message" value={this.state.newMessage} onChange={this.handleChange} ></textArea>
                         <button className="button" id="send-btn" onClick={this.sendMessage}>Send</button>
                     </div>
                 </div>
@@ -127,7 +126,7 @@ class privateChat extends React.Component {
 
 
     sendMessage(e) {
-        var that =this;
+        var that=this;
         e.preventDefault();
 
         var newMessage = that.state.newMessage;
