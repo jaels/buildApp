@@ -31,7 +31,11 @@
     "react-router": "^3.0.0",
     "request": "^2.78.0",
     "socket.io": "1.7.1",
-    "socket.io-client": "^1.7.1"
+    "socket.io-client": "^1.7.1",
+    "async":"0.1.18",
+    "ejs":"0.4.3",
+    "faceplate": "0.0.4"
+
   },
   "devDependencies": {
     "babel-core": "^6.5.1",
