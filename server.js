@@ -2,7 +2,10 @@ var express = require('express'),
 app = express(),
 cookieParser = require('cookie-parser'),
 cookieSession = require('cookie-session'),
-http = require('http').Server(app),
+// http = require('http').Server(app),
+
+    server = require('http').createServer(app),
+
 
 // csrf = require('csurf'),
 // csrfProtection = csrf({cookie: true}),
@@ -23,7 +26,19 @@ app.use(cookieSession({
 //     return next();
 // });
 
-var io = require('socket.io')(http);
+
+// var express = require('express'),
+//     app = express(),
+//     server = require('http').createServer(app),
+//     io = require('socket.io').listen(server),
+//
+// server.listen(process.env.PORT || 3000);
+//
+
+
+    var io = require('socket.io').listen(server);
+
+// var io = require('socket.io')(http);
 
 
 var users={};
@@ -275,8 +290,9 @@ app.get('/logout', function(req, res) {
     res.json({success: true});
 });
 
- http.listen(process.env.PORT || 3000);
+ // http.listen(process.env.PORT || 3000);
 
+ server.listen(process.env.PORT || 3000);
 
 
 
