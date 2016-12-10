@@ -38,7 +38,7 @@ class ChatNav extends React.Component {
                         <div>
                             <div className="usersCircle"></div>
                             <div className="usersChat">
-                            <Link to={`/connectArea/${chatUrl}`} activeClassName="active" id={user.id}> <p className="nav-text">{user.firstname } {user.lastname}</p></Link>
+                            <IndexLink to={`/connectArea/${chatUrl}`} activeClassName="active" id={user.id}> <p className="nav-text">{user.firstname } {user.lastname}</p></IndexLink>
                             </div>
                         </div>
                     )

@@ -28608,7 +28608,7 @@
 	                        'div',
 	                        { className: 'usersChat' },
 	                        React.createElement(
-	                            Link,
+	                            IndexLink,
 	                            { to: '/connectArea/' + chatUrl, activeClassName: 'active', id: user.id },
 	                            ' ',
 	                            React.createElement(
