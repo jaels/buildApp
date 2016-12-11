@@ -193,10 +193,35 @@ letter-spacing: -0.05px;
 
 }
 
+
 #login-btn {
     position: absolute;
     top: 5%;
     left: 90%;
+
+  margin-right: 70px;
+  background-color: #6956FD;
+  border-radius: 17px;
+  height: 37px;
+  width: 107px;
+  color: #FFFFFF;
+  font-family: ClearSans-Light;
+  font-size: 14px;
+  letter-spacing: -0.05px;
+  border: 0;
+  -webkit-transition: background-color 0.3s ease-out;
+  -moz-transition: background-color 0.3s ease-out;
+  -o-transition: background-color 0.3s ease-out;
+  transition: background-color 0.3s ease-out;
+}
+
+#login-btn:hover {
+  background-color: white;
+  color: #6956FD;
+  cursor: pointer;
+}
+#login-btn:focus {
+  outline: none;
 }
 
 
@@ -235,15 +260,52 @@ letter-spacing: -0.05px;
     display: inline-block;
 }
 
-.usersCircle {
-    display: inline-block;
-    margin-right: 10px;
+.emptyUsersCircle {
+    position: relative;
+    /*display: inline-block;*/
+    /*margin-right: 10px;*/
+    margin-top: 20%;
     border-radius: 50%;
     width: 6px;
     height: 6px;
     /*background-color: #009933;*/
     border: 2px solid #009933;
+    margin-top:10%;
 
+}
+
+.fullUsersCircle {
+    position: relative;
+
+    /*display: inline-block;*/
+    /*margin-right: 10px;*/
+    margin-top:10%;
+    border-radius: 50%;
+    width: 9px;
+    height: 9px;
+    background-color: #009933;
+
+}
+
+.nav-text {
+    position: relative;
+    left: 15%;
+    bottom: 29px;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: 100;
+}
+
+.nameAndCircle{
+    position: relative;
+    width:95%;
+    text-decoration: none;
+    height: 25px;
+
+}
+
+.usersArea{
+    margin-top: 40px;
 }
 
 .chatCircle {
@@ -405,11 +467,6 @@ width: 25%;
 }
 
 
-.nav-text {
-    font-size: 14px;
-    /*color: #FFFFFF;*/
-    font-weight: 100;
-}
 
 .invite-text {
     font-size: 15px;
@@ -425,6 +482,7 @@ width: 25%;
 
 #generalChat {
     font-size: 17px;
+    left: 5%;
     font-family: ClearSans-Medium;
     text-decoration: none;
     /*color: #FFFFFF;*/
@@ -432,6 +490,7 @@ width: 25%;
 .active {
     color: #FFFFFF;
     font-weight: bold;
+    text-decoration:none;
 }
 
 #youChat {

@@ -25,12 +25,13 @@ app.use(cookieSession({
 
 var io = require('socket.io')(http);
 
+var connected={};
 
 var users={};
 var sockett;
 
 io.sockets.on('connection', function(socket){
-    socket.emit('connection');
+    // socket.emit('connection');
 
     socket.on('send:message', function(message){
         io.emit('send:message', message);
@@ -43,17 +44,32 @@ io.sockets.on('connection', function(socket){
                     sockett.emit("send:private", message)
                 }
     });
-
     socket.on('newUser', function(user) {
         console.log('user conncted' + user.id)
         console.log('pushing user');
         users[user.id] = socket;
-        socket.emit('hey', user);
+        connected[user.id.toString()] = true;
+        console.log('conncted new user')
+        console.log(connected);
+        io.emit('hey', connected);
+    })
+
+    socket.on('bye', function(user) {
+        console.log('user disconnected ' + user);
+        connected[user.toString()] = false;
+        console.log('after user left')
+        console.log(connected);
+        io.emit('bye', connected);
+        // connected[user.id]=false;
     })
 });
 
 
-
+app.get('/whosConnected', function(req,res) {
+    console.log('whos connected');
+    console.log(connected);
+    res.json({file:connected})
+})
 
 app.post('/checkBuilding', function(req,res) {
     var address = req.body.address;

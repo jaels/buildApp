@@ -28563,7 +28563,8 @@
 	        var _this = _possibleConstructorReturn(this, (ChatNav.__proto__ || Object.getPrototypeOf(ChatNav)).call(this, props));
 
 	        _this.state = {
-	            users: []
+	            users: [],
+	            connected: {}
 	        };
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
 
@@ -28573,16 +28574,39 @@
 	                users: result.data.file
 	            });
 	        });
+	        axios.get('/whosConnected').then(function (result) {
+	            console.log('who is connected when entering');
+	            console.log(result);
+	            that.setState({
+	                connected: result.data.file
+	            });
+	        });
 	        return _this;
 	    }
 
 	    _createClass(ChatNav, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            socket.on('hey', function (user) {
-	                console.log('hey yoooo');
-	                console.log(user);
-	                var hey = user.id.toString();
+	            var that = this;
+	            socket.on('hey', function (connected) {
+	                console.log('hey - what the newest users from server?');
+	                console.log(connected);
+	                that.setState({
+	                    connected: connected
+	                });
+	                console.log('whats the state?');
+	                console.log(that.state.connected);
+	                // var hey = user.id.toString();
+	            });
+	            socket.on('bye', function (connected) {
+	                console.log('bye- what the newest users from server?');
+	                console.log(connected);
+	                that.setState({
+	                    connected: connected
+	                });
+	                console.log('whats the state?');
+	                console.log(that.state.connected);
+	                // var hey = user.id.toString();
 	            });
 	        }
 	    }, {
@@ -28600,24 +28624,28 @@
 	                var chatUrl = [that.props.details.user.id, user.id].sort(function (a, b) {
 	                    return a - b;
 	                }).join('_');
+	                function checkConnected() {
+	                    if (that.state.connected[user.id.toString()]) {
+	                        return React.createElement('div', { className: 'fullUsersCircle' });
+	                    } else {
+	                        return React.createElement('div', { className: 'emptyUsersCircle' });
+	                    }
+	                }
+
 	                return React.createElement(
 	                    'div',
-	                    null,
-	                    React.createElement('div', { className: 'usersCircle' }),
+	                    { className: 'nameAndCircle' },
+	                    checkConnected(),
 	                    React.createElement(
-	                        'div',
-	                        { className: 'usersChat' },
+	                        IndexLink,
+	                        { to: '/connectArea/' + chatUrl, activeClassName: 'active', id: user.id },
+	                        ' ',
 	                        React.createElement(
-	                            IndexLink,
-	                            { to: '/connectArea/' + chatUrl, activeClassName: 'active', id: user.id },
+	                            'p',
+	                            { className: 'nav-text' },
+	                            user.firstname,
 	                            ' ',
-	                            React.createElement(
-	                                'p',
-	                                { className: 'nav-text' },
-	                                user.firstname,
-	                                ' ',
-	                                user.lastname
-	                            )
+	                            user.lastname
 	                        )
 	                    )
 	                );
@@ -28653,7 +28681,11 @@
 	                        { className: 'invite-text' },
 	                        'Send a private message:'
 	                    ),
-	                    users,
+	                    React.createElement(
+	                        'div',
+	                        { className: 'usersArea' },
+	                        users
+	                    ),
 	                    React.createElement(
 	                        'h3',
 	                        { className: 'invite-text', id: 'invite' },
@@ -28782,6 +28814,7 @@
 	            this.componentDidMount = this.componentDidMount.bind(this);
 	            this.messageRecieve = this.messageRecieve.bind(this);
 	            var whichChat = this.state.whichChat;
+	            this.logOut = this.logOut.bind(this);
 
 	            axios.get('/getPrivateMessages/' + whichChat).then(function (result) {
 	                that.setState({
@@ -28927,6 +28960,7 @@
 	    }, {
 	        key: 'logOut',
 	        value: function logOut() {
+	            socket.emit('bye', that.props.details.user.id);
 	            axios.get('logOut').then(function (reponse) {
 	                console.log('logged out');
 	                window.location.href = "#/loggedOut";
@@ -51912,6 +51946,7 @@
 	        _this.sendMessage = _this.sendMessage.bind(_this);
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
 	        _this.messageRecieve = _this.messageRecieve.bind(_this);
+	        _this.logOut = _this.logOut.bind(_this);
 
 	        var buildingId = _this.props.details.buildingId;
 
@@ -52057,6 +52092,9 @@
 	    }, {
 	        key: 'logOut',
 	        value: function logOut() {
+	            var that = this;
+	            console.log(that.props);
+	            socket.emit('bye', that.props.details.user.id);
 	            axios.get('logOut').then(function (reponse) {
 	                console.log('logged out');
 	                window.location.href = "#/loggedOut";

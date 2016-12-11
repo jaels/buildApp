@@ -17,6 +17,7 @@ class generalChat extends React.Component {
         this.sendMessage = this.sendMessage.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.messageRecieve = this.messageRecieve.bind(this);
+        this.logOut = this.logOut.bind(this);
 
 
 
@@ -121,7 +122,10 @@ this.setState({messages});
             this.setState({newMessage: event.target.value});
         }
 
-        logOut() {
+         logOut() {
+            var that=this;
+            console.log(that.props);
+            socket.emit('bye', that.props.details.user.id);
             axios.get('logOut').then(function(reponse) {
                 console.log('logged out');
                 window.location.href = "#/loggedOut";
