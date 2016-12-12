@@ -37,6 +37,7 @@ io.sockets.on('connection', function(socket){
         io.emit('send:message', message);
     });
     socket.on("send:private", function(message){
+        io.emit('toNav', message);
         console.log('recievePrivate');
                 console.log('yessss')
                 var sockett=users[message.otherUser];

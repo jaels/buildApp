@@ -28475,20 +28475,38 @@
 	            gotAllDetails: false,
 	            newMessage: ""
 	        };
+
+	        var details = {};
+
 	        _this.handleNewMessage = _this.handleNewMessage.bind(_this);
+	        _this.componentWillReceiveProps = _this.componentWillReceiveProps.bind(_this);
 
 	        var that = _this;
 	        axios.get('/getAllDetails').then(function (result) {
+	            console.log(that.props.location.pathname);
+
 	            that.setState({
 	                details: result.data.file,
 	                gotAllDetails: true
 	            });
-	            return;
 	        });
 	        return _this;
 	    }
 
 	    _createClass(ConnectArea, [{
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            var details = this.state.details;
+	            var loc = this.props.location.pathname.split('/');
+	            var whichChat = loc[loc.length - 1];
+	            console.log(whichChat);
+	            details.whichChat = whichChat;
+	            this.setState({
+	                details: details
+	            });
+	            console.log(this.state.details);
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var that = this;
@@ -28564,7 +28582,11 @@
 
 	        _this.state = {
 	            users: [],
-	            connected: {}
+	            connected: {},
+	            newChat: {},
+	            newGeneralChat: false,
+	            current: "general",
+	            hover: false
 	        };
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
 
@@ -28588,25 +28610,41 @@
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            var that = this;
+	            var newChat = {};
+
 	            socket.on('hey', function (connected) {
 	                console.log('hey - what the newest users from server?');
 	                console.log(connected);
 	                that.setState({
 	                    connected: connected
 	                });
-	                console.log('whats the state?');
-	                console.log(that.state.connected);
-	                // var hey = user.id.toString();
 	            });
 	            socket.on('bye', function (connected) {
 	                console.log('bye- what the newest users from server?');
-	                console.log(connected);
 	                that.setState({
 	                    connected: connected
 	                });
-	                console.log('whats the state?');
-	                console.log(that.state.connected);
-	                // var hey = user.id.toString();
+	            });
+
+	            socket.on("toNav", function (message) {
+	                console.log('hey in nav');
+	                console.log(that.props);
+	                console.log(message);
+	                if (that.props.details.user.id.toString() == message.otherUser && that.state.current !== message.user_id.toString()) {
+	                    newChat[message.user_id.toString()] = true;
+	                    that.setState({
+	                        newChat: newChat
+	                    });
+	                }
+	                console.log(that.state.newChat);
+	            });
+	            socket.on("send:message", function (message) {
+	                console.log('in nav general');
+	                if (that.state.current !== "general") {
+	                    that.setState({
+	                        newGeneralChat: true
+	                    });
+	                }
 	            });
 	        }
 	    }, {
@@ -28624,6 +28662,17 @@
 	                var chatUrl = [that.props.details.user.id, user.id].sort(function (a, b) {
 	                    return a - b;
 	                }).join('_');
+
+	                function isNew() {
+	                    if (that.state.newChat[user.id.toString()]) {
+	                        return React.createElement(
+	                            'div',
+	                            { className: 'bubbleContainer' },
+	                            React.createElement('img', { className: 'speechBubble', src: 'speech-bubble-xxl.png' })
+	                        );
+	                    }
+	                }
+
 	                function checkConnected() {
 	                    if (that.state.connected[user.id.toString()]) {
 	                        return React.createElement('div', { className: 'fullUsersCircle' });
@@ -28632,13 +28681,20 @@
 	                    }
 	                }
 
+	                function cancelBubble() {
+	                    console.log('cancel bubble');
+	                    that.state.newChat[user.id.toString()] = false;
+	                    that.state.current = user.id.toString();
+	                    console.log(that.state);
+	                }
+
 	                return React.createElement(
 	                    'div',
 	                    { className: 'nameAndCircle' },
 	                    checkConnected(),
 	                    React.createElement(
-	                        IndexLink,
-	                        { to: '/connectArea/' + chatUrl, activeClassName: 'active', id: user.id },
+	                        Link,
+	                        { onClick: cancelBubble, to: '/connectArea/' + chatUrl, activeClassName: 'active', id: user.id },
 	                        ' ',
 	                        React.createElement(
 	                            'p',
@@ -28647,9 +28703,26 @@
 	                            ' ',
 	                            user.lastname
 	                        )
-	                    )
+	                    ),
+	                    isNew()
 	                );
 	            });
+
+	            function isNewGeneral() {
+	                if (that.state.newGeneralChat) {
+	                    return React.createElement(
+	                        'div',
+	                        { className: 'bubbleContainer', id: 'generalBubble' },
+	                        React.createElement('img', { className: 'speechBubble', src: 'speech-bubble-xxl.png' })
+	                    );
+	                }
+	            }
+
+	            function cancelGeneralBubble() {
+	                console.log('cancel general');
+	                that.state.newGeneralChat = false;
+	                that.state.current = "general";
+	            }
 
 	            return React.createElement(
 	                'div',
@@ -28672,10 +28745,11 @@
 	                        { to: '/connectArea', activeClassName: 'active' },
 	                        React.createElement(
 	                            'p',
-	                            { className: 'nav-text', id: 'generalChat' },
+	                            { className: 'nav-text', id: 'generalChat', onClick: cancelGeneralBubble },
 	                            'GENERAL'
 	                        )
 	                    ),
+	                    isNewGeneral(),
 	                    React.createElement(
 	                        'h3',
 	                        { className: 'invite-text' },
@@ -28781,6 +28855,8 @@
 	        _this.sendMessage = _this.sendMessage.bind(_this);
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
 	        _this.messageRecieve = _this.messageRecieve.bind(_this);
+	        _this.logOut = _this.logOut.bind(_this);
+
 	        var whichChat = _this.state.whichChat;
 
 	        axios.get('/getPrivateMessages/' + whichChat).then(function (result) {
@@ -28960,6 +29036,7 @@
 	    }, {
 	        key: 'logOut',
 	        value: function logOut() {
+	            var that = this;
 	            socket.emit('bye', that.props.details.user.id);
 	            axios.get('logOut').then(function (reponse) {
 	                console.log('logged out');
@@ -51942,6 +52019,7 @@
 	        _this.state = {
 	            messages: []
 	        };
+
 	        _this.handleChange = _this.handleChange.bind(_this);
 	        _this.sendMessage = _this.sendMessage.bind(_this);
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
@@ -52042,8 +52120,6 @@
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            socket.on('connection', this.connected);
-	            socket.on('disconnection', this.disconnected);
 	            socket.on('send:message', this.messageRecieve);
 	        }
 	    }, {

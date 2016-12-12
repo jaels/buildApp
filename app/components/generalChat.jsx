@@ -13,6 +13,9 @@ class generalChat extends React.Component {
         this.state = {
             messages:[]
         };
+
+
+
         this.handleChange = this.handleChange.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
@@ -79,8 +82,6 @@ class generalChat extends React.Component {
         }
 
         componentDidMount() {
-            socket.on('connection', this.connected);
-            socket.on('disconnection', this.disconnected);
             socket.on('send:message', this.messageRecieve);
 }
 

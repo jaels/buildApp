@@ -276,13 +276,10 @@ letter-spacing: -0.05px;
 
 .fullUsersCircle {
     position: relative;
-
-    /*display: inline-block;*/
-    /*margin-right: 10px;*/
     margin-top:10%;
     border-radius: 50%;
-    width: 9px;
-    height: 9px;
+    width: 10px;
+    height: 10px;
     background-color: #009933;
 
 }
@@ -298,14 +295,15 @@ letter-spacing: -0.05px;
 
 .nameAndCircle{
     position: relative;
+    display: inline-block;
     width:95%;
+    padding-right: 10px;
     text-decoration: none;
-    height: 25px;
-
+    height: 50px;
 }
 
 .usersArea{
-    margin-top: 40px;
+    margin-top: 30px;
 }
 
 .chatCircle {
@@ -317,6 +315,22 @@ letter-spacing: -0.05px;
     background-color: #ffcc00;
 }
 
+
+.bubbleContainer {
+    display: inline-block;
+    position:absolute;
+    top: 15px;
+    right:30px;
+}
+
+.speechBubble {
+    height: 14px;
+    width:14px;
+}
+
+#generalBubble {
+    top:35px;
+}
 
 .chatTods {
     border-radius: 50%;
@@ -467,13 +481,12 @@ width: 25%;
 }
 
 
-
 .invite-text {
     font-size: 15px;
     color: #FFFFFF;
     font-weight: 50;
     font-family: ClearSans-Light;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 #invite {
@@ -482,6 +495,7 @@ width: 25%;
 
 #generalChat {
     font-size: 17px;
+    margin-top: 20%;
     left: 5%;
     font-family: ClearSans-Medium;
     text-decoration: none;

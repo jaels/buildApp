@@ -13,17 +13,35 @@ class ConnectArea extends React.Component {
             gotAllDetails: false,
             newMessage: ""
         }
+
+
+        var details={};
+
         this.handleNewMessage = this.handleNewMessage.bind(this);
+        this.componentWillReceiveProps=this.componentWillReceiveProps.bind(this);
 
         var that = this;
         axios.get('/getAllDetails').then(function(result) {
+            console.log(that.props.location.pathname);
+
             that.setState({
                 details:result.data.file,
                 gotAllDetails: true
             })
-            return;
         })
     }
+
+    componentWillReceiveProps(nextProps){
+        var details=this.state.details;
+        var loc = this.props.location.pathname.split('/');
+        var whichChat = loc[loc.length-1];
+        console.log(whichChat);
+        details.whichChat=whichChat;
+        this.setState({
+            details:details
+        })
+        console.log(this.state.details);
+}
 
     render() {
         var that = this;

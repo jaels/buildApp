@@ -17,6 +17,7 @@ class privateChat extends React.Component {
 
 
 
+
         var loc = this.props.location.pathname.split('/');
         var whichChat = loc[loc.length-1];
         var that = this;
@@ -29,6 +30,8 @@ class privateChat extends React.Component {
         this.sendMessage = this.sendMessage.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.messageRecieve = this.messageRecieve.bind(this);
+        this.logOut = this.logOut.bind(this);
+
         var whichChat = this.state.whichChat;
 
         axios.get(`/getPrivateMessages/${whichChat}`).then(function(result) {
@@ -164,6 +167,7 @@ class privateChat extends React.Component {
         this.setState({newMessage: event.target.value});
     }
     logOut() {
+        var that=this;
         socket.emit('bye', that.props.details.user.id);
         axios.get('logOut').then(function(reponse) {
             console.log('logged out');
