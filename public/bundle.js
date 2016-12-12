@@ -28586,7 +28586,7 @@
 	            newChat: {},
 	            newGeneralChat: false,
 	            current: "general",
-	            hover: false
+	            hover: {}
 	        };
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
 
@@ -28688,13 +28688,78 @@
 	                    console.log(that.state);
 	                }
 
+	                function onMouseEnterHandler() {
+	                    console.log('mouse in');
+	                    var hover = that.state.hover;
+	                    hover[user.id.toString()] = true;
+	                    that.setState({
+	                        hover: hover
+	                    });
+	                    console.log('on mouse');
+	                    console.log(that.state.hover);
+	                }
+
+	                function onMouseLeaveHandler() {
+
+	                    console.log('mouse out');
+	                    var hover = that.state.hover;
+
+	                    hover[user.id.toString()] = false;
+	                    that.setState({
+	                        hover: hover
+	                    });
+	                    console.log('out mouse');
+	                    console.log(that.state.hover);
+	                }
+
+	                function checkHover() {
+	                    console.log('checking hover');
+	                    console.log(that.state.hover[user.id.toString()]);
+	                    if (that.state.hover[user.id.toString()]) {
+	                        console.log('whyyyy');
+	                        return React.createElement(
+	                            'div',
+	                            { className: 'usersDetails' },
+	                            React.createElement(
+	                                'p',
+	                                null,
+	                                'Email: ',
+	                                user.email
+	                            ),
+	                            React.createElement(
+	                                'p',
+	                                null,
+	                                'Floor: ',
+	                                user.floor
+	                            ),
+	                            React.createElement(
+	                                'p',
+	                                null,
+	                                'Building: ',
+	                                user.building_specifications
+	                            ),
+	                            React.createElement(
+	                                'p',
+	                                null,
+	                                'Apt.number: ',
+	                                user.apt_number
+	                            )
+	                        );
+	                    } else {
+	                        console.log('nooooooo');
+	                    }
+	                }
+
 	                return React.createElement(
 	                    'div',
 	                    { className: 'nameAndCircle' },
 	                    checkConnected(),
 	                    React.createElement(
 	                        Link,
-	                        { onClick: cancelBubble, to: '/connectArea/' + chatUrl, activeClassName: 'active', id: user.id },
+	                        { onClick: cancelBubble, to: '/connectArea/' + chatUrl, activeClassName: 'active', id: user.id,
+	                            onMouseEnter: onMouseEnterHandler,
+	                            onMouseLeave: onMouseLeaveHandler
+	                        },
 	                        ' ',
 	                        React.createElement(
 	                            'p',
@@ -28704,7 +28769,8 @@
 	                            user.lastname
 	                        )
 	                    ),
-	                    isNew()
+	                    isNew(),
+	                    checkHover()
 	                );
 	            });
 

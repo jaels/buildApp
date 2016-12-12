@@ -11,7 +11,7 @@ class ChatNav extends React.Component {
             newChat:{},
             newGeneralChat:false,
             current:"general",
-            hover:false
+            hover:{}
         }
         this.componentDidMount = this.componentDidMount.bind(this);
 
@@ -20,6 +20,7 @@ class ChatNav extends React.Component {
             that.setState({
                 users:result.data.file
             })
+
         })
         axios.get('/whosConnected').then(function(result) {
             console.log('who is connected when entering')
@@ -117,17 +118,64 @@ class ChatNav extends React.Component {
 
                     }
 
+                    function onMouseEnterHandler() {
+                        console.log('mouse in');
+                        var hover = that.state.hover;
+                        hover[user.id.toString()]=true;
+                        that.setState({
+                            hover:hover
+                        })
+                        console.log('on mouse');
+                        console.log(that.state.hover);
+                    }
+
+                    function onMouseLeaveHandler() {
+
+                        console.log('mouse out');
+                        var hover = that.state.hover;
+
+                        hover[user.id.toString()]=false;
+                        that.setState({
+                            hover:hover
+                        })
+                        console.log('out mouse');
+                        console.log(that.state.hover);
+                    }
+
+                    function checkHover() {
+                        console.log('checking hover');
+                        console.log(that.state.hover[user.id.toString()])
+                        if(that.state.hover[user.id.toString()]) {
+                            console.log('whyyyy')
+                            return (
+                                <div className="usersDetails">
+                                    <p>Email: {user.email}</p>
+                                    <p>Floor: {user.floor}</p>
+                                    <p>Building: {user.building_specifications}</p>
+                                    <p>Apt.number: {user.apt_number}</p>
+                                </div>
+
+                            )
+                        }
+                        else {
+                            console.log('nooooooo');
+                        }
+                    }
 
                     return (
                         <div className="nameAndCircle">
                             {checkConnected()}
-                            <Link onClick={cancelBubble} to={`/connectArea/${chatUrl}`} activeClassName="active" id={user.id} > <p  className="nav-text">{user.firstname} {user.lastname}</p></Link>
+                            <Link onClick={cancelBubble} to={`/connectArea/${chatUrl}`} activeClassName="active" id={user.id}
+                                onMouseEnter={onMouseEnterHandler}
+                                onMouseLeave={onMouseLeaveHandler}
+                                > <p  className="nav-text">{user.firstname} {user.lastname}</p></Link>
                             {isNew()}
+                            {checkHover()}
+
                         </div>
 
                     )
                 })
-
 
 
             function isNewGeneral() {
