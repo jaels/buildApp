@@ -21794,7 +21794,45 @@
 	var RegisterUser = React.createClass({
 	    displayName: 'RegisterUser',
 
+	    getInitialState: function getInitialState() {
+	        return {
+	            success: true,
+	            required: true,
+	            emailExists: false
+	        };
+	    },
 	    render: function render() {
+	        var that = this;
+	        function check() {
+	            if (that.state.success === false) {
+	                return React.createElement(
+	                    'h3',
+	                    { className: 'error-msg', id: 'notRegisterred' },
+	                    'Please go to homepage and register an address first'
+	                );
+	            }
+	        }
+
+	        function checkToo() {
+	            if (that.state.required === false) {
+	                return React.createElement(
+	                    'h3',
+	                    { className: 'error-msg', id: 'notRegisterred' },
+	                    'Please fill all the required fields'
+	                );
+	            }
+	        }
+
+	        function checkEmail() {
+	            if (that.state.emailExists) {
+	                return React.createElement(
+	                    'h3',
+	                    { className: 'error-msg', id: 'notRegisterred' },
+	                    'Your email already exists here, you can register in only one building'
+	                );
+	            }
+	        }
+
 	        return React.createElement(
 	            'div',
 	            null,
@@ -21803,6 +21841,9 @@
 	            React.createElement(
 	                'div',
 	                { className: 'RegisterUser' },
+	                check(),
+	                checkToo(),
+	                checkEmail(),
 	                React.createElement(
 	                    'div',
 	                    { className: 'form-headlines' },
@@ -21840,7 +21881,7 @@
 	                    ),
 	                    React.createElement(
 	                        'button',
-	                        { className: 'button', onClick: this.registerNew },
+	                        { className: 'button', id: 'submit-btn', onClick: this.registerNew },
 	                        'Submit'
 	                    )
 	                )
@@ -21848,6 +21889,7 @@
 	        );
 	    },
 	    registerNew: function registerNew(e) {
+	        var that = this;
 	        e.preventDefault();
 	        var firstname = this.refs.firstname.value;
 	        var lastname = this.refs.lastname.value;
@@ -21856,25 +21898,44 @@
 	        var buildingSpec = this.refs.buildingSpec.value;
 	        var email = this.refs.email.value;
 	        var password = this.refs.password.value;
-	        console.log([firstname, lastname, floor, aptNumber, buildingSpec, email, password]);
-	        axios.post('/registerUser', {
-	            firstname: firstname.toUpperCase(),
-	            lastname: lastname.toUpperCase(),
-	            floor: floor,
-	            aptNumber: aptNumber,
-	            buildingSpec: buildingSpec,
-	            email: email,
-	            password: password
-	        }).then(function (res) {
-	            if (res.data.success === true) {
-	                var user = {
-	                    id: res.data.file.user.id
-	                };
-	                socket.emit('newUser', user);
+	        if (firstname.length === 0 || lastname.length === 0 || floor.toString().length === 0 || email.length === 0 || email.indexOf('@') === -1 || password.length === 0) {
+	            that.setState({
+	                required: false
+	            });
+	            console.log('not all required');
+	            console.log(that.state);
+	        } else {
+	            axios.get('/checkAddress').then(function (result) {
+	                if (result.data.success == true) {
+	                    axios.post('/registerUser', {
+	                        firstname: firstname.toUpperCase(),
+	                        lastname: lastname.toUpperCase(),
+	                        floor: floor,
+	                        aptNumber: aptNumber,
+	                        buildingSpec: buildingSpec,
+	                        email: email,
+	                        password: password
+	                    }).then(function (res) {
+	                        if (res.data.success === true) {
+	                            var user = {
+	                                id: res.data.file.user.id
+	                            };
+	                            socket.emit('newUser', user);
 
-	                window.location.href = "#/connectArea";
-	            } else {}
-	        });
+	                            window.location.href = "#/connectArea";
+	                        } else {
+	                            that.setState({
+	                                emailExists: true
+	                            });
+	                        }
+	                    });
+	                } else {
+	                    that.setState({
+	                        success: false
+	                    });
+	                }
+	            });
+	        }
 	    }
 	});
 
@@ -28657,7 +28718,6 @@
 
 	            var details = this.props.details;
 	            var address = this.props.details.address;
-
 	            var users = that.state.users.map(function (user) {
 	                var chatUrl = [that.props.details.user.id, user.id].sort(function (a, b) {
 	                    return a - b;
@@ -28745,8 +28805,6 @@
 	                                user.apt_number
 	                            )
 	                        );
-	                    } else {
-	                        console.log('nooooooo');
 	                    }
 	                }
 
@@ -52521,11 +52579,11 @@
 	                        'Your building already exists here, would you like to join the group?'
 	                    ),
 	                    React.createElement(
-	                        'button',
-	                        { className: 'button' },
+	                        'a',
+	                        { href: '#/register' },
 	                        React.createElement(
-	                            Link,
-	                            { to: '/register' },
+	                            'button',
+	                            { className: 'button', id: 'yes-btn' },
 	                            'Yes'
 	                        )
 	                    )
@@ -52542,7 +52600,7 @@
 	                    ),
 	                    React.createElement(
 	                        'button',
-	                        { className: 'button', onClick: that.makeBuilding },
+	                        { className: 'button', id: 'yes-btn', onClick: that.makeBuilding },
 	                        'Yes!'
 	                    ),
 	                    renderSuccess()
@@ -52570,17 +52628,18 @@
 	                        'Please register and tell your neighbours to join!'
 	                    ),
 	                    React.createElement(
-	                        'button',
-	                        { className: 'button' },
+	                        'a',
+	                        { href: '#/register' },
 	                        React.createElement(
-	                            Link,
-	                            { to: '/register' },
+	                            'button',
+	                            { className: 'button', id: 'yes-btn' },
 	                            'Register'
 	                        )
 	                    )
 	                );
 	            }
 	        }
+
 	        function loginForm() {
 	            if (openLogin) {
 	                return React.createElement(
@@ -52617,7 +52676,7 @@
 	        }
 	        return React.createElement(
 	            'div',
-	            null,
+	            { className: 'landing' },
 	            React.createElement('img', { className: 'logo-main', src: 'logo_small.png' }),
 	            React.createElement('img', { className: 'building-image', src: 'building.png' }),
 	            React.createElement(
@@ -52724,7 +52783,8 @@
 	        }
 	    },
 
-	    loginUser: function loginUser() {
+	    loginUser: function loginUser(e) {
+	        e.preventDefault();
 	        var that = this;
 	        var email = this.refs.email.value;
 	        var password = this.refs.password.value;

@@ -76,6 +76,8 @@ class generalChat extends React.Component {
             )
         }
 
+
+
         componentDidUpdate() {
             console.log('scrolling');
             this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
@@ -98,6 +100,7 @@ messageRecieve(message) {
 messages.push(message);
 this.setState({messages});
 }
+
 
         sendMessage(e) {
             var that =this;

@@ -186,6 +186,9 @@ app.post('/registerUser', function(req, res) {
                     })
                 })
             }
+            else {
+                res.json({success:false})
+            }
         }).catch(function(err) {
             console.log(err);
         })

@@ -76,10 +76,6 @@ class ChatNav extends React.Component {
         var { gotAllUsers, users } = this.state;
         var details = this.props.details;
         var address = this.props.details.address;
-
-
-
-
                 var users = that.state.users.map(function(user) {
                     var chatUrl = [that.props.details.user.id,user.id].sort(function(a,b) {
                         return (a-b);
@@ -157,9 +153,6 @@ class ChatNav extends React.Component {
 
                             )
                         }
-                        else {
-                            console.log('nooooooo');
-                        }
                     }
 
                     return (
@@ -171,9 +164,7 @@ class ChatNav extends React.Component {
                                 > <p  className="nav-text">{user.firstname} {user.lastname}</p></Link>
                             {isNew()}
                             {checkHover()}
-
                         </div>
-
                     )
                 })
 
@@ -192,7 +183,6 @@ class ChatNav extends React.Component {
                 console.log('cancel general')
                 that.state.newGeneralChat=false;
                 that.state.current="general";
-
             }
 
         return (

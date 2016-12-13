@@ -31,7 +31,7 @@ var RegisterAddress = React.createClass({
                 return (
                     <div className="buildingExist">
                         <h3 className="existText">Your building already exists here, would you like to join the group?</h3>
-                        <button className="button"><Link to="/register">Yes</Link></button>
+                        <a href="#/register"><button className="button" id="yes-btn">Yes</button></a>
                     </div>
                 )
             };
@@ -39,7 +39,7 @@ var RegisterAddress = React.createClass({
                 return (
                     <div className="buildingExist">
                         <h3 className="existText">Your building is new here! Do you wanna create it?</h3>
-                    <button className="button" onClick = {that.makeBuilding}>Yes!</button>
+                    <button className="button" id="yes-btn" onClick = {that.makeBuilding}>Yes!</button>
                         {renderSuccess()}
                     </div>
                 )
@@ -53,11 +53,15 @@ var RegisterAddress = React.createClass({
                             <br/>
                         Please register and tell your neighbours to join!
                         </h3>
-                        <button className="button"><Link to="/register">Register</Link></button>
+                        <a href="#/register"><button className="button" id="yes-btn">Register</button></a>
                     </div>
                 )
             }
         }
+
+
+
+
         function loginForm () {
             if(openLogin) {
                 return (
@@ -76,7 +80,7 @@ var RegisterAddress = React.createClass({
 
         }
         return (
-            <div>
+            <div className="landing">
                 <img className="logo-main" src="logo_small.png"/>
                 <img className="building-image" src="building.png"/>
 
@@ -168,7 +172,8 @@ open: function() {
 
 },
 
-    loginUser: function() {
+    loginUser: function(e) {
+        e.preventDefault();
         var that = this;
         var email = this.refs.email.value;
         var password = this.refs.password.value;
