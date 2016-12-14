@@ -28779,30 +28779,34 @@
 	                        console.log('whyyyy');
 	                        return React.createElement(
 	                            'div',
-	                            { className: 'usersDetails' },
+	                            { className: 'detailsWrapper' },
 	                            React.createElement(
-	                                'p',
-	                                null,
-	                                'Email: ',
-	                                user.email
-	                            ),
-	                            React.createElement(
-	                                'p',
-	                                null,
-	                                'Floor: ',
-	                                user.floor
-	                            ),
-	                            React.createElement(
-	                                'p',
-	                                null,
-	                                'Building: ',
-	                                user.building_specifications
-	                            ),
-	                            React.createElement(
-	                                'p',
-	                                null,
-	                                'Apt.number: ',
-	                                user.apt_number
+	                                'div',
+	                                { className: 'usersDetails' },
+	                                React.createElement(
+	                                    'p',
+	                                    null,
+	                                    'Email: ',
+	                                    user.email
+	                                ),
+	                                React.createElement(
+	                                    'p',
+	                                    null,
+	                                    'Floor: ',
+	                                    user.floor
+	                                ),
+	                                React.createElement(
+	                                    'p',
+	                                    null,
+	                                    'Building: ',
+	                                    user.building_specifications
+	                                ),
+	                                React.createElement(
+	                                    'p',
+	                                    null,
+	                                    'Apt.number: ',
+	                                    user.apt_number
+	                                )
 	                            )
 	                        );
 	                    }

@@ -144,12 +144,14 @@ class ChatNav extends React.Component {
                         if(that.state.hover[user.id.toString()]) {
                             console.log('whyyyy')
                             return (
+                                <div className="detailsWrapper">
                                 <div className="usersDetails">
                                     <p>Email: {user.email}</p>
                                     <p>Floor: {user.floor}</p>
                                     <p>Building: {user.building_specifications}</p>
                                     <p>Apt.number: {user.apt_number}</p>
                                 </div>
+                            </div>
 
                             )
                         }
