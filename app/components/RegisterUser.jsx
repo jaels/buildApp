@@ -52,7 +52,7 @@ var RegisterUser = React.createClass({
                         <p className="existText" id="form-subtitle">Fill in this form to join your building and chat away!</p>
                     </div>
                     <form>
-                        <div>
+                        <div className="theForm">
                             <input className="inputField" type="text" placeholder="First name (required)" ref="firstname" required="require"></input>
                             <br/>
                             <input className="inputField" type="text" placeholder="Last name (required)" ref="lastname" required="require"></input>

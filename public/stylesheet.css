@@ -51,12 +51,15 @@ body {
 .know-your {
     position: relative;
     font-family: League Spartan;
-    font-size: 45px;
+    /*font-size: 45px;*/
     color: #FFFFFF;
     letter-spacing: -0.18px;
     margin-left: 80px;
+    margin-right: 20px;
     z-index: 1;
     width: 100%;
+    font-size: 3.1vw;
+
 
 }
 
@@ -127,6 +130,8 @@ body {
     min-width:150px;
     height: 50px;
     right: 30px;
+    margin-right: 20px;
+
     /*margin-top: 40%;*/
 
     font-weight: 400;
@@ -176,18 +181,6 @@ body {
     display: none;
 }
 
-.inputField {
-    background-color: #120079;
-    margin-bottom: 20px;
-    border: 2px solid #FFFFFF;
-    height: 30px;
-    width: 85%;
-    Padding-bottom: 10px;
-    font-family: Clear Sans;
-    font-size: 16px;
-    color: #BCBCBC;
-    letter-spacing: -0.06px;
-}
 
 .inputField:focus {
     outline: none;
@@ -198,13 +191,34 @@ body {
     min-width: 600px;
 }
 
+.inputField {
+    background-color: #120079;
+    margin-bottom: 20px;
+    border: 2px solid #FFFFFF;
+    height: 30px;
+    width: 30%;
+    Padding-bottom: 10px;
+    font-family: Clear Sans;
+    font-size: 16px;
+    color: #BCBCBC;
+    letter-spacing: -0.06px;
+}
+
+
+
 .RegisterUser {
-    position: absolute;
+    position: relative;
     top: 1%;
-    left: 32%;
-    margin-top: 6%;
+    right: 3%;
+    /*left: 5%;*/
+    margin-top: 2%;
     text-align: center;
 
+}
+
+.theForm {
+    /*position: relative;
+    left: 10%;*/
 }
 
 .big-n {
@@ -463,6 +477,7 @@ body {
 .messageText {
     position: relative;
     line-height: 100%;
+    font-weight: bolder;
 
 }
 .messageName {
@@ -809,7 +824,7 @@ padding-top: 2px;
 
 .connectArea {
     display: inline;
-    font-family: Clear Sans;
+    font-family: Clear Sans Light;
     background-color: #F9F9F9;
 }
 

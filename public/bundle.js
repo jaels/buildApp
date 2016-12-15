@@ -21863,7 +21863,7 @@
 	                    null,
 	                    React.createElement(
 	                        'div',
-	                        null,
+	                        { className: 'theForm' },
 	                        React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'First name (required)', ref: 'firstname', required: 'require' }),
 	                        React.createElement('br', null),
 	                        React.createElement('input', { className: 'inputField', type: 'text', placeholder: 'Last name (required)', ref: 'lastname', required: 'require' }),
