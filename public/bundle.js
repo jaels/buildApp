@@ -28978,12 +28978,12 @@
 	            messages: [],
 	            whichChat: whichChat
 	        };
-
 	        _this.handleChange = _this.handleChange.bind(_this);
 	        _this.sendMessage = _this.sendMessage.bind(_this);
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
 	        _this.messageRecieve = _this.messageRecieve.bind(_this);
 	        _this.logOut = _this.logOut.bind(_this);
+	        _this.handleKeyPress = _this.handleKeyPress.bind(_this);
 
 	        var whichChat = _this.state.whichChat;
 
@@ -29092,7 +29092,7 @@
 	                    React.createElement(
 	                        'div',
 	                        { className: 'chatContainer' },
-	                        React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.newMessage, onChange: this.handleChange }),
+	                        React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.newMessage, onChange: this.handleChange, onKeyPress: this.handleKeyPress }),
 	                        React.createElement(
 	                            'button',
 	                            { className: 'button', id: 'send-btn', onClick: this.sendMessage },
@@ -29101,6 +29101,13 @@
 	                    )
 	                )
 	            );
+	        }
+	    }, {
+	        key: 'handleKeyPress',
+	        value: function handleKeyPress(event) {
+	            if (event.key == 'Enter') {
+	                this.sendMessage(event);
+	            }
 	        }
 	    }, {
 	        key: 'componentDidUpdate',
@@ -52153,6 +52160,7 @@
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
 	        _this.messageRecieve = _this.messageRecieve.bind(_this);
 	        _this.logOut = _this.logOut.bind(_this);
+	        _this.handleKeyPress = _this.handleKeyPress.bind(_this);
 
 	        var buildingId = _this.props.details.buildingId;
 
@@ -52229,7 +52237,7 @@
 	                    React.createElement(
 	                        'div',
 	                        { className: 'chatContainer' },
-	                        React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.newMessage, onChange: this.handleChange }),
+	                        React.createElement('textArea', { className: 'textArea', placeholder: 'Write your message', value: this.state.newMessage, onChange: this.handleChange, onKeyPress: this.handleKeyPress }),
 	                        React.createElement(
 	                            'button',
 	                            { className: 'button', id: 'send-btn', onClick: this.sendMessage },
@@ -52238,6 +52246,13 @@
 	                    )
 	                )
 	            );
+	        }
+	    }, {
+	        key: 'handleKeyPress',
+	        value: function handleKeyPress(event) {
+	            if (event.key == 'Enter') {
+	                this.sendMessage(event);
+	            }
 	        }
 	    }, {
 	        key: 'componentDidUpdate',

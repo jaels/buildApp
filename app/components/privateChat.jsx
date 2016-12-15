@@ -3,9 +3,6 @@ import io from 'socket.io-client';
 import Moment from 'moment';
 
 
-
-
-
 class privateChat extends React.Component {
     constructor(props) {
         super(props);
@@ -15,9 +12,6 @@ class privateChat extends React.Component {
         }
         socket.emit('newUser', user);
 
-
-
-
         var loc = this.props.location.pathname.split('/');
         var whichChat = loc[loc.length-1];
         var that = this;
@@ -25,12 +19,13 @@ class privateChat extends React.Component {
             messages:[],
             whichChat:whichChat
         };
-
         this.handleChange = this.handleChange.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.messageRecieve = this.messageRecieve.bind(this);
         this.logOut = this.logOut.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+
 
         var whichChat = this.state.whichChat;
 
@@ -104,13 +99,20 @@ class privateChat extends React.Component {
                         </div>
                     </div>
                     <div className="chatContainer">
-                        <textArea className="textArea"  placeholder="Write your message" value={this.state.newMessage} onChange={this.handleChange} ></textArea>
+                        <textArea className="textArea"  placeholder="Write your message" value={this.state.newMessage} onChange={this.handleChange} onKeyPress={this.handleKeyPress} ></textArea>
                         <button className="button" id="send-btn" onClick={this.sendMessage}>Send</button>
                     </div>
                 </div>
             </div>
         )
     }
+
+    handleKeyPress(event) {
+        if(event.key == 'Enter'){
+            this.sendMessage(event);
+        }
+    }
+
 
     componentDidUpdate() {
         this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;

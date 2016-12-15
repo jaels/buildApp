@@ -22,11 +22,11 @@ body {
     font-style: normal;
     font-weight: 500;
     src: local('ClearSans-Medium'), local('Clear Sans Medium'),
-         url('fonts/clearsans/ClearSans-Medium.eot'),
-         url('fonts/clearsans/ClearSans-Medium.eot?#iefix') format('embedded-opentype'),
-         url('fonts/clearsans/ClearSans-Medium.woff') format('woff'),
-         url('fonts/clearsans/ClearSans-Medium.ttf') format('truetype'),
-         url('fonts/clearsans/ClearSans-Medium.svg') format('svg');
+         url('fonts/ClearSans-Medium.eot'),
+         url('fonts/ClearSans-Medium.eot?#iefix') format('embedded-opentype'),
+         url('fonts/ClearSans-Medium.woff') format('woff'),
+         url('fonts/ClearSans-Medium.ttf') format('truetype'),
+         url('fonts/ClearSans-Medium.svg') format('svg');
 }
 
 @font-face {
@@ -34,11 +34,11 @@ body {
     font-style: normal;
     font-weight: 500;
     src: local('ClearSans-Light'), local('Clear Sans Light'),
-         url('fonts/clearsans/ClearSans-Light.eot'),
-         url('fonts/clearsans/ClearSans-Light.eot?#iefix') format('embedded-opentype'),
-         url('fonts/clearsans/ClearSans-Light.woff') format('woff'),
-         url('fonts/clearsans/ClearSans-Light.ttf') format('truetype'),
-         url('fonts/clearsans/ClearSans-Light.svg') format('svg');
+         url('fonts/ClearSans-Light.eot'),
+         url('fonts/ClearSans-Light.eot?#iefix') format('embedded-opentype'),
+         url('fonts/ClearSans-Light.woff') format('woff'),
+         url('fonts/ClearSans-Light.ttf') format('truetype'),
+         url('fonts/ClearSans-Light.svg') format('svg');
 }
 
 
@@ -57,9 +57,6 @@ body {
     margin-left: 80px;
     z-index: 1;
     width: 100%;
-    overflow: hidden;
-white-space: nowrap;
-
 
 }
 
@@ -266,6 +263,68 @@ white-space: nowrap;
     outline: none;
 
 }
+
+#send-btn {
+    position: relative;
+    display: inline-block;
+    height: 100%;
+    bottom: 40px;
+    margin-left: 92%;
+    font-size: 16px;
+    color: #FFFFFF;
+    font-family: Clear Sans Light;
+    font-size: 14px;
+    letter-spacing: -0.05px;
+    border: 0;
+    -webkit-transition: background-color 0.3s ease-out;
+    -moz-transition: background-color 0.3s ease-out;
+    -o-transition: background-color 0.3s ease-out;
+    transition: background-color 0.3s ease-out;
+}
+
+#send-btn:hover {
+    background-color: white;
+    color: #6956FD;
+    border: 1px solid #6956FD;
+    cursor: pointer;
+}
+
+#send-btn:focus {
+    outline: none;
+
+
+}
+
+
+#submitLogin {
+    margin-top: 4%;
+    margin-left:3%;
+    margin-bottom: 2%;
+    height: 37px;
+    width: 70px;
+    color: #FFFFFF;
+    font-family: Clear Sans Light;
+    font-size: 14px;
+    letter-spacing: -0.05px;
+    border: 0;
+    -webkit-transition: background-color 0.3s ease-out;
+    -moz-transition: background-color 0.3s ease-out;
+    -o-transition: background-color 0.3s ease-out;
+    transition: background-color 0.3s ease-out;
+}
+
+#submitLogin:hover {
+    background-color: white;
+    color: #6956FD;
+    border: 1px solid #6956FD;
+    cursor: pointer;
+}
+
+#submitLogin:focus {
+    outline: none;
+
+}
+
 
 #logOutButton {
     position: relative;
@@ -622,12 +681,6 @@ padding-top: 2px;
     margin-top: 2%;
 }
 
-#submitLogin {
-    margin-top: 4%;
-    margin-left:3%;
-    margin-bottom: 2%;
-
-}
 
 .buildingExist {
     width: 100%;
@@ -709,13 +762,14 @@ padding-top: 2px;
 
 .textArea {
     position: relative;
-
     display: inline-block;
-    height: 5vh;
+    height: 4vh;
     /*width: 120vh;*/
     width:90%;
-    font-size: 18px;
+    font-size: 19px;
     margin-bottom: 10px;
+    padding-top: 10px;
+    /*padding-bottom: 10px;
     /*webkit-border-radius: 30px;*/
     /*-moz-border-radius: 20px;*/
     border-radius: 5px;
@@ -723,14 +777,6 @@ padding-top: 2px;
 
 }
 
-#send-btn {
-    position: relative;
-    display: inline-block;
-    height: 100%;
-    bottom: 45px;
-    margin-left: 92%;
-    font-size: 16px;
-}
 
 
 .chatUpperStreep {
