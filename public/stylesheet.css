@@ -477,7 +477,7 @@ body {
 .messageText {
     position: relative;
     line-height: 100%;
-    font-weight: bolder;
+    /*font-weight: bolder;*/
 
 }
 .messageName {
@@ -824,7 +824,7 @@ padding-top: 2px;
 
 .connectArea {
     display: inline;
-    font-family: Clear Sans Light;
+    font-family: Clear Sans;
     background-color: #F9F9F9;
 }
 
