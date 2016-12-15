@@ -52340,7 +52340,7 @@
 	    render: function render() {
 	        return React.createElement(
 	            "div",
-	            null,
+	            { className: "logoutContainer" },
 	            React.createElement("img", { className: "loggedOutLogo", src: "logo_bigger.png" }),
 	            React.createElement(
 	                "h1",

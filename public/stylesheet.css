@@ -836,11 +836,18 @@ padding-top: 2px;
     text-align: center;
 }
 
+.logoutContainer {
+    text-align: center;
+    margin-right: 32%;
+}
+
 #loggedOut {
     font-size: 30px;
     font-weight: 300;
     margin-top: 5%;
     margin-left: 26%;
+    margin-right: 26%;
+    /*left: 20%;*/
 }
 
 .loggedOutLogo {
