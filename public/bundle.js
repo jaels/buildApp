@@ -52678,7 +52678,7 @@
 	                            { className: 'loginText' },
 	                            'Password'
 	                        ),
-	                        React.createElement('input', { type: 'text', ref: 'password', className: 'input-box' })
+	                        React.createElement('input', { type: 'password', ref: 'password', className: 'input-box' })
 	                    ),
 	                    React.createElement(
 	                        'button',

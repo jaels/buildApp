@@ -70,7 +70,7 @@ var RegisterAddress = React.createClass({
                             <p className="loginText">Email</p>
                             <input type="text" ref="email" className="input-box"></input>
                             <p className="loginText">Password</p>
-                            <input type="text" ref="password" className="input-box"></input>
+                            <input type="password" ref="password" className="input-box"></input>
                         </div>
                         <button className="button" id="submitLogin" onClick={that.loginUser}>Submit</button>
                     {that.state.error ? <h4 className="userError">wrong email or password</h4> : null}
