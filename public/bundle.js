@@ -52697,7 +52697,7 @@
 	            'div',
 	            { className: 'landing' },
 	            React.createElement('img', { className: 'logo-main', src: 'logo_small.png' }),
-	            React.createElement('img', { className: 'building-image', src: 'building.png' }),
+	            React.createElement('img', { className: 'building-image', src: 'building2.png' }),
 	            React.createElement(
 	                'div',
 	                null,

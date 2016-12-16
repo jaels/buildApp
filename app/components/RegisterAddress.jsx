@@ -82,7 +82,7 @@ var RegisterAddress = React.createClass({
         return (
             <div className="landing">
                 <img className="logo-main" src="logo_small.png"/>
-                <img className="building-image" src="building.png"/>
+                <img className="building-image" src="building2.png"/>
 
                 <div>
                     <button className="button" id="login-btn" onClick={this.open}>Log In</button>
