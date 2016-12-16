@@ -151,7 +151,7 @@ body {
     -webkit-transition: border 0.2s, box-shadow 0.2s;
     transition: border 0.2s, box-shadow 0.2s;
 
-    background-image: url(search_icon.png);
+    background-image: url(search_oc.png);
     background-position: 13px 21px;
     background-size: 30px;
     background-repeat: no-repeat;
