@@ -68,7 +68,7 @@ function aboutText() {
             <div>
             <p className="aboutText">
                 Please check out <a href="                 https://vimeo.com/195662970" target="_blank">
-this</a> video to understand the idea behind neighbours. The password is: neighbours2016
+this</a> video to understand the idea behind Neighbours. The password is: neighbours2016
 <br/>
 <div className="credits">
                 This app was created by Yael Stein.<br/>
@@ -182,7 +182,8 @@ this</a> video to understand the idea behind neighbours. The password is: neighb
 open: function() {
     if(this.state.openLogin===false) {
         this.setState({
-            openLogin:true
+            openLogin:true,
+            openAbout:false
         })
     }
     else {
@@ -196,7 +197,8 @@ open: function() {
 openAbout: function() {
     if(this.state.openAbout===false) {
         this.setState({
-            openAbout:true
+            openAbout:true,
+            openLogin:false
         })
     }
     else {
