@@ -457,6 +457,30 @@ body {
     outline: none;
 }
 
+#about-btn {
+    position: absolute;
+    top: 3.2%;
+    left: 85%;
+    border-radius: 17px;
+    color: #FFFFFF;
+    font-family: Clear Sans Light;
+    font-size: 14px;
+    letter-spacing: -0.05px;
+    border: 0;
+}
+
+#about-btn:hover {
+    color: #6956FD;
+    cursor: pointer;
+}
+#about-btn:focus {
+    outline: none;
+}
+
+
+
+
+
 .error-msg {
     font-family: Clear Sans;
     color: red;
@@ -629,6 +653,21 @@ width: 300px;
 
 }
 
+.about-container {
+    position: absolute;
+    left: 64%;
+    top: 10%;
+    opacity: 0.97;
+    background: #E6E2FF;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 20px;
+    border-radius: 10px;
+    z-index: 5;
+    width: 25%;
+
+}
+
+
 .inputAndChat {
     z-index:0;
 }
@@ -659,6 +698,20 @@ width: 300px;
     font-size: 14px;
     color: #120079;
     letter-spacing: -0.05px;
+}
+
+.aboutText {
+    font-family: Clear Sans;
+    font-size: 14px;
+    color: #120079;
+    letter-spacing: -0.05px;
+    padding: 8px;
+}
+
+.credits {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 15px;
 }
 
 /*#form-subtitle {

@@ -52574,7 +52574,8 @@
 	        return { exists: false,
 	            doesntExist: false,
 	            creationSuccess: false,
-	            openLogin: false
+	            openLogin: false,
+	            openAbout: false
 	        };
 	    },
 	    render: function render() {
@@ -52583,6 +52584,7 @@
 	        var exists = this.state.exists;
 	        var doesntExist = this.state.doesntExist;
 	        var openLogin = this.state.openLogin;
+	        var openAbout = this.state.openAbout;
 
 
 	        var fixtures = [];
@@ -52659,6 +52661,34 @@
 	            }
 	        }
 
+	        function aboutText() {
+	            if (openAbout) {
+	                return React.createElement(
+	                    'div',
+	                    null,
+	                    React.createElement(
+	                        'p',
+	                        { className: 'aboutText' },
+	                        'Please check out ',
+	                        React.createElement(
+	                            'a',
+	                            { href: '                 https://vimeo.com/195662970', target: '_blank' },
+	                            'this'
+	                        ),
+	                        ' video to understand the idea behind neighbours. The password is: neighbours2016',
+	                        React.createElement('br', null),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'credits' },
+	                            'This app was created by Yael Stein.',
+	                            React.createElement('br', null),
+	                            'Design: Noga Inbar'
+	                        )
+	                    )
+	                );
+	            }
+	        }
+
 	        function loginForm() {
 	            if (openLogin) {
 	                return React.createElement(
@@ -52711,6 +52741,20 @@
 	                'div',
 	                { className: 'login-container' },
 	                loginForm()
+	            ),
+	            React.createElement(
+	                'div',
+	                null,
+	                React.createElement(
+	                    'h5',
+	                    { id: 'about-btn', onClick: this.openAbout },
+	                    'About'
+	                )
+	            ),
+	            React.createElement(
+	                'div',
+	                { className: 'about-container' },
+	                aboutText()
 	            ),
 	            React.createElement(
 	                'div',
@@ -52802,6 +52846,18 @@
 	        }
 	    },
 
+	    openAbout: function openAbout() {
+	        if (this.state.openAbout === false) {
+	            this.setState({
+	                openAbout: true
+	            });
+	        } else {
+	            this.setState({
+	                openAbout: false
+	            });
+	        }
+	    },
+
 	    loginUser: function loginUser(e) {
 	        e.preventDefault();
 	        var that = this;
@@ -52817,7 +52873,6 @@
 	                    id: res.data.file.user.id
 	                };
 	                socket.emit('newUser', user);
-
 	                window.location.href = "#/connectArea";
 	            } else {
 	                console.log('blaaa');
@@ -52825,7 +52880,6 @@
 	            }
 	        });
 	    }
-
 	});
 
 	module.exports = RegisterAddress;

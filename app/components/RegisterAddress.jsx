@@ -14,7 +14,8 @@ var RegisterAddress = React.createClass({
         return { exists: false,
             doesntExist:false,
             creationSuccess: false,
-            openLogin:false
+            openLogin:false,
+            openAbout:false
         };
     },
     render: function() {
@@ -23,6 +24,7 @@ var RegisterAddress = React.createClass({
         var { exists } = this.state;
         var { doesntExist } = this.state;
         var { openLogin } = this.state;
+        var { openAbout } = this.state;
 
         var fixtures = [];
         var that=this;
@@ -60,7 +62,23 @@ var RegisterAddress = React.createClass({
         }
 
 
-
+function aboutText() {
+    if(openAbout) {
+        return (
+            <div>
+            <p className="aboutText">
+                Please check out <a href="                 https://vimeo.com/195662970" target="_blank">
+this</a> video to understand the idea behind neighbours. The password is: neighbours2016
+<br/>
+<div className="credits">
+                This app was created by Yael Stein.<br/>
+                Design: Noga Inbar
+            </div>
+            </p>
+            </div>
+        )
+    }
+}
 
         function loginForm () {
             if(openLogin) {
@@ -77,7 +95,6 @@ var RegisterAddress = React.createClass({
                 </form>
                 )
             }
-
         }
         return (
             <div className="landing">
@@ -90,7 +107,12 @@ var RegisterAddress = React.createClass({
                 <div className="login-container">
                     {loginForm()}
                 </div>
-
+<div>
+    <h5 id="about-btn" onClick={this.openAbout}>About</h5>
+</div>
+<div className="about-container">
+{aboutText()}
+</div>
             <div className="addressContainer">
                 <div>
                 <h3 className="know-your">Know your neighbours.</h3>
@@ -169,6 +191,20 @@ open: function() {
         })
 
     }
+},
+
+openAbout: function() {
+    if(this.state.openAbout===false) {
+        this.setState({
+            openAbout:true
+        })
+    }
+    else {
+        this.setState({
+            openAbout:false
+        })
+
+    }
 
 },
 
@@ -187,7 +223,6 @@ open: function() {
                     id:res.data.file.user.id
                 }
                         socket.emit('newUser', user);
-
                 window.location.href = "#/connectArea";
             }
             else {
@@ -196,8 +231,6 @@ open: function() {
             }
         })
     }
-
-
 })
 
 module.exports = RegisterAddress;
