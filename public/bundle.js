@@ -52578,6 +52578,25 @@
 	            openAbout: false
 	        };
 	    },
+	    handleClick: function handleClick(e) {
+	        if (this.getDOMNode().contains(e.target)) {
+	            return;
+	        } else {
+	            this.setState({
+	                openAbout: false,
+	                openLogin: false
+	            });
+	        }
+	    },
+
+	    componentWillMount: function componentWillMount() {
+	        document.addEventListener('click', this.handleClick, false);
+	    },
+
+	    componentWillUnmount: function componentWillUnmount() {
+	        document.removeEventListener('click', this.handleClick, false);
+	    },
+
 	    render: function render() {
 	        var address = this.state.address;
 	        var creationSuccess = this.state.creationSuccess;

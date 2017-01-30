@@ -18,6 +18,26 @@ var RegisterAddress = React.createClass({
             openAbout:false
         };
     },
+    handleClick: function (e) {
+        if (this.getDOMNode().contains(e.target)) {
+            return;
+        }
+        else {
+            this.setState({
+                openAbout:false,
+                openLogin:false
+            })
+        }
+    },
+
+    componentWillMount: function () {
+        document.addEventListener('click', this.handleClick, false);
+    },
+
+    componentWillUnmount: function () {
+        document.removeEventListener('click', this.handleClick, false);
+    },
+
     render: function() {
         var { address } = this.state;
         var { creationSuccess } = this.state;
