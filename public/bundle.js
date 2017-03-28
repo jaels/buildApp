@@ -48,20 +48,13 @@
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
-	var RegisterUser = __webpack_require__(183);
-	var createBuilding = __webpack_require__(265);
-	var connectArea = __webpack_require__(266);
-
-	var privateChat = __webpack_require__(269);
-
-	var generalChat = __webpack_require__(432);
-
-	var loggedOut = __webpack_require__(433);
-
-	var Conversations = __webpack_require__(268);
-
 	var Main = __webpack_require__(434);
 	var LoginPage = __webpack_require__(436);
+	var RegisterUser = __webpack_require__(183);
+	var connectArea = __webpack_require__(266);
+	var privateChat = __webpack_require__(269);
+	var generalChat = __webpack_require__(432);
+	var loggedOut = __webpack_require__(433);
 
 	var _require = __webpack_require__(184),
 	    Route = _require.Route,
@@ -21902,8 +21895,6 @@
 	            that.setState({
 	                required: false
 	            });
-	            console.log('not all required');
-	            console.log(that.state);
 	        } else {
 	            axios.get('/checkAddress').then(function (result) {
 	                if (result.data.success == true) {
@@ -28425,88 +28416,7 @@
 
 
 /***/ },
-/* 265 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var _require = __webpack_require__(184),
-	    Link = _require.Link;
-
-	var axios = __webpack_require__(240);
-
-	var createBuilding = React.createClass({
-	    displayName: 'createBuilding',
-
-	    getInitialState: function getInitialState() {
-	        return { creationSuccess: false };
-	    },
-	    render: function render() {
-	        var address = this.state.address;
-	        var creationSuccess = this.state.creationSuccess;
-
-	        function renderSuccess() {
-	            if (creationSuccess) {
-	                return React.createElement(
-	                    'div',
-	                    { className: 'buildingExist' },
-	                    React.createElement(
-	                        'h3',
-	                        { id: 'loginHeadline' },
-	                        ' Your building in ',
-	                        React.createElement(
-	                            'span',
-	                            { id: 'createdAddress' },
-	                            ' ',
-	                            address,
-	                            ' '
-	                        ),
-	                        ' was created! Please register and tell your neighbours to join!'
-	                    ),
-	                    React.createElement(
-	                        'button',
-	                        { className: 'button' },
-	                        React.createElement(
-	                            Link,
-	                            { to: '/register' },
-	                            'Register'
-	                        )
-	                    )
-	                );
-	            }
-	        }
-	        return React.createElement(
-	            'div',
-	            { className: 'buildingExist' },
-	            React.createElement(
-	                'h3',
-	                { id: 'loginHeadline' },
-	                'Your building is new here! Do you wanna create it?'
-	            ),
-	            React.createElement(
-	                'button',
-	                { className: 'button', onClick: this.makeBuilding },
-	                'Yes!'
-	            ),
-	            renderSuccess()
-	        );
-	    },
-	    makeBuilding: function makeBuilding() {
-	        var that = this;
-	        axios.get('/registerBuilding').then(function (result) {
-	            that.setState({
-	                creationSuccess: true,
-	                address: result.data.file
-	            });
-	        });
-	    }
-	});
-
-	module.exports = createBuilding;
-
-/***/ },
+/* 265 */,
 /* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -28522,7 +28432,6 @@
 
 	var React = __webpack_require__(1);
 	var ChatNav = __webpack_require__(267);
-	var Conversations = __webpack_require__(268);
 
 	var ConnectArea = function (_React$Component) {
 	    _inherits(ConnectArea, _React$Component);
@@ -28536,21 +28445,16 @@
 	            gotAllDetails: false,
 	            newMessage: ""
 	        };
-
 	        var details = {};
-
-	        _this.handleNewMessage = _this.handleNewMessage.bind(_this);
-	        _this.componentWillReceiveProps = _this.componentWillReceiveProps.bind(_this);
-
 	        var that = _this;
 	        axios.get('/getAllDetails').then(function (result) {
-	            console.log(that.props.location.pathname);
-
 	            that.setState({
 	                details: result.data.file,
 	                gotAllDetails: true
 	            });
 	        });
+	        _this.handleNewMessage = _this.handleNewMessage.bind(_this);
+	        _this.componentWillReceiveProps = _this.componentWillReceiveProps.bind(_this);
 	        return _this;
 	    }
 
@@ -28560,12 +28464,10 @@
 	            var details = this.state.details;
 	            var loc = this.props.location.pathname.split('/');
 	            var whichChat = loc[loc.length - 1];
-	            console.log(whichChat);
 	            details.whichChat = whichChat;
 	            this.setState({
 	                details: details
 	            });
-	            console.log(this.state.details);
 	        }
 	    }, {
 	        key: 'render',
@@ -28658,8 +28560,6 @@
 	            });
 	        });
 	        axios.get('/whosConnected').then(function (result) {
-	            console.log('who is connected when entering');
-	            console.log(result);
 	            that.setState({
 	                connected: result.data.file
 	            });
@@ -28672,35 +28572,26 @@
 	        value: function componentDidMount() {
 	            var that = this;
 	            var newChat = {};
-
 	            socket.on('hey', function (connected) {
-	                console.log('hey - what the newest users from server?');
-	                console.log(connected);
 	                that.setState({
 	                    connected: connected
 	                });
 	            });
 	            socket.on('bye', function (connected) {
-	                console.log('bye- what the newest users from server?');
 	                that.setState({
 	                    connected: connected
 	                });
 	            });
 
 	            socket.on("toNav", function (message) {
-	                console.log('hey in nav');
-	                console.log(that.props);
-	                console.log(message);
 	                if (that.props.details.user.id.toString() == message.otherUser && that.state.current !== message.user_id.toString()) {
 	                    newChat[message.user_id.toString()] = true;
 	                    that.setState({
 	                        newChat: newChat
 	                    });
 	                }
-	                console.log(that.state.newChat);
 	            });
 	            socket.on("send:message", function (message) {
-	                console.log('in nav general');
 	                if (that.state.current !== "general") {
 	                    that.setState({
 	                        newGeneralChat: true
@@ -28722,7 +28613,6 @@
 	                var chatUrl = [that.props.details.user.id, user.id].sort(function (a, b) {
 	                    return a - b;
 	                }).join('_');
-
 	                function isNew() {
 	                    if (that.state.newChat[user.id.toString()]) {
 	                        return React.createElement(
@@ -28732,7 +28622,6 @@
 	                        );
 	                    }
 	                }
-
 	                function checkConnected() {
 	                    if (that.state.connected[user.id.toString()]) {
 	                        return React.createElement('div', { className: 'fullUsersCircle' });
@@ -28740,43 +28629,26 @@
 	                        return React.createElement('div', { className: 'emptyUsersCircle' });
 	                    }
 	                }
-
 	                function cancelBubble() {
-	                    console.log('cancel bubble');
 	                    that.state.newChat[user.id.toString()] = false;
 	                    that.state.current = user.id.toString();
-	                    console.log(that.state);
 	                }
-
 	                function onMouseEnterHandler() {
-	                    console.log('mouse in');
 	                    var hover = that.state.hover;
 	                    hover[user.id.toString()] = true;
 	                    that.setState({
 	                        hover: hover
 	                    });
-	                    console.log('on mouse');
-	                    console.log(that.state.hover);
 	                }
-
 	                function onMouseLeaveHandler() {
-
-	                    console.log('mouse out');
 	                    var hover = that.state.hover;
-
 	                    hover[user.id.toString()] = false;
 	                    that.setState({
 	                        hover: hover
 	                    });
-	                    console.log('out mouse');
-	                    console.log(that.state.hover);
 	                }
-
 	                function checkHover() {
-	                    console.log('checking hover');
-	                    console.log(that.state.hover[user.id.toString()]);
 	                    if (that.state.hover[user.id.toString()]) {
-	                        console.log('whyyyy');
 	                        return React.createElement(
 	                            'div',
 	                            { className: 'detailsWrapper' },
@@ -28847,7 +28719,6 @@
 	            }
 
 	            function cancelGeneralBubble() {
-	                console.log('cancel general');
 	                that.state.newGeneralChat = false;
 	                that.state.current = "general";
 	            }
@@ -28904,34 +28775,7 @@
 	module.exports = ChatNav;
 
 /***/ },
-/* 268 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var React = __webpack_require__(1);
-
-	var Conversations = React.createClass({
-	    displayName: "Conversations",
-
-	    render: function render() {
-	        var details = this.props.details;
-	        return React.createElement(
-	            "div",
-	            { className: "conversationsArea" },
-	            React.createElement(
-	                "h3",
-	                null,
-	                "these are conversations"
-	            ),
-	            this.props.children
-	        );
-	    }
-	});
-
-	module.exports = Conversations;
-
-/***/ },
+/* 268 */,
 /* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -29012,27 +28856,24 @@
 	                messages: [],
 	                whichChat: whichChat
 	            });
-
-	            this.handleChange = this.handleChange.bind(this);
-	            this.sendMessage = this.sendMessage.bind(this);
-	            this.componentDidMount = this.componentDidMount.bind(this);
-	            this.messageRecieve = this.messageRecieve.bind(this);
 	            var whichChat = this.state.whichChat;
-	            this.logOut = this.logOut.bind(this);
-
 	            axios.get('/getPrivateMessages/' + whichChat).then(function (result) {
 	                that.setState({
 	                    messages: result.data.file,
 	                    gotMessages: true
 	                });
 	            });
+	            this.handleChange = this.handleChange.bind(this);
+	            this.sendMessage = this.sendMessage.bind(this);
+	            this.componentDidMount = this.componentDidMount.bind(this);
+	            this.messageRecieve = this.messageRecieve.bind(this);
+	            this.logOut = this.logOut.bind(this);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var that = this;
 	            var address = this.props.details.user.address;
-
 	            var messages = that.state.messages.map(function (message) {
 	                return React.createElement(
 	                    'div',
@@ -29122,7 +28963,6 @@
 	    }, {
 	        key: 'messageRecieve',
 	        value: function messageRecieve(message) {
-	            console.log('recievedddd');
 	            var messages = this.state.messages;
 
 	            if (message.chat_name == this.state.whichChat) {
@@ -29135,10 +28975,8 @@
 	        value: function sendMessage(e) {
 	            var that = this;
 	            e.preventDefault();
-
 	            var newMessage = that.state.newMessage;
 	            if (newMessage.length > 0) {
-
 	                this.setState({
 	                    newMessage: ""
 	                });
@@ -29156,9 +28994,6 @@
 	                        var otherUser = arr[0];
 	                    }
 	                    newMessage.otherUser = otherUser;
-	                    console.log(newMessage);
-	                    console.log(otherUser);
-	                    console.log('sending private');
 	                    socket.emit("send:private", newMessage);
 	                });
 	            }
@@ -29174,7 +29009,6 @@
 	            var that = this;
 	            socket.emit('bye', that.props.details.user.id);
 	            axios.get('logOut').then(function (reponse) {
-	                console.log('logged out');
 	                window.location.href = "#/loggedOut";
 	            });
 	        }
@@ -52154,21 +51988,18 @@
 	        _this.state = {
 	            messages: []
 	        };
-
+	        var buildingId = _this.props.details.buildingId;
+	        axios.get('/getGeneralMessages/' + buildingId).then(function (result) {
+	            that.setState({
+	                messages: result.data.file
+	            });
+	        });
 	        _this.handleChange = _this.handleChange.bind(_this);
 	        _this.sendMessage = _this.sendMessage.bind(_this);
 	        _this.componentDidMount = _this.componentDidMount.bind(_this);
 	        _this.messageRecieve = _this.messageRecieve.bind(_this);
 	        _this.logOut = _this.logOut.bind(_this);
 	        _this.handleKeyPress = _this.handleKeyPress.bind(_this);
-
-	        var buildingId = _this.props.details.buildingId;
-
-	        axios.get('/getGeneralMessages/' + buildingId).then(function (result) {
-	            that.setState({
-	                messages: result.data.file
-	            });
-	        });
 	        return _this;
 	    }
 
@@ -52177,7 +52008,6 @@
 	        value: function render() {
 	            var that = this;
 	            var address = this.props.details.user.address;
-
 	            var messages = that.state.messages.map(function (message) {
 	                return React.createElement(
 	                    'div',
@@ -52203,7 +52033,6 @@
 	                    )
 	                );
 	            });
-
 	            return React.createElement(
 	                'div',
 	                null,
@@ -52257,7 +52086,6 @@
 	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {
-	            console.log('scrolling');
 	            this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
 	        }
 	    }, {
@@ -52298,7 +52126,6 @@
 	                }).then(function (response) {
 	                    newMessage = response.data.file;
 	                    that.props.onNewMessage(newMessage);
-	                    console.log(that.state.messages);
 	                    socket.emit('send:message', newMessage);
 	                });
 	            }
@@ -52312,10 +52139,8 @@
 	        key: 'logOut',
 	        value: function logOut() {
 	            var that = this;
-	            console.log(that.props);
 	            socket.emit('bye', that.props.details.user.id);
 	            axios.get('logOut').then(function (reponse) {
-	                console.log('logged out');
 	                window.location.href = "#/loggedOut";
 	            });
 	        }
@@ -52400,7 +52225,6 @@
 	    },
 	    logOut: function logOut() {
 	        axios.get('logOut').then(function (reponse) {
-	            console.log('logged out');
 	            window.location.href = "#/loggedOut";
 	        });
 	    }
@@ -52511,6 +52335,7 @@
 	            ) : null
 	        );
 	    },
+
 	    loginUser: function loginUser() {
 	        var that = this;
 	        var email = this.refs.email.value;
@@ -52519,9 +52344,7 @@
 	            email: email,
 	            password: password
 	        }).then(function (res) {
-	            console.log('heyyyy');
 	            if (res.data.success === true) {
-	                console.log('trueee');
 	                var user = {
 	                    id: res.data.file.user.id
 	                };
@@ -52529,12 +52352,10 @@
 
 	                window.location.href = "#/connectArea";
 	            } else {
-	                console.log('blaaa');
 	                that.setState({ error: true });
 	            }
 	        });
 	    }
-
 	});
 
 	module.exports = Login;
@@ -52604,7 +52425,6 @@
 	        var doesntExist = this.state.doesntExist;
 	        var openLogin = this.state.openLogin;
 	        var openAbout = this.state.openAbout;
-
 
 	        var fixtures = [];
 	        var that = this;
@@ -52691,10 +52511,10 @@
 	                        'Please check out ',
 	                        React.createElement(
 	                            'a',
-	                            { href: '                 https://vimeo.com/195662970', target: '_blank' },
+	                            { href: '                 https://vimeo.com/208111033', target: '_blank' },
 	                            'this'
 	                        ),
-	                        ' video to understand the idea behind Neighbours. The password is: neighbours2016',
+	                        ' video to understand the idea behind Neighbours.',
 	                        React.createElement('br', null),
 	                        React.createElement(
 	                            'div',
@@ -52852,7 +52672,6 @@
 	            });
 	        });
 	    },
-
 	    open: function open() {
 	        if (this.state.openLogin === false) {
 	            this.setState({
@@ -52865,7 +52684,6 @@
 	            });
 	        }
 	    },
-
 	    openAbout: function openAbout() {
 	        if (this.state.openAbout === false) {
 	            this.setState({
@@ -52878,7 +52696,6 @@
 	            });
 	        }
 	    },
-
 	    loginUser: function loginUser(e) {
 	        e.preventDefault();
 	        var that = this;
@@ -52888,7 +52705,6 @@
 	            email: email,
 	            password: password
 	        }).then(function (res) {
-	            console.log('heyyyy');
 	            if (res.data.success === true) {
 	                var user = {
 	                    id: res.data.file.user.id
@@ -52896,7 +52712,6 @@
 	                socket.emit('newUser', user);
 	                window.location.href = "#/connectArea";
 	            } else {
-	                console.log('blaaa');
 	                that.setState({ error: true });
 	            }
 	        });

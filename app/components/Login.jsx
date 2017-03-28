@@ -24,6 +24,7 @@ var Login = React.createClass({
             </div>
         )
     },
+
     loginUser: function() {
         var that = this;
         var email = this.refs.email.value;
@@ -32,9 +33,7 @@ var Login = React.createClass({
             email: email,
             password: password,
         }).then(function(res) {
-            console.log('heyyyy');
             if(res.data.success===true) {
-                console.log('trueee')
                 var user = {
                     id:res.data.file.user.id
                 }
@@ -43,12 +42,10 @@ var Login = React.createClass({
                 window.location.href = "#/connectArea";
             }
             else {
-                console.log('blaaa');
                 that.setState({error:true})
             }
         })
     }
-
 })
 
 

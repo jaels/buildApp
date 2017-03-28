@@ -2,7 +2,6 @@ var React = require('react');
 import io from 'socket.io-client';
 import Moment from 'moment';
 
-
 class generalChat extends React.Component {
     constructor(props) {
         super(props);
@@ -10,27 +9,23 @@ class generalChat extends React.Component {
         this.state = {
             messages:[]
         };
-
+        var buildingId = this.props.details.buildingId;
+        axios.get(`/getGeneralMessages/${buildingId}`).then(function(result) {
+            that.setState({
+                messages:result.data.file
+            })
+        })
         this.handleChange = this.handleChange.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.messageRecieve = this.messageRecieve.bind(this);
         this.logOut = this.logOut.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
-
-        var buildingId = this.props.details.buildingId;
-
-        axios.get(`/getGeneralMessages/${buildingId}`).then(function(result) {
-            that.setState({
-                messages:result.data.file
-            })
-        })
     }
 
     render() {
         var that = this;
         var address = this.props.details.user.address;
-
         var messages = that.state.messages.map(function(message) {
             return (
                 <div className="messagesContainer">
@@ -43,15 +38,12 @@ class generalChat extends React.Component {
                 </div>
             )
         })
-
-
         return(
             <div>
                 <div className="chatUpperStreep">
                     <h3>#{address}</h3>
                     <button className="button" id="logOutButton" onClick={this.logOut}>Log Out</button>
                 </div>
-
                 <div className="inputAndChat">
                     <div className = "conversationsArea" ref='scrollDiv' onFocus={this.scrolling}>
                         <div>
@@ -72,9 +64,8 @@ class generalChat extends React.Component {
             this.sendMessage(event);
         }
     }
-    
+
     componentDidUpdate() {
-        console.log('scrolling');
         this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
     }
 
@@ -87,7 +78,6 @@ class generalChat extends React.Component {
     }
     disconnected() {
         console.log('disconnected!');
-
     }
 
     messageRecieve(message) {
@@ -95,8 +85,6 @@ class generalChat extends React.Component {
         messages.push(message);
         this.setState({messages});
     }
-
-
     sendMessage(e) {
         var that =this;
         e.preventDefault();
@@ -110,7 +98,6 @@ class generalChat extends React.Component {
             }).then(function(response) {
                 newMessage = response.data.file;
                 that.props.onNewMessage(newMessage);
-                console.log(that.state.messages);
                 socket.emit('send:message', newMessage);
             })
         }
@@ -122,14 +109,11 @@ class generalChat extends React.Component {
 
     logOut() {
         var that=this;
-        console.log(that.props);
         socket.emit('bye', that.props.details.user.id);
         axios.get('logOut').then(function(reponse) {
-            console.log('logged out');
             window.location.href = "#/loggedOut";
         })
     }
-
 }
 
 module.exports = generalChat;

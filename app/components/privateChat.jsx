@@ -50,27 +50,23 @@ class privateChat extends React.Component {
             messages:[],
             whichChat:whichChat
         })
-
-        this.handleChange = this.handleChange.bind(this);
-        this.sendMessage = this.sendMessage.bind(this);
-        this.componentDidMount = this.componentDidMount.bind(this);
-        this.messageRecieve = this.messageRecieve.bind(this);
         var whichChat = this.state.whichChat;
-        this.logOut = this.logOut.bind(this);
-
-
-        axios.get(`/getPrivateMessages/${whichChat}`).then(function(result) {
+            axios.get(`/getPrivateMessages/${whichChat}`).then(function(result) {
             that.setState({
                 messages:result.data.file,
                 gotMessages:true
             })
         })
+        this.handleChange = this.handleChange.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
+        this.messageRecieve = this.messageRecieve.bind(this);
+        this.logOut = this.logOut.bind(this);
     }
 
     render() {
         var that = this;
         var address = this.props.details.user.address;
-
         var messages = that.state.messages.map(function(message) {
             return (
                 <div className="messagesContainer">
@@ -90,8 +86,6 @@ class privateChat extends React.Component {
                     <h3>#{address}</h3>
                     <button className="button" id="logOutButton" onClick={this.logOut}>Log Out</button>
                 </div>
-
-
                 <div className="inputAndChat">
                     <div className = "conversationsArea" ref='scrollDiv' onFocus={this.scrolling}>
                         <div>
@@ -112,18 +106,13 @@ class privateChat extends React.Component {
             this.sendMessage(event);
         }
     }
-
-
     componentDidUpdate() {
         this.refs.scrollDiv.scrollTop = this.refs.scrollDiv.scrollHeight;
     }
     componentDidMount() {
         socket.on('send:private', this.messageRecieve);
-
     }
-
     messageRecieve(message) {
-        console.log('recievedddd')
         var {messages} = this.state;
         if(message.chat_name==this.state.whichChat) {
             messages.push(message);
@@ -131,14 +120,11 @@ class privateChat extends React.Component {
         }
     }
 
-
     sendMessage(e) {
         var that=this;
         e.preventDefault();
-
         var newMessage = that.state.newMessage;
         if(newMessage.length>0) {
-
             this.setState({
                 newMessage:""
             })
@@ -157,9 +143,6 @@ class privateChat extends React.Component {
                     var otherUser = arr[0]
                 }
                 newMessage.otherUser = otherUser;
-                console.log(newMessage);
-                console.log(otherUser);
-                console.log('sending private')
                 socket.emit("send:private", newMessage);
             })
         }
@@ -172,13 +155,9 @@ class privateChat extends React.Component {
         var that=this;
         socket.emit('bye', that.props.details.user.id);
         axios.get('logOut').then(function(reponse) {
-            console.log('logged out');
             window.location.href = "#/loggedOut";
-
         })
     }
-
-
 }
 
 module.exports = privateChat;

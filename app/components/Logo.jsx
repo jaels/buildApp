@@ -11,9 +11,7 @@ var Logo = React.createClass({
     },
     logOut: function() {
         axios.get('logOut').then(function(reponse) {
-            console.log('logged out');
             window.location.href = "#/loggedOut";
-
         })
     }
 })

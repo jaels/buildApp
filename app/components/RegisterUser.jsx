@@ -88,8 +88,6 @@ var RegisterUser = React.createClass({
             that.setState({
                 required:false
             })
-            console.log('not all required');
-            console.log(that.state)
         }
 
         else {
@@ -124,16 +122,9 @@ var RegisterUser = React.createClass({
                     that.setState({
                         success:false
                     })
-
                 }
-
             })
-
-
         }
-
-
-
     }
 })
 

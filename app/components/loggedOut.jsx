@@ -9,7 +9,7 @@ var loggedOut = React.createClass({
             <h1 className="know-your" id="loggedOut">Thank you for using Neighbours! Till next time!</h1>
             </div>
         )
-    },
+    }
 })
 
 module.exports = loggedOut;

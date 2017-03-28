@@ -4,11 +4,8 @@ if(!process.env.DATABASE_URL) {
 }
 var dbUrl = process.env.DATABASE_URL || `postgres://${password.user}:${password.password}@localhost:5432/neighbours`;
 
-
-var bcrypt = require('bcrypt');
-
 dbUrl = require('url').parse(dbUrl);
-
+var bcrypt = require('bcrypt');
 var dbUser = dbUrl.auth.split(':');
 
 var dbConfig = {
@@ -45,7 +42,6 @@ exports.insertBuilding = function(address,placeId) {
     });
 };
 
-
 exports.checkEmail = function(email) {
     return getFromDb('SELECT * FROM users WHERE email=$1',[email]).then(function(result) {
         return result;
@@ -65,7 +61,7 @@ exports.getUsers = function(buildingId,currentUser) {
     return getFromDb('SELECT * FROM users WHERE building_id=$1 AND id!=$2',[buildingId, currentUser]).then(function(result) {
         return result;
     });
-}
+};
 
 exports.getGeneralMessages = function(buildingId) {
     return getFromDb('SELECT * FROM generalMessages WHERE building_id=$1 ORDER BY created_at LIMIT 200',[buildingId]).then(function(result) {
