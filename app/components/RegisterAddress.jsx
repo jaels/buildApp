@@ -84,7 +84,7 @@ var RegisterAddress = React.createClass({
                     <div>
                         <p className="aboutText">
                             Please check out <a href="                 https://vimeo.com/208111033" target="_blank">
-                            this</a> video to understand the idea behind Neighbours. 
+                            this</a> video to understand the idea behind Neighbours. To see the chatroom, login with v@v, password vv. 
                             <br/>
                             <div className="credits">
                                 This app was created by Yael Stein.<br/>
